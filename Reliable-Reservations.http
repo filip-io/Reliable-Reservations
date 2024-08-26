@@ -1,0 +1,6 @@
+@Reliable_Reservations_HostAddress = http://localhost:5083
+
+GET {{Reliable_Reservations_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
