@@ -13,6 +13,11 @@ namespace Reliable_Reservations
             DotNetEnv.Env.Load();
             var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 
+            // Configure logging
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole();
+            builder.Logging.AddDebug();
+
             // Add services to the container.
             builder.Services.AddDbContext<ReliableReservationsDbContext>(
                 options => options.UseSqlServer(connectionString));
