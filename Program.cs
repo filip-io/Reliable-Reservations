@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Reliable_Reservations.Data;
+using Reliable_Reservations.Services.IServices;
 
 namespace Reliable_Reservations
 {
@@ -7,7 +10,16 @@ namespace Reliable_Reservations
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            DotNetEnv.Env.Load();
+            var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+
             // Add services to the container.
+            builder.Services.AddDbContext<ReliableReservationsDbContext>(
+                options => options.UseSqlServer(connectionString));
+
+            builder.Services.AddScoped<ICustomerService, CustomerService>();
+            builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
