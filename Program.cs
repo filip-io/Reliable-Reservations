@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Reliable_Reservations.Data;
+using Reliable_Reservations.Repositories;
+using Reliable_Reservations.Repositories.Interfaces;
+using Reliable_Reservations.Services;
 using Reliable_Reservations.Services.IServices;
 
 namespace Reliable_Reservations
@@ -24,10 +27,14 @@ namespace Reliable_Reservations
 
             builder.Services.AddScoped<ICustomerService, CustomerService>();
             builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+            builder.Services.AddScoped<ITableService, TableService>();
+            builder.Services.AddScoped<ITableRepository, TableRepository>();
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddAutoMapper(typeof(Program));
 
             var app = builder.Build();
 

@@ -38,8 +38,7 @@ public class CustomerController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while getting all customers.");
-            return StatusCode(500, "An unexpected error occurred.");
+            return ResponseHelper.HandleException(_logger, ex);
         }
     }
 
@@ -53,32 +52,29 @@ public class CustomerController : ControllerBase
 
             if (customer == null)
             {
-                _logger.LogWarning("Customer with ID {id} not found.", id);
-                return NotFound($"Customer with ID {id} not found.");
+                return ResponseHelper.HandleNotFound(_logger, id);
             }
 
             return Ok(customer);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"An error occurred while getting customer with ID {id}.");
-            return StatusCode(500, "An unexpected error occurred.");
+            return ResponseHelper.HandleException(_logger, ex);
         }
     }
 
     // POST: api/Customer/create
     [HttpPost("create")]
-    public async Task<ActionResult<CustomerDto>> CreateCustomer(CustomerDto customerDto)
+    public async Task<ActionResult<CustomerDto>> CreateCustomer(CustomerCreateDto customerCreateDto)
     {
         try
         {
-            var createdCustomer = await _customerService.CreateCustomerAsync(customerDto);
+            var createdCustomer = await _customerService.CreateCustomerAsync(customerCreateDto);
             return CreatedAtAction(nameof(GetCustomerById), new { id = createdCustomer.CustomerId }, createdCustomer);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while creating a customer.");
-            return StatusCode(500, "An unexpected error occurred.");
+            return ResponseHelper.HandleException(_logger, ex);
         }
     }
 
@@ -88,9 +84,8 @@ public class CustomerController : ControllerBase
     {
         if (id != customerDto.CustomerId)
         {
-            return BadRequest("Customer ID mismatch.");
+            return ResponseHelper.HandleBadRequest(_logger, "Customer ID mismatch. Make sure ID matches in both URL and request body.");
         }
-
         try
         {
             await _customerService.UpdateCustomerAsync(customerDto);
@@ -98,13 +93,11 @@ public class CustomerController : ControllerBase
         }
         catch (KeyNotFoundException)
         {
-            _logger.LogWarning("Customer with ID {id} not found.", id);
-            return NotFound($"Customer with ID {id} not found.");
+            return ResponseHelper.HandleNotFound(_logger, id);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"An error occurred while updating customer with ID {id}.");
-            return StatusCode(500, "An unexpected error occurred.");
+            return ResponseHelper.HandleException(_logger, ex);
         }
     }
 
@@ -115,17 +108,15 @@ public class CustomerController : ControllerBase
         try
         {
             await _customerService.DeleteCustomerAsync(id);
-            return NoContent();
+            return ResponseHelper.HandleSuccess(_logger, $"Customer with ID {id} has been successfully deleted.");
         }
         catch (KeyNotFoundException)
         {
-            _logger.LogWarning("Customer with ID {id} not found.", id);
-            return NotFound($"Customer with ID {id} not found.");
+            return ResponseHelper.HandleNotFound(_logger, id);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"An error occurred while deleting customer with ID {id}.");
-            return StatusCode(500, "An unexpected error occurred.");
+            return ResponseHelper.HandleException(_logger, ex);
         }
     }
 }

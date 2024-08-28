@@ -39,7 +39,7 @@ public class CustomerService : ICustomerService
 
         if (customer == null)
         {
-            return null;
+            throw new KeyNotFoundException($"Customer with ID {id} not found.");
         }
 
         return new CustomerDto
@@ -52,19 +52,27 @@ public class CustomerService : ICustomerService
         };
     }
 
-    public async Task<CustomerDto> CreateCustomerAsync(CustomerDto customerDto)
+    public async Task<CustomerDto> CreateCustomerAsync(CustomerCreateDto customerCreateDto)
     {
         var customer = new Customer
         {
-            FirstName = customerDto.FirstName,
-            LastName = customerDto.LastName,
-            PhoneNumber = customerDto.PhoneNumber,
-            Email = customerDto.Email
+            FirstName = customerCreateDto.FirstName,
+            LastName = customerCreateDto.LastName,
+            PhoneNumber = customerCreateDto.PhoneNumber,
+            Email = customerCreateDto.Email
         };
 
         await _customerRepository.AddAsync(customer);
 
-        customerDto.CustomerId = customer.CustomerId;
+        var customerDto = new CustomerDto
+        {
+            CustomerId = customer.CustomerId,
+            FirstName = customer.FirstName,
+            LastName = customer.LastName,
+            PhoneNumber = customer.PhoneNumber,
+            Email = customer.Email
+        };
+
         return customerDto;
     }
 
