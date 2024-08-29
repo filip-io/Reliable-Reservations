@@ -2,6 +2,8 @@
 using Reliable_Reservations.Data;
 using Reliable_Reservations.Models;
 using Reliable_Reservations.Repositories.IRepos;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Reliable_Reservations.Repositories
 {
@@ -16,12 +18,18 @@ namespace Reliable_Reservations.Repositories
 
         public async Task<IEnumerable<OpeningHours>> GetAllAsync()
         {
-            return await _context.OpeningHours.ToListAsync();
+            return await _context.OpeningHours
+                .Include(o => o.SpecialOpeningHours)
+                .Include(o => o.TimeSlots)
+                .ToListAsync();
         }
 
         public async Task<OpeningHours?> GetByIdAsync(int id)
         {
-            return await _context.OpeningHours.FindAsync(id);
+            return await _context.OpeningHours
+                .Include(o => o.SpecialOpeningHours)
+                .Include(o => o.TimeSlots)
+                .FirstOrDefaultAsync(o => o.OpeningHoursId == id);
         }
 
         public async Task AddAsync(OpeningHours openingHours)
@@ -32,15 +40,7 @@ namespace Reliable_Reservations.Repositories
 
         public async Task UpdateAsync(OpeningHours openingHours)
         {
-            var existingOpeningHours = await _context.OpeningHours.FindAsync(openingHours.OpeningHoursId);
-            if (existingOpeningHours == null)
-            {
-                throw new KeyNotFoundException($"Opening hours with ID {openingHours.OpeningHoursId} not found.");
-            }
-
-            // Only update changed values for efficiency and optimization
-            _context.Entry(existingOpeningHours).CurrentValues.SetValues(openingHours);
-
+            _context.OpeningHours.Update(openingHours);
             await _context.SaveChangesAsync();
         }
 
@@ -51,10 +51,6 @@ namespace Reliable_Reservations.Repositories
             {
                 _context.OpeningHours.Remove(openingHours);
                 await _context.SaveChangesAsync();
-            }
-            else
-            {
-                throw new KeyNotFoundException($"Opening hours with ID {id} not found.");
             }
         }
     }

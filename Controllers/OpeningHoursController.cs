@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using Reliable_Reservations.Models.DTOs;
 using Reliable_Reservations.Services.IServices;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Reliable_Reservations.Controllers
 {
@@ -25,19 +28,16 @@ namespace Reliable_Reservations.Controllers
             try
             {
                 var openingHours = await _openingHoursService.GetAllOpeningHoursAsync();
-
-                if (openingHours.IsNullOrEmpty())
+                if (openingHours == null || !openingHours.Any())
                 {
-                    return Ok("No opening hours in database.");
+                    return Ok("No opening hours found.");
                 }
-                else
-                {
-                    return Ok(openingHours);
-                }
+                return Ok(openingHours);
             }
             catch (Exception ex)
             {
-                return ResponseHelper.HandleException(_logger, ex);
+                _logger.LogError(ex, "An error occurred while getting all opening hours.");
+                return StatusCode(500, "Internal server error");
             }
         }
 
@@ -48,60 +48,56 @@ namespace Reliable_Reservations.Controllers
             try
             {
                 var openingHours = await _openingHoursService.GetOpeningHoursByIdAsync(id);
-
                 if (openingHours == null)
                 {
-                    return ResponseHelper.HandleNotFound(_logger, id);
+                    return NotFound($"Opening hours with ID {id} not found.");
                 }
                 return Ok(openingHours);
             }
             catch (Exception ex)
             {
-                return ResponseHelper.HandleException(_logger, ex);
+                _logger.LogError(ex, $"An error occurred while getting opening hours with ID {id}.");
+                return StatusCode(500, "Internal server error");
             }
         }
 
         // POST: api/OpeningHours/create
         [HttpPost("create")]
-        public async Task<ActionResult<OpeningHoursDto>> CreateOpeningHours(OpeningHoursCreateDto openingHoursCreateDto)
+        public async Task<ActionResult<OpeningHoursDto>> CreateOpeningHours([FromBody] OpeningHoursCreateDto openingHoursCreateDto)
         {
             try
             {
                 var createdOpeningHours = await _openingHoursService.CreateOpeningHoursAsync(openingHoursCreateDto);
-
-                var locationUrl = Url.Action(nameof(GetOpeningHoursById), new { id = createdOpeningHours.OpeningHoursId });
-
-                // Log the URL for debugging purposes
-                _logger.LogInformation("Redirecting to: {LocationUrl}", locationUrl);
-
                 return CreatedAtAction(nameof(GetOpeningHoursById), new { id = createdOpeningHours.OpeningHoursId }, createdOpeningHours);
             }
             catch (Exception ex)
             {
-                return ResponseHelper.HandleException(_logger, ex);
+                _logger.LogError(ex, "An error occurred while creating opening hours.");
+                return StatusCode(500, "Internal server error");
             }
         }
 
         // PUT: api/OpeningHours/update/{id}
         [HttpPut("update/{id}")]
-        public async Task<ActionResult<OpeningHoursDto>> UpdateOpeningHours(int id, OpeningHoursDto openingHoursDto)
+        public async Task<ActionResult<OpeningHoursDto>> UpdateOpeningHours(int id, [FromBody] OpeningHoursDto openingHoursDto)
         {
             if (id != openingHoursDto.OpeningHoursId)
             {
-                return ResponseHelper.HandleBadRequest(_logger, "Opening Hours ID mismatch. Make sure ID matches in both URL and request body.");
+                return BadRequest("ID mismatch.");
             }
             try
             {
                 var updatedOpeningHours = await _openingHoursService.UpdateOpeningHoursAsync(openingHoursDto);
-                return CreatedAtAction(nameof(GetOpeningHoursById), new { id = updatedOpeningHours.OpeningHoursId }, updatedOpeningHours);
+                return Ok(updatedOpeningHours);
             }
             catch (KeyNotFoundException)
             {
-                return ResponseHelper.HandleNotFound(_logger, id);
+                return NotFound($"Opening hours with ID {id} not found.");
             }
             catch (Exception ex)
             {
-                return ResponseHelper.HandleException(_logger, ex);
+                _logger.LogError(ex, $"An error occurred while updating opening hours with ID {id}.");
+                return StatusCode(500, "Internal server error");
             }
         }
 
@@ -112,15 +108,16 @@ namespace Reliable_Reservations.Controllers
             try
             {
                 await _openingHoursService.DeleteOpeningHoursAsync(id);
-                return ResponseHelper.HandleSuccess(_logger, $"Opening Hours with ID {id} has been successfully deleted.");
+                return NoContent(); // 204 No Content
             }
             catch (KeyNotFoundException)
             {
-                return ResponseHelper.HandleNotFound(_logger, id);
+                return NotFound($"Opening hours with ID {id} not found.");
             }
             catch (Exception ex)
             {
-                return ResponseHelper.HandleException(_logger, ex);
+                _logger.LogError(ex, $"An error occurred while deleting opening hours with ID {id}.");
+                return StatusCode(500, "Internal server error");
             }
         }
     }

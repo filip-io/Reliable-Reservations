@@ -27,12 +27,19 @@ namespace Reliable_Reservations
             builder.Services.AddDbContext<ReliableReservationsDbContext>(
                 options => options.UseSqlServer(connectionString));
 
+            // Customer
             builder.Services.AddScoped<ICustomerService, CustomerService>();
             builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+
+            // Table
             builder.Services.AddScoped<ITableService, TableService>();
             builder.Services.AddScoped<ITableRepository, TableRepository>();
+
+            // TimeSlot
             builder.Services.AddScoped<ITimeSlotService, TimeSlotService>();
             builder.Services.AddScoped<ITimeSlotRepository, TimeSlotRepository>();
+
+            // OpeningHours
             builder.Services.AddScoped<IOpeningHoursService, OpeningHoursService>();
             builder.Services.AddScoped<IOpeningHoursRepository, OpeningHoursRepository>();
 
@@ -40,6 +47,7 @@ namespace Reliable_Reservations
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // AutoMapper
             builder.Services.AddAutoMapper(typeof(Program));
 
             var app = builder.Build();
