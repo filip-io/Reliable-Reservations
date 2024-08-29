@@ -1,59 +1,63 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Reliable_Reservations.Data;
 using Reliable_Reservations.Models;
+using Reliable_Reservations.Repositories.IRepos;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-public class CustomerRepository : ICustomerRepository
+namespace Reliable_Reservations.Repositories
 {
-    private readonly ReliableReservationsDbContext _context;
-
-    public CustomerRepository(ReliableReservationsDbContext context)
+    public class CustomerRepository : ICustomerRepository
     {
-        _context = context;
-    }
+        private readonly ReliableReservationsDbContext _context;
 
-    public async Task<IEnumerable<Customer>> GetAllAsync()
-    {
-        return await _context.Customers.ToListAsync();
-    }
-
-    public async Task<Customer> GetByIdAsync(int id)
-    {
-        return await _context.Customers.FindAsync(id);
-    }
-
-    public async Task AddAsync(Customer customer)
-    {
-        _context.Customers.Add(customer);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task UpdateAsync(Customer customer)
-    {
-        var existingCustomer = await _context.Customers.FindAsync(customer.CustomerId);
-        if (existingCustomer == null)
+        public CustomerRepository(ReliableReservationsDbContext context)
         {
-            throw new KeyNotFoundException($"Customer with ID {customer.CustomerId} not found.");
+            _context = context;
         }
 
-        // Only update changed values for efficiency and optimization
-        _context.Entry(existingCustomer).CurrentValues.SetValues(customer);
-
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task DeleteAsync(int id)
-    {
-        var customer = await _context.Customers.FindAsync(id);
-        if (customer != null)
+        public async Task<IEnumerable<Customer>> GetAllAsync()
         {
-            _context.Customers.Remove(customer);
+            return await _context.Customers.ToListAsync();
+        }
+
+        public async Task<Customer?> GetByIdAsync(int id)
+        {
+            return await _context.Customers.FindAsync(id);
+        }
+
+        public async Task AddAsync(Customer customer)
+        {
+            _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
         }
-        else
+
+        public async Task UpdateAsync(Customer customer)
         {
-            throw new KeyNotFoundException($"Customer with ID {id} not found.");
+            var existingCustomer = await _context.Customers.FindAsync(customer.CustomerId);
+            if (existingCustomer == null)
+            {
+                throw new KeyNotFoundException($"Customer with ID {customer.CustomerId} not found.");
+            }
+
+            // Only update changed values for efficiency and optimization
+            _context.Entry(existingCustomer).CurrentValues.SetValues(customer);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var customer = await _context.Customers.FindAsync(id);
+            if (customer != null)
+            {
+                _context.Customers.Remove(customer);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new KeyNotFoundException($"Customer with ID {id} not found.");
+            }
         }
     }
 }

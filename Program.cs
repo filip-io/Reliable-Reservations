@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Reliable_Reservations.Data;
+using Reliable_Reservations.Repos;
+using Reliable_Reservations.Repos.IRepos;
 using Reliable_Reservations.Repositories;
-using Reliable_Reservations.Repositories.Interfaces;
+using Reliable_Reservations.Repositories.IRepos;
 using Reliable_Reservations.Services;
 using Reliable_Reservations.Services.IServices;
 
@@ -29,6 +31,10 @@ namespace Reliable_Reservations
             builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
             builder.Services.AddScoped<ITableService, TableService>();
             builder.Services.AddScoped<ITableRepository, TableRepository>();
+            builder.Services.AddScoped<ITimeSlotService, TimeSlotService>();
+            builder.Services.AddScoped<ITimeSlotRepository, TimeSlotRepository>();
+            builder.Services.AddScoped<IOpeningHoursService, OpeningHoursService>();
+            builder.Services.AddScoped<IOpeningHoursRepository, OpeningHoursRepository>();
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();

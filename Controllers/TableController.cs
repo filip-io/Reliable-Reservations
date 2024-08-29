@@ -3,111 +3,123 @@ using Microsoft.IdentityModel.Tokens;
 using Reliable_Reservations.Models.DTOs;
 using Reliable_Reservations.Services.IServices;
 
-[ApiController]
-[Route("api/[controller]")]
-public class TableController : ControllerBase
+namespace Reliable_Reservations.Controllers
 {
-    private readonly ITableService _tableService;
-    private readonly ILogger<TableController> _logger;
-
-    public TableController(ITableService tableService, ILogger<TableController> logger)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class TableController : ControllerBase
     {
-        _tableService = tableService;
-        _logger = logger;
-    }
+        private readonly ITableService _tableService;
+        private readonly ILogger<TableController> _logger;
 
-    // GET: api/Table/all
-    [HttpGet("all")]
-    public async Task<ActionResult<IEnumerable<TableDto>>> GetAllTablesAsync()
-    {
-        try
+        public TableController(ITableService tableService, ILogger<TableController> logger)
         {
-            var tables = await _tableService.GetAllTablesAsync();
+            _tableService = tableService;
+            _logger = logger;
+        }
 
-            if (tables.IsNullOrEmpty())
+        // GET: api/Table/all
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<TableDto>>> GetAllTablesAsync()
+        {
+            try
             {
-                return Ok("No tables in database.");
+                var tables = await _tableService.GetAllTablesAsync();
+
+                if (tables.IsNullOrEmpty())
+                {
+                    return Ok("No tables in database.");
+                }
+                else
+                {
+                    return Ok(tables);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return Ok(tables);
+                return ResponseHelper.HandleException(_logger, ex);
             }
         }
-        catch (Exception ex)
-        {
-            return ResponseHelper.HandleException(_logger, ex);
-        }
-    }
 
-    // GET: api/Table/get/{id}
-    [HttpGet("get/{id}")]
-    public async Task<ActionResult<TableDto>> GetTableByIdAsync(int id)
-    {
-        try
+        // GET: api/Table/get/{id}
+        [HttpGet("get/{id}")]
+        public async Task<ActionResult<TableDto>> GetTableById(int id)
         {
-            var table = await _tableService.GetTableByIdAsync(id);
-            if (table == null)
+            try
+            {
+                var table = await _tableService.GetTableByIdAsync(id);
+
+                if (table == null)
+                {
+                    return ResponseHelper.HandleNotFound(_logger, id);
+                }
+
+                return Ok(table);
+            }
+            catch (Exception ex)
+            {
+                return ResponseHelper.HandleException(_logger, ex);
+            }
+        }
+
+        // POST: api/Table/create
+        [HttpPost("create")]
+        public async Task<ActionResult<TableDto>> CreateTableAsync(TableCreateDto tableCreateDto)
+        {
+            try
+            {
+                var createdTable = await _tableService.CreateTableAsync(tableCreateDto);
+
+                var locationUrl = Url.Action(nameof(GetTableById), new { id = createdTable.TableId });
+
+                // Log the URL for debugging purposes
+                _logger.LogInformation("Redirecting to: {LocationUrl}", locationUrl);
+
+                return CreatedAtAction(nameof(GetTableById), new { id = createdTable.TableId }, createdTable);
+            }
+            catch (Exception ex)
+            {
+                return ResponseHelper.HandleException(_logger, ex);
+            }
+        }
+
+        // PUT: api/Table/update/{id}
+        [HttpPut("update/{id}")]
+        public async Task<ActionResult<TableDto>> UpdateTableAsync(int id, TableCreateDto tableCreateDto)
+        {
+            try
+            {
+                var updatedTable = await _tableService.UpdateTableAsync(id, tableCreateDto);
+
+                return CreatedAtAction(nameof(GetTableById), new { id = updatedTable.TableId }, updatedTable);
+            }
+            catch (KeyNotFoundException)
             {
                 return ResponseHelper.HandleNotFound(_logger, id);
             }
-            return Ok(table);
+            catch (Exception ex)
+            {
+                return ResponseHelper.HandleException(_logger, ex);
+            }
         }
-        catch (Exception ex)
-        {
-            return ResponseHelper.HandleException(_logger, ex);
-        }
-    }
 
-    // POST: api/Table/create
-    [HttpPost("create")]
-    public async Task<ActionResult<TableDto>> CreateTableAsync(TableCreateDto tableCreateDto)
-    {
-        try
+        // DELETE: api/Table/delete/{id}
+        [HttpDelete("delete/{id}")]
+        public async Task<ActionResult<TableDto>> DeleteTableAsync(int id)
         {
-            var createdTable = await _tableService.CreateTableAsync(tableCreateDto);
-            return CreatedAtAction(nameof(GetTableByIdAsync), new { id = createdTable.TableId }, createdTable);
-        }
-        catch (Exception ex)
-        {
-            return ResponseHelper.HandleException(_logger, ex);
-        }
-    }
-
-    // PUT: api/Table/update/{id}
-    [HttpPut("update/{id}")]
-    public async Task<IActionResult> UpdateTableAsync(int id, TableCreateDto tableCreateDto)
-    {
-        try
-        {
-            await _tableService.UpdateTableAsync(id, tableCreateDto);
-            return NoContent();
-        }
-        catch (KeyNotFoundException)
-        {
-            return ResponseHelper.HandleNotFound(_logger, id);
-        }
-        catch (Exception ex)
-        {
-            return ResponseHelper.HandleException(_logger, ex);
-        }
-    }
-
-    // DELETE: api/Table/delete/{id}
-    [HttpDelete("delete/{id}")]
-    public async Task<IActionResult> DeleteTableAsync(int id)
-    {
-        try
-        {
-            await _tableService.DeleteTableAsync(id);
-            return Ok($"Table with ID {id} was successfully deleted.");
-        }
-        catch (KeyNotFoundException)
-        {
-            return ResponseHelper.HandleNotFound(_logger, id);
-        }
-        catch (Exception ex)
-        {
-            return ResponseHelper.HandleException(_logger, ex);
+            try
+            {
+                await _tableService.DeleteTableAsync(id);
+                return Ok($"Table with ID {id} was successfully deleted.");
+            }
+            catch (KeyNotFoundException)
+            {
+                return ResponseHelper.HandleNotFound(_logger, id);
+            }
+            catch (Exception ex)
+            {
+                return ResponseHelper.HandleException(_logger, ex);
+            }
         }
     }
 }

@@ -2,7 +2,7 @@
 using Microsoft.Identity.Client;
 using Reliable_Reservations.Data;
 using Reliable_Reservations.Models;
-using Reliable_Reservations.Repositories.Interfaces;
+using Reliable_Reservations.Repositories.IRepos;
 
 namespace Reliable_Reservations.Repositories
 {
@@ -15,12 +15,12 @@ namespace Reliable_Reservations.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Table>> GetAllTablesAsync()
+        public async Task<IEnumerable<Table>> GetAllAsync()
         {
             return await _context.Tables.ToListAsync();
         }
 
-        public async Task<Table?> GetTableByIdAsync(int id)
+        public async Task<Table?> GetByIdAsync(int id)
         {
             return await _context.Tables.FindAsync(id);
         }
@@ -30,19 +30,19 @@ namespace Reliable_Reservations.Repositories
             return await _context.Tables.AnyAsync(t => t.TableNumber == tableNumber);
         }
 
-        public async Task AddTableAsync(Table table)
+        public async Task AddAsync(Table table)
         {
             _context.Tables.Add(table);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateTableAsync(Table table)
+        public async Task UpdateAsync(Table table)
         {
             _context.Tables.Update(table);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteTableAsync(int id)
+        public async Task DeleteAsync(int id)
         {
             var table = await _context.Tables.FindAsync(id);
             if (table != null)

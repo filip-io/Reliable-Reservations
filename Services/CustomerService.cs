@@ -1,100 +1,113 @@
 ﻿using Reliable_Reservations.Models;
 using Reliable_Reservations.Models.DTOs;
+using Reliable_Reservations.Repositories.IRepos;
 using Reliable_Reservations.Services.IServices;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-public class CustomerService : ICustomerService
+namespace Reliable_Reservations.Services
 {
-    private readonly ICustomerRepository _customerRepository;
-
-    public CustomerService(ICustomerRepository customerRepository)
+    public class CustomerService : ICustomerService
     {
-        _customerRepository = customerRepository;
-    }
+        private readonly ICustomerRepository _customerRepository;
 
-    public async Task<IEnumerable<CustomerDto>> GetAllCustomersAsync()
-    {
-        var customers = await _customerRepository.GetAllAsync();
-
-        var customerDtos = new List<CustomerDto>();
-        foreach (var customer in customers)
+        public CustomerService(ICustomerRepository customerRepository)
         {
-            customerDtos.Add(new CustomerDto
+            _customerRepository = customerRepository;
+        }
+
+        public async Task<IEnumerable<CustomerDto>> GetAllCustomersAsync()
+        {
+            var customers = await _customerRepository.GetAllAsync();
+
+            List<CustomerDto> customerDtos = customers
+                .Select(c => new CustomerDto()
+                {
+                    CustomerId = c.CustomerId,
+                    FirstName = c.FirstName,
+                    LastName = c.LastName,
+                    PhoneNumber = c.PhoneNumber,
+                    Email = c.Email
+                })
+                .ToList();
+
+            return customerDtos;
+        }
+
+        public async Task<CustomerDto?> GetCustomerByIdAsync(int id)
+        {
+            var customer = await _customerRepository.GetByIdAsync(id);
+
+            if (customer == null)
+            {
+                return null;
+            }
+
+            return new CustomerDto
             {
                 CustomerId = customer.CustomerId,
                 FirstName = customer.FirstName,
                 LastName = customer.LastName,
                 PhoneNumber = customer.PhoneNumber,
                 Email = customer.Email
-            });
+            };
         }
 
-        return customerDtos;
-    }
-
-    public async Task<CustomerDto> GetCustomerByIdAsync(int id)
-    {
-        var customer = await _customerRepository.GetByIdAsync(id);
-
-        if (customer == null)
+        public async Task<CustomerDto> CreateCustomerAsync(CustomerCreateDto dto)
         {
-            throw new KeyNotFoundException($"Customer with ID {id} not found.");
+            Customer newCustomer = new()
+            {
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                PhoneNumber = dto.PhoneNumber,
+                Email = dto.Email
+            };
+
+            await _customerRepository.AddAsync(newCustomer);
+
+            CustomerDto customerDto = new()
+            {
+                CustomerId = newCustomer.CustomerId,
+                FirstName = newCustomer.FirstName,
+                LastName = newCustomer.LastName,
+                PhoneNumber = newCustomer.PhoneNumber,
+                Email = newCustomer.Email
+            };
+
+            return customerDto;
         }
 
-        return new CustomerDto
+        public async Task<CustomerDto> UpdateCustomerAsync(CustomerDto customerDto)
         {
-            CustomerId = customer.CustomerId,
-            FirstName = customer.FirstName,
-            LastName = customer.LastName,
-            PhoneNumber = customer.PhoneNumber,
-            Email = customer.Email
-        };
-    }
+            var customer = await _customerRepository.GetByIdAsync(customerDto.CustomerId);
 
-    public async Task<CustomerDto> CreateCustomerAsync(CustomerCreateDto customerCreateDto)
-    {
-        var customer = new Customer
-        {
-            FirstName = customerCreateDto.FirstName,
-            LastName = customerCreateDto.LastName,
-            PhoneNumber = customerCreateDto.PhoneNumber,
-            Email = customerCreateDto.Email
-        };
+            if (customer == null)
+            {
+                throw new KeyNotFoundException($"Customer with ID {customerDto.CustomerId} not found.");
+            }
 
-        await _customerRepository.AddAsync(customer);
+            customer.FirstName = customerDto.FirstName;
+            customer.LastName = customerDto.LastName;
+            customer.PhoneNumber = customerDto.PhoneNumber;
+            customer.Email = customerDto.Email;
 
-        var customerDto = new CustomerDto
-        {
-            CustomerId = customer.CustomerId,
-            FirstName = customer.FirstName,
-            LastName = customer.LastName,
-            PhoneNumber = customer.PhoneNumber,
-            Email = customer.Email
-        };
+            await _customerRepository.UpdateAsync(customer);
 
-        return customerDto;
-    }
+            var updatedCustomer = new CustomerDto
+            {
+                CustomerId = customer.CustomerId,
+                FirstName = customer.FirstName,
+                LastName = customer.LastName,
+                PhoneNumber = customer.PhoneNumber,
+                Email = customer.Email
+            };
 
-    public async Task UpdateCustomerAsync(CustomerDto customerDto)
-    {
-        var customer = await _customerRepository.GetByIdAsync(customerDto.CustomerId);
-
-        if (customer == null)
-        {
-            throw new KeyNotFoundException($"Customer with ID {customerDto.CustomerId} not found.");
+            return updatedCustomer;
         }
 
-        customer.FirstName = customerDto.FirstName;
-        customer.LastName = customerDto.LastName;
-        customer.PhoneNumber = customerDto.PhoneNumber;
-        customer.Email = customerDto.Email;
-
-        await _customerRepository.UpdateAsync(customer);
-    }
-
-    public async Task DeleteCustomerAsync(int id)
-    {
-        await _customerRepository.DeleteAsync(id);
+        public async Task DeleteCustomerAsync(int id)
+        {
+            await _customerRepository.DeleteAsync(id);
+        }
     }
 }

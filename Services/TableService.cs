@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
-using Reliable_Reservations.Models;
 using Reliable_Reservations.Models.DTOs;
-using Reliable_Reservations.Repositories.Interfaces;
+using Reliable_Reservations.Repositories.IRepos;
 using Reliable_Reservations.Services.IServices;
 
 namespace Reliable_Reservations.Services
@@ -19,17 +18,17 @@ namespace Reliable_Reservations.Services
 
         public async Task<IEnumerable<TableDto>> GetAllTablesAsync()
         {
-            var tables = await _tableRepository.GetAllTablesAsync();
+            var tables = await _tableRepository.GetAllAsync();
             return _mapper.Map<IEnumerable<TableDto>>(tables);
         }
 
-        public async Task<TableDto> GetTableByIdAsync(int id)
+        public async Task<TableDto?> GetTableByIdAsync(int id)
         {
-            var table = await _tableRepository.GetTableByIdAsync(id);
+            var table = await _tableRepository.GetByIdAsync(id);
 
             if (table == null)
             {
-                throw new KeyNotFoundException($"Table with ID {id} not found.");
+                return null;
             }
             else
             {
@@ -45,22 +44,27 @@ namespace Reliable_Reservations.Services
             }
 
             var table = _mapper.Map<Table>(tableCreateDto);
-            await _tableRepository.AddTableAsync(table);
+            await _tableRepository.AddAsync(table);
             return _mapper.Map<TableDto>(table);
         }
 
-        public async Task UpdateTableAsync(int id, TableCreateDto tableCreateDto)
+        public async Task<TableDto> UpdateTableAsync(int id, TableCreateDto tableCreateDto)
         {
-            var table = await _tableRepository.GetTableByIdAsync(id);
-            if (table == null) throw new KeyNotFoundException($"No table with ID {id} found.");
+            var table = await _tableRepository.GetByIdAsync(id);
+
+            if (table == null)
+            {
+                throw new KeyNotFoundException($"No table with ID {id} found.");
+            }
 
             _mapper.Map(tableCreateDto, table);
-            await _tableRepository.UpdateTableAsync(table);
+            await _tableRepository.UpdateAsync(table);
+            return _mapper.Map<TableDto>(table);
         }
 
         public async Task DeleteTableAsync(int id)
         {
-            await _tableRepository.DeleteTableAsync(id);
+            await _tableRepository.DeleteAsync(id);
         }
     }
 }

@@ -1,122 +1,127 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Reliable_Reservations.Models.DTOs;
 using Reliable_Reservations.Services.IServices;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-[ApiController]
-[Route("api/[controller]")]
-public class CustomerController : ControllerBase
+namespace Reliable_Reservations.Controllers
 {
-    private readonly ICustomerService _customerService;
-    private readonly ILogger<CustomerController> _logger;
-
-    public CustomerController(ICustomerService customerService, ILogger<CustomerController> logger)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class CustomerController : ControllerBase
     {
-        _customerService = customerService;
-        _logger = logger;
-    }
+        private readonly ICustomerService _customerService;
+        private readonly ILogger<CustomerController> _logger;
 
-    // GET: api/Customer/all
-    [HttpGet("all")]
-    public async Task<ActionResult<IEnumerable<CustomerDto>>> GetAllCustomers()
-    {
-        try
+        public CustomerController(ICustomerService customerService, ILogger<CustomerController> logger)
         {
-            var customers = await _customerService.GetAllCustomersAsync();
+            _customerService = customerService;
+            _logger = logger;
+        }
 
-            if (customers.IsNullOrEmpty())
+        // GET: api/Customer/all
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<CustomerDto>>> GetAllCustomers()
+        {
+            try
             {
-                return Ok("No customers in database.");
+                var customers = await _customerService.GetAllCustomersAsync();
+
+                if (customers.IsNullOrEmpty())
+                {
+                    return Ok("No customers in database.");
+                }
+                else
+                {
+                    return Ok(customers);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return Ok(customers);
+                return ResponseHelper.HandleException(_logger, ex);
             }
         }
-        catch (Exception ex)
+
+        // GET: api/Customer/get/{id}
+        [HttpGet("get/{id}")]
+        public async Task<ActionResult<CustomerDto>> GetCustomerById(int id)
         {
-            return ResponseHelper.HandleException(_logger, ex);
+            try
+            {
+                var customer = await _customerService.GetCustomerByIdAsync(id);
+
+                if (customer == null)
+                {
+                    return ResponseHelper.HandleNotFound(_logger, id);
+                }
+                return Ok(customer);
+            }
+            catch (Exception ex)
+            {
+                return ResponseHelper.HandleException(_logger, ex);
+            }
         }
-    }
 
-    // GET: api/Customer/get/{id}
-    [HttpGet("get/{id}")]
-    public async Task<ActionResult<CustomerDto>> GetCustomerById(int id)
-    {
-        try
+        // POST: api/Customer/create
+        [HttpPost("create")]
+        public async Task<ActionResult<CustomerDto>> CreateCustomer(CustomerCreateDto customerCreateDto)
         {
-            var customer = await _customerService.GetCustomerByIdAsync(id);
+            try
+            {
+                var createdCustomer = await _customerService.CreateCustomerAsync(customerCreateDto);
 
-            if (customer == null)
+                var locationUrl = Url.Action(nameof(GetCustomerById), new { id = createdCustomer.CustomerId });
+
+                // Log the URL for debugging purposes
+                _logger.LogInformation("Redirecting to: {LocationUrl}", locationUrl);
+
+                return CreatedAtAction(nameof(GetCustomerById), new { id = createdCustomer.CustomerId }, createdCustomer);
+            }
+            catch (Exception ex)
+            {
+                return ResponseHelper.HandleException(_logger, ex);
+            }
+        }
+
+        // PUT: api/Customer/update/{id}
+        [HttpPut("update/{id}")]
+        public async Task<ActionResult<CustomerDto>> UpdateCustomer(int id, CustomerDto customerDto)
+        {
+            if (id != customerDto.CustomerId)
+            {
+                return ResponseHelper.HandleBadRequest(_logger, "Customer ID mismatch. Make sure ID matches in both URL and request body.");
+            }
+            try
+            {
+                var updatedCustomer = await _customerService.UpdateCustomerAsync(customerDto);
+                return CreatedAtAction(nameof(GetCustomerById), new { id = updatedCustomer.CustomerId }, updatedCustomer);
+            }
+            catch (KeyNotFoundException)
             {
                 return ResponseHelper.HandleNotFound(_logger, id);
             }
+            catch (Exception ex)
+            {
+                return ResponseHelper.HandleException(_logger, ex);
+            }
+        }
 
-            return Ok(customer);
-        }
-        catch (Exception ex)
+        // DELETE: api/Customer/delete/{id}
+        [HttpDelete("delete/{id}")]
+        public async Task<ActionResult<CustomerDto>> DeleteCustomer(int id)
         {
-            return ResponseHelper.HandleException(_logger, ex);
-        }
-    }
-
-    // POST: api/Customer/create
-    [HttpPost("create")]
-    public async Task<ActionResult<CustomerDto>> CreateCustomer(CustomerCreateDto customerCreateDto)
-    {
-        try
-        {
-            var createdCustomer = await _customerService.CreateCustomerAsync(customerCreateDto);
-            return CreatedAtAction(nameof(GetCustomerById), new { id = createdCustomer.CustomerId }, createdCustomer);
-        }
-        catch (Exception ex)
-        {
-            return ResponseHelper.HandleException(_logger, ex);
-        }
-    }
-
-    // PUT: api/Customer/update/{id}
-    [HttpPut("update/{id}")]
-    public async Task<IActionResult> UpdateCustomer(int id, CustomerDto customerDto)
-    {
-        if (id != customerDto.CustomerId)
-        {
-            return ResponseHelper.HandleBadRequest(_logger, "Customer ID mismatch. Make sure ID matches in both URL and request body.");
-        }
-        try
-        {
-            await _customerService.UpdateCustomerAsync(customerDto);
-            return NoContent();
-        }
-        catch (KeyNotFoundException)
-        {
-            return ResponseHelper.HandleNotFound(_logger, id);
-        }
-        catch (Exception ex)
-        {
-            return ResponseHelper.HandleException(_logger, ex);
-        }
-    }
-
-    // DELETE: api/Customer/delete/{id}
-    [HttpDelete("delete/{id}")]
-    public async Task<IActionResult> DeleteCustomer(int id)
-    {
-        try
-        {
-            await _customerService.DeleteCustomerAsync(id);
-            return ResponseHelper.HandleSuccess(_logger, $"Customer with ID {id} has been successfully deleted.");
-        }
-        catch (KeyNotFoundException)
-        {
-            return ResponseHelper.HandleNotFound(_logger, id);
-        }
-        catch (Exception ex)
-        {
-            return ResponseHelper.HandleException(_logger, ex);
+            try
+            {
+                await _customerService.DeleteCustomerAsync(id);
+                return ResponseHelper.HandleSuccess(_logger, $"Customer with ID {id} has been successfully deleted.");
+            }
+            catch (KeyNotFoundException)
+            {
+                return ResponseHelper.HandleNotFound(_logger, id);
+            }
+            catch (Exception ex)
+            {
+                return ResponseHelper.HandleException(_logger, ex);
+            }
         }
     }
 }
