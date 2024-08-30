@@ -34,6 +34,6 @@ namespace Reliable_Reservations.Models
         [Required]
         public ReservationStatus Status { get; set; } = ReservationStatus.Pending;
 
-        public virtual ICollection<Table> Tables { get; set; } = new List<Table>();
+        public virtual ICollection<Table> Tables { get; set; } = new List<Table>(); // Initialize to avoid nullref
     }
 }

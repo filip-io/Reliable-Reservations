@@ -38,7 +38,6 @@ namespace Reliable_Reservations.Services
 
             int timeSlotDuration = (int)(timeSlot.EndTime - timeSlot.StartTime).TotalMinutes;
 
-            // Make sure the timeslot is 60 or 120 mins
             if (timeSlotDuration != 60 && timeSlotDuration != 120)
             {
                 throw new Exception("TimeSlot duration must be either 60 or 120 minutes.");

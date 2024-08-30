@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using Reliable_Reservations.Models.DTOs;
 using Reliable_Reservations.Services.IServices;
+using Reliable_Reservations.Services;
 
 namespace Reliable_Reservations.Controllers
 {
@@ -27,7 +28,7 @@ namespace Reliable_Reservations.Controllers
 
                 if (reservations.IsNullOrEmpty())
                 {
-                    return Ok("No reservations in database.");
+                    return Ok("No reservations in the database.");
                 }
 
                 return Ok(reservations);

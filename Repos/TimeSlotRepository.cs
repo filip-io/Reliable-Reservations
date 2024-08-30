@@ -24,6 +24,20 @@ namespace Reliable_Reservations.Repos
             return await _context.TimeSlots.FindAsync(id);
         }
 
+        public async Task<TimeSlot?> GetTimeSlotByDate(DateTime reservationDate)
+        {
+            // Extract time only from reservationDate if needed, adjust query as appropriate
+            var dateOnly = reservationDate.Date;
+            var timeOnly = reservationDate.TimeOfDay;
+
+            return await _context.TimeSlots
+                .Where(ts => 
+                ts.StartTime.Date == dateOnly && 
+                ts.StartTime.TimeOfDay <= timeOnly && 
+                ts.EndTime.TimeOfDay >= timeOnly)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task AddTimeSlot(TimeSlot timeSlot)
         {
             _context.TimeSlots.Add(timeSlot);

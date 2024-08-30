@@ -30,6 +30,19 @@ namespace Reliable_Reservations.Repositories
             return await _context.Tables.AnyAsync(t => t.TableNumber == tableNumber);
         }
 
+        public async Task<List<Table>> GetTablesByNumbersAsync(List<int> tableNumbers)
+        {
+            // If no table numbers provided, return empty list to avoid unnecessary db query.
+            if (tableNumbers == null || !tableNumbers.Any())
+            {
+                return new List<Table>();
+            }
+
+            return await _context.Tables
+                .Where(t => tableNumbers.Contains(t.TableNumber))
+                .ToListAsync();
+        }
+
         public async Task AddAsync(Table table)
         {
             _context.Tables.Add(table);

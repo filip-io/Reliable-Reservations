@@ -1,9 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Reliable_Reservations.Data;
 using Reliable_Reservations.Models;
+using Reliable_Reservations.Models.DTOs;
 using Reliable_Reservations.Repos.IRepos;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace Reliable_Reservations.Repos
+namespace Reliable_Reservations.Repositories
 {
     public class ReservationRepository : IReservationRepository
     {
@@ -14,39 +17,51 @@ namespace Reliable_Reservations.Repos
             _context = context;
         }
 
-        public async Task<IEnumerable<Reservation>> GetAllAsync()
+        public async Task<IEnumerable<Reservation>> GetAllReservations()
         {
             return await _context.Reservations
-                .Include(r => r.Customer)
-                .Include(r => r.TimeSlot)
-                .Include(r => r.Tables)
-                .ToListAsync();
+                                 .Include(r => r.TimeSlot)
+                                 .Include(r => r.Tables)
+                                 .Include(r => r.Customer)
+                                 .ToListAsync();
         }
 
-        public async Task<Reservation?> GetByIdAsync(int id)
+        public async Task<Reservation?> GetReservationById(int reservationId)
         {
             return await _context.Reservations
-                .Include(r => r.Customer)
-                .Include(r => r.TimeSlot)
-                .Include(r => r.Tables)
-                .FirstOrDefaultAsync(r => r.ReservationId == id);
+                                 .Include(r => r.TimeSlot)
+                                 .Include(r => r.Tables)
+                                 .Include(r => r.Customer)
+                                 .FirstOrDefaultAsync(r => r.ReservationId == reservationId);
         }
 
-        public async Task AddAsync(Reservation reservation)
+        public async Task<Reservation> AddReservation(Reservation reservation)
         {
             _context.Reservations.Add(reservation);
+
             await _context.SaveChangesAsync();
+
+            var addedReservation = _context.Reservations
+                .FirstOrDefault(r => r.ReservationId == reservation.ReservationId);
+
+            return addedReservation;
         }
 
-        public async Task UpdateAsync(Reservation reservation)
+        public async Task<Reservation> UpdateReservation(Reservation reservation)
         {
             _context.Reservations.Update(reservation);
+
             await _context.SaveChangesAsync();
+
+            var updatedReservation = _context.Reservations
+                .FirstOrDefault(r => r.ReservationId == reservation.ReservationId);
+
+            return updatedReservation;
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteReservation(int reservationId)
         {
-            var reservation = await _context.Reservations.FindAsync(id);
+            var reservation = await GetReservationById(reservationId);
             if (reservation != null)
             {
                 _context.Reservations.Remove(reservation);

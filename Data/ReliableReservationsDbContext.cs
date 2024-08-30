@@ -15,9 +15,11 @@ namespace Reliable_Reservations.Data
         public DbSet<Table> Tables { get; set; }
         public DbSet<TimeSlot> TimeSlots { get; set; }
 
+
+        // Config of entities with Fluent API
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Configuration for Customer entity
+            // Customer
             modelBuilder.Entity<Customer>()
                 .HasKey(c => c.CustomerId);
 
@@ -41,7 +43,7 @@ namespace Reliable_Reservations.Data
                 .IsRequired()
                 .HasMaxLength(100);
 
-            // Configuration for Menu entity
+            // Menu
             modelBuilder.Entity<Menu>()
                 .HasKey(m => m.MenuItemId);
 
@@ -65,7 +67,7 @@ namespace Reliable_Reservations.Data
                 .IsRequired()
                 .HasMaxLength(50);
 
-            // Configuration for OpeningHours entity
+            // OpeningHours
             modelBuilder.Entity<OpeningHours>()
                 .HasKey(o => o.OpeningHoursId);
 
@@ -92,7 +94,7 @@ namespace Reliable_Reservations.Data
                 .WithOne(t => t.OpeningHours)
                 .HasForeignKey(t => t.OpeningHoursId);
 
-            // Configuration for SpecialOpeningHours entity
+            // SpecialOpeningHours
             modelBuilder.Entity<SpecialOpeningHours>()
                 .HasKey(s => s.SpecialOpeningHoursId);
 
@@ -102,11 +104,13 @@ namespace Reliable_Reservations.Data
 
             modelBuilder.Entity<SpecialOpeningHours>()
                 .Property(s => s.OpenTime)
-                .IsRequired(false);
+                .IsRequired(false)
+                .HasColumnType("time(0)");
 
             modelBuilder.Entity<SpecialOpeningHours>()
                 .Property(s => s.CloseTime)
-                .IsRequired(false);
+                .IsRequired(false)
+                .HasColumnType("time(0)");
 
             modelBuilder.Entity<SpecialOpeningHours>()
                 .Property(s => s.IsClosed)
@@ -117,7 +121,7 @@ namespace Reliable_Reservations.Data
                 .WithMany(o => o.SpecialOpeningHours)
                 .HasForeignKey(s => s.OpeningHoursId);
 
-            // Configuration for Reservation entity
+            // Reservation
             modelBuilder.Entity<Reservation>()
                 .HasKey(r => r.ReservationId);
 
@@ -132,9 +136,15 @@ namespace Reliable_Reservations.Data
                 .HasForeignKey(r => r.TimeSlotId);
 
             modelBuilder.Entity<Reservation>()
+                .Property(r => r.ReservationDate)
+                .IsRequired()
+                .HasColumnType("datetime2(0)");
+
+            modelBuilder.Entity<Reservation>()
                 .HasMany(r => r.Tables)
                 .WithMany(t => t.Reservations)
-                .UsingEntity<Dictionary<string, object>>(
+                .UsingEntity<Dictionary<string, object>>
+                (
                     "ReservationTables",
                     j => j
                         .HasOne<Table>()
@@ -157,7 +167,7 @@ namespace Reliable_Reservations.Data
                 .Property(r => r.SpecialRequests)
                 .HasMaxLength(300);
 
-            // Configuration for Table entity
+            // Table
             modelBuilder.Entity<Table>()
                 .HasKey(t => t.TableId);
 
@@ -173,17 +183,24 @@ namespace Reliable_Reservations.Data
                 .Property(t => t.Location)
                 .HasMaxLength(50);
 
-            // Configuration for TimeSlot entity
+            modelBuilder.Entity<Table>()
+                .HasIndex(t => t.TableNumber)
+                .IsUnique();
+
+            // TimeSlot
             modelBuilder.Entity<TimeSlot>()
                 .HasKey(t => t.TimeSlotId);
 
             modelBuilder.Entity<TimeSlot>()
                 .Property(t => t.StartTime)
-                .IsRequired();
+                .IsRequired()
+                .HasColumnType("datetime2(0)");
 
             modelBuilder.Entity<TimeSlot>()
                 .Property(t => t.EndTime)
-                .IsRequired();
+                .IsRequired()
+                .HasColumnType("datetime2(0)");
+
 
             modelBuilder.Entity<TimeSlot>()
                 .Property(t => t.SlotDuration)
@@ -200,64 +217,65 @@ namespace Reliable_Reservations.Data
                 .HasForeignKey(r => r.TimeSlotId);
 
             // Seed data for OpeningHours
-            modelBuilder.Entity<OpeningHours>().HasData(
-                new OpeningHours
-                {
-                    OpeningHoursId = 1,
-                    DayOfWeek = DayOfWeek.Sunday,
-                    OpenTime = new TimeOnly(10, 0),
-                    CloseTime = new TimeOnly(23, 0),
-                    IsClosed = false
-                },
-                new OpeningHours
-                {
-                    OpeningHoursId = 2,
-                    DayOfWeek = DayOfWeek.Monday,
-                    OpenTime = new TimeOnly(10, 0),
-                    CloseTime = new TimeOnly(23, 0),
-                    IsClosed = true
-                },
-                new OpeningHours
-                {
-                    OpeningHoursId = 3,
-                    DayOfWeek = DayOfWeek.Tuesday,
-                    OpenTime = new TimeOnly(10, 0),
-                    CloseTime = new TimeOnly(23, 0),
-                    IsClosed = true
-                },
-                new OpeningHours
-                {
-                    OpeningHoursId = 4,
-                    DayOfWeek = DayOfWeek.Wednesday,
-                    OpenTime = new TimeOnly(10, 0),
-                    CloseTime = new TimeOnly(23, 0),
-                    IsClosed = false
-                },
-                new OpeningHours
-                {
-                    OpeningHoursId = 5,
-                    DayOfWeek = DayOfWeek.Thursday,
-                    OpenTime = new TimeOnly(10, 0),
-                    CloseTime = new TimeOnly(23, 0),
-                    IsClosed = false
-                },
-                new OpeningHours
-                {
-                    OpeningHoursId = 6,
-                    DayOfWeek = DayOfWeek.Friday,
-                    OpenTime = new TimeOnly(10, 0),
-                    CloseTime = new TimeOnly(23, 0),
-                    IsClosed = false
-                },
-                new OpeningHours
-                {
-                    OpeningHoursId = 7,
-                    DayOfWeek = DayOfWeek.Saturday,
-                    OpenTime = new TimeOnly(10, 0),
-                    CloseTime = new TimeOnly(23, 0),
-                    IsClosed = false
-                }
-            );
+            modelBuilder.Entity<OpeningHours>().HasData
+                (
+                    new OpeningHours
+                    {
+                        OpeningHoursId = 1,
+                        DayOfWeek = DayOfWeek.Sunday,
+                        OpenTime = new TimeOnly(10, 0),
+                        CloseTime = new TimeOnly(23, 0),
+                        IsClosed = false
+                    },
+                    new OpeningHours
+                    {
+                        OpeningHoursId = 2,
+                        DayOfWeek = DayOfWeek.Monday,
+                        OpenTime = new TimeOnly(10, 0),
+                        CloseTime = new TimeOnly(23, 0),
+                        IsClosed = true
+                    },
+                    new OpeningHours
+                    {
+                        OpeningHoursId = 3,
+                        DayOfWeek = DayOfWeek.Tuesday,
+                        OpenTime = new TimeOnly(10, 0),
+                        CloseTime = new TimeOnly(23, 0),
+                        IsClosed = true
+                    },
+                    new OpeningHours
+                    {
+                        OpeningHoursId = 4,
+                        DayOfWeek = DayOfWeek.Wednesday,
+                        OpenTime = new TimeOnly(10, 0),
+                        CloseTime = new TimeOnly(23, 0),
+                        IsClosed = false
+                    },
+                    new OpeningHours
+                    {
+                        OpeningHoursId = 5,
+                        DayOfWeek = DayOfWeek.Thursday,
+                        OpenTime = new TimeOnly(10, 0),
+                        CloseTime = new TimeOnly(23, 0),
+                        IsClosed = false
+                    },
+                    new OpeningHours
+                    {
+                        OpeningHoursId = 6,
+                        DayOfWeek = DayOfWeek.Friday,
+                        OpenTime = new TimeOnly(10, 0),
+                        CloseTime = new TimeOnly(23, 0),
+                        IsClosed = false
+                    },
+                    new OpeningHours
+                    {
+                        OpeningHoursId = 7,
+                        DayOfWeek = DayOfWeek.Saturday,
+                        OpenTime = new TimeOnly(10, 0),
+                        CloseTime = new TimeOnly(23, 0),
+                        IsClosed = false
+                    }
+                );
         }
     }
 }
