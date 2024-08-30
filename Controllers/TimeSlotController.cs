@@ -20,7 +20,6 @@ namespace Reliable_Reservations.Controllers
             _logger = logger;
         }
 
-        // GET: api/TimeSlot/getAll
         [HttpGet("getAll")]
         public async Task<ActionResult<IEnumerable<TimeSlotDto>>> GetAllTimeSlots()
         {
@@ -43,8 +42,7 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
-        // GET: api/TimeSlot/get/{id}
-        [HttpGet("get/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<TimeSlotDto>> GetTimeSlotById(int id)
         {
             try
@@ -63,7 +61,6 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
-        // POST: api/TimeSlot/create
         [HttpPost("create")]
         public async Task<ActionResult<TimeSlotDto>> CreateTimeSlot(TimeSlotCreateDto timeSlotCreateDto)
         {
@@ -78,8 +75,7 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
-        // PUT: api/TimeSlot/update/{id}
-        [HttpPut("update/{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTimeSlot(int id, TimeSlotCreateDto timeSlotCreateDto)
         {
             try
@@ -93,8 +89,7 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
-        // DELETE: api/TimeSlot/delete/{id}
-        [HttpDelete("delete/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTimeSlot(int id)
         {
             try

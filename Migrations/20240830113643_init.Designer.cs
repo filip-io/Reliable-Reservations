@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Reliable_Reservations.Data;
 
@@ -11,9 +12,11 @@ using Reliable_Reservations.Data;
 namespace Reliable_Reservations.Migrations
 {
     [DbContext(typeof(ReliableReservationsDbContext))]
-    partial class ReliableReservationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240830113643_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,7 +104,7 @@ namespace Reliable_Reservations.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OpeningHoursId"));
 
                     b.Property<TimeOnly>("CloseTime")
-                        .HasColumnType("time(0)");
+                        .HasColumnType("time");
 
                     b.Property<int>("DayOfWeek")
                         .HasColumnType("int");
@@ -110,69 +113,11 @@ namespace Reliable_Reservations.Migrations
                         .HasColumnType("bit");
 
                     b.Property<TimeOnly>("OpenTime")
-                        .HasColumnType("time(0)");
+                        .HasColumnType("time");
 
                     b.HasKey("OpeningHoursId");
 
                     b.ToTable("OpeningHours");
-
-                    b.HasData(
-                        new
-                        {
-                            OpeningHoursId = 1,
-                            CloseTime = new TimeOnly(23, 0, 0),
-                            DayOfWeek = 0,
-                            IsClosed = false,
-                            OpenTime = new TimeOnly(10, 0, 0)
-                        },
-                        new
-                        {
-                            OpeningHoursId = 2,
-                            CloseTime = new TimeOnly(23, 0, 0),
-                            DayOfWeek = 1,
-                            IsClosed = true,
-                            OpenTime = new TimeOnly(10, 0, 0)
-                        },
-                        new
-                        {
-                            OpeningHoursId = 3,
-                            CloseTime = new TimeOnly(23, 0, 0),
-                            DayOfWeek = 2,
-                            IsClosed = true,
-                            OpenTime = new TimeOnly(10, 0, 0)
-                        },
-                        new
-                        {
-                            OpeningHoursId = 4,
-                            CloseTime = new TimeOnly(23, 0, 0),
-                            DayOfWeek = 3,
-                            IsClosed = false,
-                            OpenTime = new TimeOnly(10, 0, 0)
-                        },
-                        new
-                        {
-                            OpeningHoursId = 5,
-                            CloseTime = new TimeOnly(23, 0, 0),
-                            DayOfWeek = 4,
-                            IsClosed = false,
-                            OpenTime = new TimeOnly(10, 0, 0)
-                        },
-                        new
-                        {
-                            OpeningHoursId = 6,
-                            CloseTime = new TimeOnly(23, 0, 0),
-                            DayOfWeek = 5,
-                            IsClosed = false,
-                            OpenTime = new TimeOnly(10, 0, 0)
-                        },
-                        new
-                        {
-                            OpeningHoursId = 7,
-                            CloseTime = new TimeOnly(23, 0, 0),
-                            DayOfWeek = 6,
-                            IsClosed = false,
-                            OpenTime = new TimeOnly(10, 0, 0)
-                        });
                 });
 
             modelBuilder.Entity("Reliable_Reservations.Models.Reservation", b =>

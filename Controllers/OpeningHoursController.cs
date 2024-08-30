@@ -21,7 +21,6 @@ namespace Reliable_Reservations.Controllers
             _logger = logger;
         }
 
-        // GET: api/OpeningHours/all
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<OpeningHoursDto>>> GetAllOpeningHours()
         {
@@ -41,8 +40,7 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
-        // GET: api/OpeningHours/get/{id}
-        [HttpGet("get/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<OpeningHoursDto>> GetOpeningHoursById(int id)
         {
             try
@@ -61,7 +59,6 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
-        // POST: api/OpeningHours/create
         [HttpPost("create")]
         public async Task<ActionResult<OpeningHoursDto>> CreateOpeningHours([FromBody] OpeningHoursCreateDto openingHoursCreateDto)
         {
@@ -77,8 +74,7 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
-        // PUT: api/OpeningHours/update/{id}
-        [HttpPut("update/{id}")]
+        [HttpPut("{id}")]
         public async Task<ActionResult<OpeningHoursDto>> UpdateOpeningHours(int id, [FromBody] OpeningHoursDto openingHoursDto)
         {
             if (id != openingHoursDto.OpeningHoursId)
@@ -101,8 +97,7 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
-        // DELETE: api/OpeningHours/delete/{id}
-        [HttpDelete("delete/{id}")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteOpeningHours(int id)
         {
             try

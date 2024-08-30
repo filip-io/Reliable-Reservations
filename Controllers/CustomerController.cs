@@ -18,7 +18,6 @@ namespace Reliable_Reservations.Controllers
             _logger = logger;
         }
 
-        // GET: api/Customer/all
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<CustomerDto>>> GetAllCustomers()
         {
@@ -30,10 +29,8 @@ namespace Reliable_Reservations.Controllers
                 {
                     return Ok("No customers in database.");
                 }
-                else
-                {
-                    return Ok(customers);
-                }
+
+                return Ok(customers);
             }
             catch (Exception ex)
             {
@@ -41,8 +38,7 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
-        // GET: api/Customer/get/{id}
-        [HttpGet("get/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<CustomerDto>> GetCustomerById(int id)
         {
             try
@@ -61,7 +57,6 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
-        // POST: api/Customer/create
         [HttpPost("create")]
         public async Task<ActionResult<CustomerDto>> CreateCustomer(CustomerCreateDto customerCreateDto)
         {
@@ -82,8 +77,8 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
-        // PUT: api/Customer/update/{id}
-        [HttpPut("update/{id}")]
+
+        [HttpPut("{id}")]
         public async Task<ActionResult<CustomerDto>> UpdateCustomer(int id, CustomerDto customerDto)
         {
             if (id != customerDto.CustomerId)
@@ -105,8 +100,7 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
-        // DELETE: api/Customer/delete/{id}
-        [HttpDelete("delete/{id}")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<CustomerDto>> DeleteCustomer(int id)
         {
             try

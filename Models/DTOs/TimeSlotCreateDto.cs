@@ -5,15 +5,9 @@ namespace Reliable_Reservations.Models.DTOs
     public class TimeSlotCreateDto
     {
         [Required]
-        public required TimeSpan StartTime { get; set; }
+        public required DateTime StartTime { get; set; }
 
         [Required]
-        public required TimeSpan EndTime { get; set; }
-
-        [Required]
-        public required TimeSpan SlotDuration { get; set; }
-
-        [Required]
-        public required int OpeningHoursId { get; set; }
+        public required DateTime EndTime { get; set; }
     }
 }

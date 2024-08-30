@@ -31,6 +31,14 @@ namespace Reliable_Reservations
             builder.Services.AddScoped<ICustomerService, CustomerService>();
             builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
+            // OpeningHours
+            builder.Services.AddScoped<IOpeningHoursService, OpeningHoursService>();
+            builder.Services.AddScoped<IOpeningHoursRepository, OpeningHoursRepository>();
+
+            // Reservations
+            builder.Services.AddScoped<IReservationService, ReservationService>();
+            builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+
             // Table
             builder.Services.AddScoped<ITableService, TableService>();
             builder.Services.AddScoped<ITableRepository, TableRepository>();
@@ -39,11 +47,12 @@ namespace Reliable_Reservations
             builder.Services.AddScoped<ITimeSlotService, TimeSlotService>();
             builder.Services.AddScoped<ITimeSlotRepository, TimeSlotRepository>();
 
-            // OpeningHours
-            builder.Services.AddScoped<IOpeningHoursService, OpeningHoursService>();
-            builder.Services.AddScoped<IOpeningHoursRepository, OpeningHoursRepository>();
-
             builder.Services.AddControllers();
+                //.AddJsonOptions(options =>
+                // {
+                //     options.JsonSerializerOptions.Converters.Add(new JsonDateConverter());
+                // });
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 

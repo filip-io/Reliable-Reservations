@@ -52,12 +52,9 @@ namespace Reliable_Reservations.Migrations
                     OpeningHoursId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DayOfWeek = table.Column<int>(type: "int", nullable: false),
-                    OpenTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    CloseTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    IsClosed = table.Column<bool>(type: "bit", nullable: false),
-                    SpecialDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SpecialOpenTime = table.Column<TimeSpan>(type: "time", nullable: true),
-                    SpecialCloseTime = table.Column<TimeSpan>(type: "time", nullable: true)
+                    OpenTime = table.Column<TimeOnly>(type: "time", nullable: false),
+                    CloseTime = table.Column<TimeOnly>(type: "time", nullable: false),
+                    IsClosed = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -80,14 +77,37 @@ namespace Reliable_Reservations.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SpecialOpeningHours",
+                columns: table => new
+                {
+                    SpecialOpeningHoursId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateOnly>(type: "date", nullable: false),
+                    OpenTime = table.Column<TimeOnly>(type: "time", nullable: true),
+                    CloseTime = table.Column<TimeOnly>(type: "time", nullable: true),
+                    IsClosed = table.Column<bool>(type: "bit", nullable: false),
+                    OpeningHoursId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SpecialOpeningHours", x => x.SpecialOpeningHoursId);
+                    table.ForeignKey(
+                        name: "FK_SpecialOpeningHours_OpeningHours_OpeningHoursId",
+                        column: x => x.OpeningHoursId,
+                        principalTable: "OpeningHours",
+                        principalColumn: "OpeningHoursId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TimeSlots",
                 columns: table => new
                 {
                     TimeSlotId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    EndTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    SlotDuration = table.Column<TimeSpan>(type: "time", nullable: false),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SlotDuration = table.Column<int>(type: "int", nullable: false),
                     OpeningHoursId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -109,8 +129,9 @@ namespace Reliable_Reservations.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CustomerId = table.Column<int>(type: "int", nullable: false),
                     TimeSlotId = table.Column<int>(type: "int", nullable: false),
+                    ReservationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     NumberOfGuests = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
-                    SpecialRequests = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
+                    SpecialRequests = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -134,21 +155,21 @@ namespace Reliable_Reservations.Migrations
                 name: "ReservationTables",
                 columns: table => new
                 {
-                    ReservationsReservationId = table.Column<int>(type: "int", nullable: false),
-                    TablesTableId = table.Column<int>(type: "int", nullable: false)
+                    ReservationId = table.Column<int>(type: "int", nullable: false),
+                    TableId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ReservationTables", x => new { x.ReservationsReservationId, x.TablesTableId });
+                    table.PrimaryKey("PK_ReservationTables", x => new { x.ReservationId, x.TableId });
                     table.ForeignKey(
-                        name: "FK_ReservationTables_Reservations_ReservationsReservationId",
-                        column: x => x.ReservationsReservationId,
+                        name: "FK_ReservationTables_Reservations_ReservationId",
+                        column: x => x.ReservationId,
                         principalTable: "Reservations",
                         principalColumn: "ReservationId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ReservationTables_Tables_TablesTableId",
-                        column: x => x.TablesTableId,
+                        name: "FK_ReservationTables_Tables_TableId",
+                        column: x => x.TableId,
                         principalTable: "Tables",
                         principalColumn: "TableId",
                         onDelete: ReferentialAction.Cascade);
@@ -165,9 +186,14 @@ namespace Reliable_Reservations.Migrations
                 column: "TimeSlotId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReservationTables_TablesTableId",
+                name: "IX_ReservationTables_TableId",
                 table: "ReservationTables",
-                column: "TablesTableId");
+                column: "TableId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SpecialOpeningHours_OpeningHoursId",
+                table: "SpecialOpeningHours",
+                column: "OpeningHoursId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TimeSlots_OpeningHoursId",
@@ -183,6 +209,9 @@ namespace Reliable_Reservations.Migrations
 
             migrationBuilder.DropTable(
                 name: "ReservationTables");
+
+            migrationBuilder.DropTable(
+                name: "SpecialOpeningHours");
 
             migrationBuilder.DropTable(
                 name: "Reservations");

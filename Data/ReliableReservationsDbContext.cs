@@ -17,183 +17,247 @@ namespace Reliable_Reservations.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Customer entity
+            // Configuration for Customer entity
             modelBuilder.Entity<Customer>()
-                .HasKey(c => c.CustomerId); // Primary key
+                .HasKey(c => c.CustomerId);
 
-            // Define required fields for Customer
             modelBuilder.Entity<Customer>()
                 .Property(c => c.FirstName)
-                .IsRequired() // Required field
-                .HasMaxLength(50); // Max length
+                .IsRequired()
+                .HasMaxLength(50);
 
             modelBuilder.Entity<Customer>()
                 .Property(c => c.LastName)
-                .IsRequired() // Required field
-                .HasMaxLength(50); // Max length
+                .IsRequired()
+                .HasMaxLength(50);
 
             modelBuilder.Entity<Customer>()
                 .Property(c => c.PhoneNumber)
-                .IsRequired() // Required field
-                .HasMaxLength(15); // Max length
+                .IsRequired()
+                .HasMaxLength(15);
 
             modelBuilder.Entity<Customer>()
                 .Property(c => c.Email)
-                .IsRequired() // Required field
-                .HasMaxLength(100); // Max length
+                .IsRequired()
+                .HasMaxLength(100);
 
-            // Menu entity
+            // Configuration for Menu entity
             modelBuilder.Entity<Menu>()
-                .HasKey(m => m.MenuItemId); // Primary key
+                .HasKey(m => m.MenuItemId);
 
-            // Define required fields for Menu
             modelBuilder.Entity<Menu>()
                 .Property(m => m.Name)
-                .IsRequired() // Required field
-                .HasMaxLength(100); // Max length
+                .IsRequired()
+                .HasMaxLength(100);
 
             modelBuilder.Entity<Menu>()
                 .Property(m => m.Description)
-                .IsRequired() // Required field
-                .HasMaxLength(500); // Max length
+                .IsRequired()
+                .HasMaxLength(500);
 
             modelBuilder.Entity<Menu>()
                 .Property(m => m.Price)
-                .IsRequired() // Required field
-                .HasColumnType("decimal(18,2)"); // Column type for currency
+                .IsRequired()
+                .HasColumnType("decimal(18,2)");
 
             modelBuilder.Entity<Menu>()
                 .Property(m => m.Category)
-                .IsRequired() // Required field
-                .HasMaxLength(50); // Max length
+                .IsRequired()
+                .HasMaxLength(50);
 
-            // OpeningHours entity
+            // Configuration for OpeningHours entity
             modelBuilder.Entity<OpeningHours>()
-                .HasKey(o => o.OpeningHoursId); // Primary key
+                .HasKey(o => o.OpeningHoursId);
 
-            // Define required fields for OpeningHours
             modelBuilder.Entity<OpeningHours>()
                 .Property(o => o.DayOfWeek)
-                .IsRequired(); // Required field
+                .IsRequired();
 
             modelBuilder.Entity<OpeningHours>()
                 .Property(o => o.OpenTime)
-                .IsRequired(); // Required field
+                .IsRequired()
+                .HasColumnType("time(0)");
 
             modelBuilder.Entity<OpeningHours>()
                 .Property(o => o.CloseTime)
-                .IsRequired(); // Required field
+                .IsRequired()
+                .HasColumnType("time(0)");
 
             modelBuilder.Entity<OpeningHours>()
                 .Property(o => o.IsClosed)
-                .IsRequired(); // Required field
+                .IsRequired();
 
-            // Define relationships for OpeningHours
             modelBuilder.Entity<OpeningHours>()
-                .HasMany(o => o.TimeSlots) // One-to-many relationship with TimeSlot
+                .HasMany(o => o.TimeSlots)
                 .WithOne(t => t.OpeningHours)
-                .HasForeignKey(t => t.OpeningHoursId); // Foreign key in TimeSlot
+                .HasForeignKey(t => t.OpeningHoursId);
 
-            // SpecialOpeningHours entity
+            // Configuration for SpecialOpeningHours entity
             modelBuilder.Entity<SpecialOpeningHours>()
-                .HasKey(s => s.SpecialOpeningHoursId); // Primary key
+                .HasKey(s => s.SpecialOpeningHoursId);
 
-            // Define required fields for SpecialOpeningHours
             modelBuilder.Entity<SpecialOpeningHours>()
                 .Property(s => s.Date)
-                .IsRequired(); // Required field
+                .IsRequired();
 
             modelBuilder.Entity<SpecialOpeningHours>()
                 .Property(s => s.OpenTime)
-                .IsRequired(false); // Optional field
+                .IsRequired(false);
 
             modelBuilder.Entity<SpecialOpeningHours>()
                 .Property(s => s.CloseTime)
-                .IsRequired(false); // Optional field
+                .IsRequired(false);
 
             modelBuilder.Entity<SpecialOpeningHours>()
                 .Property(s => s.IsClosed)
-                .IsRequired(); // Required field
+                .IsRequired();
 
-            // Define relationships for SpecialOpeningHours
             modelBuilder.Entity<SpecialOpeningHours>()
-                .HasOne(s => s.OpeningHours) // Many-to-one relationship with OpeningHours
+                .HasOne(s => s.OpeningHours)
                 .WithMany(o => o.SpecialOpeningHours)
-                .HasForeignKey(s => s.OpeningHoursId); // Foreign key in SpecialOpeningHours
+                .HasForeignKey(s => s.OpeningHoursId);
 
-            // Reservation entity
+            // Configuration for Reservation entity
             modelBuilder.Entity<Reservation>()
-                .HasKey(r => r.ReservationId); // Primary key
+                .HasKey(r => r.ReservationId);
 
-            // Define relationships for Reservation
             modelBuilder.Entity<Reservation>()
-                .HasOne(r => r.Customer) // Many-to-one relationship with Customer
+                .HasOne(r => r.Customer)
                 .WithMany(c => c.Reservations)
-                .HasForeignKey(r => r.CustomerId); // Foreign key in Reservation
+                .HasForeignKey(r => r.CustomerId);
 
             modelBuilder.Entity<Reservation>()
-                .HasOne(r => r.TimeSlot) // Many-to-one relationship with TimeSlot
+                .HasOne(r => r.TimeSlot)
                 .WithMany(t => t.Reservations)
-                .HasForeignKey(r => r.TimeSlotId); // Foreign key in Reservation
+                .HasForeignKey(r => r.TimeSlotId);
 
             modelBuilder.Entity<Reservation>()
-                .HasMany(r => r.Tables) // Many-to-many relationship with Table
+                .HasMany(r => r.Tables)
                 .WithMany(t => t.Reservations)
-                .UsingEntity(j => j.ToTable("ReservationTables")); // Junction table
+                .UsingEntity<Dictionary<string, object>>(
+                    "ReservationTables",
+                    j => j
+                        .HasOne<Table>()
+                        .WithMany()
+                        .HasForeignKey("TableId")
+                        .OnDelete(DeleteBehavior.Cascade),
+                    j => j
+                        .HasOne<Reservation>()
+                        .WithMany()
+                        .HasForeignKey("ReservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                );
 
             modelBuilder.Entity<Reservation>()
                 .Property(r => r.NumberOfGuests)
-                .IsRequired() // Required field
-                .HasDefaultValue(1); // Default value
+                .IsRequired()
+                .HasDefaultValue(1);
 
             modelBuilder.Entity<Reservation>()
                 .Property(r => r.SpecialRequests)
-                .HasMaxLength(300); // Max length
+                .HasMaxLength(300);
 
-            // Table entity
+            // Configuration for Table entity
             modelBuilder.Entity<Table>()
-                .HasKey(t => t.TableId); // Primary key
+                .HasKey(t => t.TableId);
 
-            // Define required fields for Table
             modelBuilder.Entity<Table>()
                 .Property(t => t.TableNumber)
-                .IsRequired(); // Required field
+                .IsRequired();
 
             modelBuilder.Entity<Table>()
                 .Property(t => t.SeatingCapacity)
-                .IsRequired(); // Required field
+                .IsRequired();
 
             modelBuilder.Entity<Table>()
                 .Property(t => t.Location)
-                .HasMaxLength(50); // Max length
+                .HasMaxLength(50);
 
-            // TimeSlot entity
+            // Configuration for TimeSlot entity
             modelBuilder.Entity<TimeSlot>()
-                .HasKey(t => t.TimeSlotId); // Primary key
+                .HasKey(t => t.TimeSlotId);
 
-            // Define required fields for TimeSlot
             modelBuilder.Entity<TimeSlot>()
                 .Property(t => t.StartTime)
-                .IsRequired(); // Required field
+                .IsRequired();
 
             modelBuilder.Entity<TimeSlot>()
                 .Property(t => t.EndTime)
-                .IsRequired(); // Required field
+                .IsRequired();
 
             modelBuilder.Entity<TimeSlot>()
                 .Property(t => t.SlotDuration)
-                .IsRequired(); // Required field
+                .IsRequired();
 
-            // Define relationships for TimeSlot
             modelBuilder.Entity<TimeSlot>()
-                .HasOne(t => t.OpeningHours) // Many-to-one relationship with OpeningHours
+                .HasOne(t => t.OpeningHours)
                 .WithMany(o => o.TimeSlots)
-                .HasForeignKey(t => t.OpeningHoursId); // Foreign key in TimeSlot
+                .HasForeignKey(t => t.OpeningHoursId);
 
             modelBuilder.Entity<TimeSlot>()
-                .HasMany(t => t.Reservations) // One-to-many relationship with Reservation
+                .HasMany(t => t.Reservations)
                 .WithOne(r => r.TimeSlot)
-                .HasForeignKey(r => r.TimeSlotId); // Foreign key in Reservation
+                .HasForeignKey(r => r.TimeSlotId);
+
+            // Seed data for OpeningHours
+            modelBuilder.Entity<OpeningHours>().HasData(
+                new OpeningHours
+                {
+                    OpeningHoursId = 1,
+                    DayOfWeek = DayOfWeek.Sunday,
+                    OpenTime = new TimeOnly(10, 0),
+                    CloseTime = new TimeOnly(23, 0),
+                    IsClosed = false
+                },
+                new OpeningHours
+                {
+                    OpeningHoursId = 2,
+                    DayOfWeek = DayOfWeek.Monday,
+                    OpenTime = new TimeOnly(10, 0),
+                    CloseTime = new TimeOnly(23, 0),
+                    IsClosed = true
+                },
+                new OpeningHours
+                {
+                    OpeningHoursId = 3,
+                    DayOfWeek = DayOfWeek.Tuesday,
+                    OpenTime = new TimeOnly(10, 0),
+                    CloseTime = new TimeOnly(23, 0),
+                    IsClosed = true
+                },
+                new OpeningHours
+                {
+                    OpeningHoursId = 4,
+                    DayOfWeek = DayOfWeek.Wednesday,
+                    OpenTime = new TimeOnly(10, 0),
+                    CloseTime = new TimeOnly(23, 0),
+                    IsClosed = false
+                },
+                new OpeningHours
+                {
+                    OpeningHoursId = 5,
+                    DayOfWeek = DayOfWeek.Thursday,
+                    OpenTime = new TimeOnly(10, 0),
+                    CloseTime = new TimeOnly(23, 0),
+                    IsClosed = false
+                },
+                new OpeningHours
+                {
+                    OpeningHoursId = 6,
+                    DayOfWeek = DayOfWeek.Friday,
+                    OpenTime = new TimeOnly(10, 0),
+                    CloseTime = new TimeOnly(23, 0),
+                    IsClosed = false
+                },
+                new OpeningHours
+                {
+                    OpeningHoursId = 7,
+                    DayOfWeek = DayOfWeek.Saturday,
+                    OpenTime = new TimeOnly(10, 0),
+                    CloseTime = new TimeOnly(23, 0),
+                    IsClosed = false
+                }
+            );
         }
     }
 }

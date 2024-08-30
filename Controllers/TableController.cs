@@ -18,7 +18,6 @@ namespace Reliable_Reservations.Controllers
             _logger = logger;
         }
 
-        // GET: api/Table/all
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<TableDto>>> GetAllTablesAsync()
         {
@@ -41,8 +40,7 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
-        // GET: api/Table/get/{id}
-        [HttpGet("get/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<TableDto>> GetTableById(int id)
         {
             try
@@ -62,7 +60,6 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
-        // POST: api/Table/create
         [HttpPost("create")]
         public async Task<ActionResult<TableDto>> CreateTableAsync(TableCreateDto tableCreateDto)
         {
@@ -83,8 +80,7 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
-        // PUT: api/Table/update/{id}
-        [HttpPut("update/{id}")]
+        [HttpPut("{id}")]
         public async Task<ActionResult<TableDto>> UpdateTableAsync(int id, TableCreateDto tableCreateDto)
         {
             try
@@ -103,8 +99,7 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
-        // DELETE: api/Table/delete/{id}
-        [HttpDelete("delete/{id}")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<TableDto>> DeleteTableAsync(int id)
         {
             try

@@ -12,8 +12,8 @@ using Reliable_Reservations.Data;
 namespace Reliable_Reservations.Migrations
 {
     [DbContext(typeof(ReliableReservationsDbContext))]
-    [Migration("20240827155126_init")]
-    partial class init
+    [Migration("20240830140243_UpdateOpeningHoursTable")]
+    partial class UpdateOpeningHoursTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -103,8 +103,8 @@ namespace Reliable_Reservations.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OpeningHoursId"));
 
-                    b.Property<TimeSpan>("CloseTime")
-                        .HasColumnType("time");
+                    b.Property<TimeOnly>("CloseTime")
+                        .HasColumnType("time(0)");
 
                     b.Property<int>("DayOfWeek")
                         .HasColumnType("int");
@@ -112,21 +112,70 @@ namespace Reliable_Reservations.Migrations
                     b.Property<bool>("IsClosed")
                         .HasColumnType("bit");
 
-                    b.Property<TimeSpan>("OpenTime")
-                        .HasColumnType("time");
-
-                    b.Property<TimeSpan?>("SpecialCloseTime")
-                        .HasColumnType("time");
-
-                    b.Property<DateTime?>("SpecialDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<TimeSpan?>("SpecialOpenTime")
-                        .HasColumnType("time");
+                    b.Property<TimeOnly>("OpenTime")
+                        .HasColumnType("time(0)");
 
                     b.HasKey("OpeningHoursId");
 
                     b.ToTable("OpeningHours");
+
+                    b.HasData(
+                        new
+                        {
+                            OpeningHoursId = 1,
+                            CloseTime = new TimeOnly(23, 0, 0),
+                            DayOfWeek = 0,
+                            IsClosed = false,
+                            OpenTime = new TimeOnly(10, 0, 0)
+                        },
+                        new
+                        {
+                            OpeningHoursId = 2,
+                            CloseTime = new TimeOnly(23, 0, 0),
+                            DayOfWeek = 1,
+                            IsClosed = true,
+                            OpenTime = new TimeOnly(10, 0, 0)
+                        },
+                        new
+                        {
+                            OpeningHoursId = 3,
+                            CloseTime = new TimeOnly(23, 0, 0),
+                            DayOfWeek = 2,
+                            IsClosed = true,
+                            OpenTime = new TimeOnly(10, 0, 0)
+                        },
+                        new
+                        {
+                            OpeningHoursId = 4,
+                            CloseTime = new TimeOnly(23, 0, 0),
+                            DayOfWeek = 3,
+                            IsClosed = false,
+                            OpenTime = new TimeOnly(10, 0, 0)
+                        },
+                        new
+                        {
+                            OpeningHoursId = 5,
+                            CloseTime = new TimeOnly(23, 0, 0),
+                            DayOfWeek = 4,
+                            IsClosed = false,
+                            OpenTime = new TimeOnly(10, 0, 0)
+                        },
+                        new
+                        {
+                            OpeningHoursId = 6,
+                            CloseTime = new TimeOnly(23, 0, 0),
+                            DayOfWeek = 5,
+                            IsClosed = false,
+                            OpenTime = new TimeOnly(10, 0, 0)
+                        },
+                        new
+                        {
+                            OpeningHoursId = 7,
+                            CloseTime = new TimeOnly(23, 0, 0),
+                            DayOfWeek = 6,
+                            IsClosed = false,
+                            OpenTime = new TimeOnly(10, 0, 0)
+                        });
                 });
 
             modelBuilder.Entity("Reliable_Reservations.Models.Reservation", b =>
@@ -145,8 +194,10 @@ namespace Reliable_Reservations.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(1);
 
+                    b.Property<DateTime>("ReservationDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("SpecialRequests")
-                        .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
@@ -165,7 +216,79 @@ namespace Reliable_Reservations.Migrations
                     b.ToTable("Reservations");
                 });
 
-            modelBuilder.Entity("Reliable_Reservations.Models.Table", b =>
+            modelBuilder.Entity("Reliable_Reservations.Models.SpecialOpeningHours", b =>
+                {
+                    b.Property<int>("SpecialOpeningHoursId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SpecialOpeningHoursId"));
+
+                    b.Property<TimeOnly?>("CloseTime")
+                        .HasColumnType("time");
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<bool>("IsClosed")
+                        .HasColumnType("bit");
+
+                    b.Property<TimeOnly?>("OpenTime")
+                        .HasColumnType("time");
+
+                    b.Property<int>("OpeningHoursId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SpecialOpeningHoursId");
+
+                    b.HasIndex("OpeningHoursId");
+
+                    b.ToTable("SpecialOpeningHours");
+                });
+
+            modelBuilder.Entity("Reliable_Reservations.Models.TimeSlot", b =>
+                {
+                    b.Property<int>("TimeSlotId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TimeSlotId"));
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("OpeningHoursId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SlotDuration")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("TimeSlotId");
+
+                    b.HasIndex("OpeningHoursId");
+
+                    b.ToTable("TimeSlots");
+                });
+
+            modelBuilder.Entity("ReservationTables", b =>
+                {
+                    b.Property<int>("ReservationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TableId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ReservationId", "TableId");
+
+                    b.HasIndex("TableId");
+
+                    b.ToTable("ReservationTables");
+                });
+
+            modelBuilder.Entity("Table", b =>
                 {
                     b.Property<int>("TableId")
                         .ValueGeneratedOnAdd()
@@ -189,48 +312,6 @@ namespace Reliable_Reservations.Migrations
                     b.ToTable("Tables");
                 });
 
-            modelBuilder.Entity("Reliable_Reservations.Models.TimeSlot", b =>
-                {
-                    b.Property<int>("TimeSlotId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TimeSlotId"));
-
-                    b.Property<TimeSpan>("EndTime")
-                        .HasColumnType("time");
-
-                    b.Property<int>("OpeningHoursId")
-                        .HasColumnType("int");
-
-                    b.Property<TimeSpan>("SlotDuration")
-                        .HasColumnType("time");
-
-                    b.Property<TimeSpan>("StartTime")
-                        .HasColumnType("time");
-
-                    b.HasKey("TimeSlotId");
-
-                    b.HasIndex("OpeningHoursId");
-
-                    b.ToTable("TimeSlots");
-                });
-
-            modelBuilder.Entity("ReservationTable", b =>
-                {
-                    b.Property<int>("ReservationsReservationId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TablesTableId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ReservationsReservationId", "TablesTableId");
-
-                    b.HasIndex("TablesTableId");
-
-                    b.ToTable("ReservationTables", (string)null);
-                });
-
             modelBuilder.Entity("Reliable_Reservations.Models.Reservation", b =>
                 {
                     b.HasOne("Reliable_Reservations.Models.Customer", "Customer")
@@ -250,6 +331,17 @@ namespace Reliable_Reservations.Migrations
                     b.Navigation("TimeSlot");
                 });
 
+            modelBuilder.Entity("Reliable_Reservations.Models.SpecialOpeningHours", b =>
+                {
+                    b.HasOne("Reliable_Reservations.Models.OpeningHours", "OpeningHours")
+                        .WithMany("SpecialOpeningHours")
+                        .HasForeignKey("OpeningHoursId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OpeningHours");
+                });
+
             modelBuilder.Entity("Reliable_Reservations.Models.TimeSlot", b =>
                 {
                     b.HasOne("Reliable_Reservations.Models.OpeningHours", "OpeningHours")
@@ -261,17 +353,17 @@ namespace Reliable_Reservations.Migrations
                     b.Navigation("OpeningHours");
                 });
 
-            modelBuilder.Entity("ReservationTable", b =>
+            modelBuilder.Entity("ReservationTables", b =>
                 {
                     b.HasOne("Reliable_Reservations.Models.Reservation", null)
                         .WithMany()
-                        .HasForeignKey("ReservationsReservationId")
+                        .HasForeignKey("ReservationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Reliable_Reservations.Models.Table", null)
+                    b.HasOne("Table", null)
                         .WithMany()
-                        .HasForeignKey("TablesTableId")
+                        .HasForeignKey("TableId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -283,6 +375,8 @@ namespace Reliable_Reservations.Migrations
 
             modelBuilder.Entity("Reliable_Reservations.Models.OpeningHours", b =>
                 {
+                    b.Navigation("SpecialOpeningHours");
+
                     b.Navigation("TimeSlots");
                 });
 

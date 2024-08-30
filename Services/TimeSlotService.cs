@@ -2,6 +2,7 @@
 using Reliable_Reservations.Models;
 using Reliable_Reservations.Models.DTOs;
 using Reliable_Reservations.Repos.IRepos;
+using Reliable_Reservations.Repositories.IRepos;
 using Reliable_Reservations.Services.IServices;
 
 namespace Reliable_Reservations.Services
@@ -9,11 +10,13 @@ namespace Reliable_Reservations.Services
     public class TimeSlotService : ITimeSlotService
     {
         private readonly ITimeSlotRepository _timeSlotRepository;
+        private readonly IOpeningHoursRepository _openingHoursRepository;
         private readonly IMapper _mapper;
 
-        public TimeSlotService(ITimeSlotRepository timeSlotRepository, IMapper mapper)
+        public TimeSlotService(ITimeSlotRepository timeSlotRepository, IOpeningHoursRepository openingHoursRepository, IMapper mapper)
         {
             _timeSlotRepository = timeSlotRepository;
+            _openingHoursRepository = openingHoursRepository;
             _mapper = mapper;
         }
 
@@ -32,6 +35,28 @@ namespace Reliable_Reservations.Services
         public async Task<TimeSlotDto> CreateTimeSlotAsync(TimeSlotCreateDto timeSlotCreateDto)
         {
             var timeSlot = _mapper.Map<TimeSlot>(timeSlotCreateDto);
+
+            int timeSlotDuration = (int)(timeSlot.EndTime - timeSlot.StartTime).TotalMinutes;
+
+            // Make sure the timeslot is 60 or 120 mins
+            if (timeSlotDuration != 60 && timeSlotDuration != 120)
+            {
+                throw new Exception("TimeSlot duration must be either 60 or 120 minutes.");
+            }
+
+            timeSlot.SlotDuration = timeSlotDuration;
+
+            DayOfWeek dayOfWeek = timeSlot.StartTime.DayOfWeek;
+            var openingHours = await _openingHoursRepository.GetAllAsync();
+            var matchingOpeningHours = openingHours.FirstOrDefault(o => o.DayOfWeek == dayOfWeek);
+
+            if (matchingOpeningHours == null)
+            {
+                throw new Exception($"No OpeningHours found for the day: {dayOfWeek}");
+            }
+
+            timeSlot.OpeningHoursId = matchingOpeningHours.OpeningHoursId;
+
             await _timeSlotRepository.AddTimeSlot(timeSlot);
             return _mapper.Map<TimeSlotDto>(timeSlot);
         }

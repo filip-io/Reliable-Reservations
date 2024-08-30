@@ -12,8 +12,8 @@ using Reliable_Reservations.Data;
 namespace Reliable_Reservations.Migrations
 {
     [DbContext(typeof(ReliableReservationsDbContext))]
-    [Migration("20240829224926_AddSpecialOpeningHoursTable")]
-    partial class AddSpecialOpeningHoursTable
+    [Migration("20240830134809_AddSeedDataForOpeningHours")]
+    partial class AddSeedDataForOpeningHours
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -118,6 +118,64 @@ namespace Reliable_Reservations.Migrations
                     b.HasKey("OpeningHoursId");
 
                     b.ToTable("OpeningHours");
+
+                    b.HasData(
+                        new
+                        {
+                            OpeningHoursId = 1,
+                            CloseTime = new TimeOnly(23, 0, 0),
+                            DayOfWeek = 0,
+                            IsClosed = false,
+                            OpenTime = new TimeOnly(10, 0, 0)
+                        },
+                        new
+                        {
+                            OpeningHoursId = 2,
+                            CloseTime = new TimeOnly(23, 0, 0),
+                            DayOfWeek = 1,
+                            IsClosed = true,
+                            OpenTime = new TimeOnly(10, 0, 0)
+                        },
+                        new
+                        {
+                            OpeningHoursId = 3,
+                            CloseTime = new TimeOnly(23, 0, 0),
+                            DayOfWeek = 2,
+                            IsClosed = true,
+                            OpenTime = new TimeOnly(10, 0, 0)
+                        },
+                        new
+                        {
+                            OpeningHoursId = 4,
+                            CloseTime = new TimeOnly(23, 0, 0),
+                            DayOfWeek = 3,
+                            IsClosed = false,
+                            OpenTime = new TimeOnly(10, 0, 0)
+                        },
+                        new
+                        {
+                            OpeningHoursId = 5,
+                            CloseTime = new TimeOnly(23, 0, 0),
+                            DayOfWeek = 4,
+                            IsClosed = false,
+                            OpenTime = new TimeOnly(10, 0, 0)
+                        },
+                        new
+                        {
+                            OpeningHoursId = 6,
+                            CloseTime = new TimeOnly(23, 0, 0),
+                            DayOfWeek = 5,
+                            IsClosed = false,
+                            OpenTime = new TimeOnly(10, 0, 0)
+                        },
+                        new
+                        {
+                            OpeningHoursId = 7,
+                            CloseTime = new TimeOnly(23, 0, 0),
+                            DayOfWeek = 6,
+                            IsClosed = false,
+                            OpenTime = new TimeOnly(10, 0, 0)
+                        });
                 });
 
             modelBuilder.Entity("Reliable_Reservations.Models.Reservation", b =>
@@ -136,8 +194,10 @@ namespace Reliable_Reservations.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(1);
 
+                    b.Property<DateTime>("ReservationDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("SpecialRequests")
-                        .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
@@ -194,17 +254,17 @@ namespace Reliable_Reservations.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TimeSlotId"));
 
-                    b.Property<TimeSpan>("EndTime")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("OpeningHoursId")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan>("SlotDuration")
-                        .HasColumnType("time");
+                    b.Property<int>("SlotDuration")
+                        .HasColumnType("int");
 
-                    b.Property<TimeSpan>("StartTime")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("TimeSlotId");
 
@@ -213,19 +273,19 @@ namespace Reliable_Reservations.Migrations
                     b.ToTable("TimeSlots");
                 });
 
-            modelBuilder.Entity("ReservationTable", b =>
+            modelBuilder.Entity("ReservationTables", b =>
                 {
-                    b.Property<int>("ReservationsReservationId")
+                    b.Property<int>("ReservationId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TablesTableId")
+                    b.Property<int>("TableId")
                         .HasColumnType("int");
 
-                    b.HasKey("ReservationsReservationId", "TablesTableId");
+                    b.HasKey("ReservationId", "TableId");
 
-                    b.HasIndex("TablesTableId");
+                    b.HasIndex("TableId");
 
-                    b.ToTable("ReservationTables", (string)null);
+                    b.ToTable("ReservationTables");
                 });
 
             modelBuilder.Entity("Table", b =>
@@ -293,17 +353,17 @@ namespace Reliable_Reservations.Migrations
                     b.Navigation("OpeningHours");
                 });
 
-            modelBuilder.Entity("ReservationTable", b =>
+            modelBuilder.Entity("ReservationTables", b =>
                 {
                     b.HasOne("Reliable_Reservations.Models.Reservation", null)
                         .WithMany()
-                        .HasForeignKey("ReservationsReservationId")
+                        .HasForeignKey("ReservationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Table", null)
                         .WithMany()
-                        .HasForeignKey("TablesTableId")
+                        .HasForeignKey("TableId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
