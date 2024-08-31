@@ -18,7 +18,7 @@ namespace Reliable_Reservations.Controllers
             _logger = logger;
         }
 
-        [HttpGet("all")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<CustomerDto>>> GetAllCustomers()
         {
             try
@@ -57,7 +57,7 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
-        [HttpPost("create")]
+        [HttpPost]
         public async Task<ActionResult<CustomerDto>> CreateCustomer(CustomerCreateDto customerCreateDto)
         {
             try
@@ -66,7 +66,7 @@ namespace Reliable_Reservations.Controllers
 
                 var locationUrl = Url.Action(nameof(GetCustomerById), new { id = createdCustomer.CustomerId });
 
-                // Log the URL for debugging purposes
+                // Log URL for debugging
                 _logger.LogInformation("Redirecting to: {LocationUrl}", locationUrl);
 
                 return CreatedAtAction(nameof(GetCustomerById), new { id = createdCustomer.CustomerId }, createdCustomer);

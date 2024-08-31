@@ -28,7 +28,7 @@ namespace Reliable_Reservations.Controllers
 
                 if (menuItems == null)
                 {
-                    return Ok("No menu items in database.");
+                    return NotFound("No menu items in database.");
                 }
                 else
                 {

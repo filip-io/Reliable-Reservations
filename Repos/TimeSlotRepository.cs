@@ -24,9 +24,14 @@ namespace Reliable_Reservations.Repos
             return await _context.TimeSlots.FindAsync(id);
         }
 
+        public async Task<bool> TimeSlotExists(int id)
+        {
+            return await _context.TimeSlots.AnyAsync(ts => ts.TimeSlotId == id);
+        }
+
         public async Task<TimeSlot?> GetTimeSlotByDate(DateTime reservationDate)
         {
-            // Extract time only from reservationDate if needed, adjust query as appropriate
+
             var dateOnly = reservationDate.Date;
             var timeOnly = reservationDate.TimeOfDay;
 
@@ -50,19 +55,10 @@ namespace Reliable_Reservations.Repos
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteTimeSlot(int id)
+        public async Task DeleteTimeSlot(TimeSlot timeSlot)
         {
-            var timeSlot = await _context.TimeSlots.FindAsync(id);
-            if (timeSlot != null)
-            {
-                _context.TimeSlots.Remove(timeSlot);
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        public async Task<bool> TimeSlotExists(int id)
-        {
-            return await _context.TimeSlots.AnyAsync(ts => ts.TimeSlotId == id);
+            _context.TimeSlots.Remove(timeSlot);
+            await _context.SaveChangesAsync();
         }
     }
 }

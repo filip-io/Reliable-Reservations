@@ -50,14 +50,10 @@ namespace Reliable_Reservations.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(OpeningHours openingHoursToDelete)
         {
-            var openingHours = await _context.OpeningHours.FindAsync(id);
-            if (openingHours != null)
-            {
-                _context.OpeningHours.Remove(openingHours);
-                await _context.SaveChangesAsync();
-            }
+            _context.OpeningHours.Remove(openingHoursToDelete);
+            await _context.SaveChangesAsync();
         }
     }
 }

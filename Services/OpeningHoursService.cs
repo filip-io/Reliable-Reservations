@@ -1,4 +1,5 @@
-﻿using Reliable_Reservations.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Reliable_Reservations.Models;
 using Reliable_Reservations.Models.DTOs;
 using Reliable_Reservations.Repositories.IRepos;
 using Reliable_Reservations.Services.IServices;
@@ -167,7 +168,13 @@ namespace Reliable_Reservations.Services
 
         public async Task DeleteOpeningHoursAsync(int id)
         {
-            await _openingHoursRepository.DeleteAsync(id);
+            var openingHoursToDelete = await _openingHoursRepository.GetByIdAsync(id);
+            if (openingHoursToDelete == null)
+            {
+                throw new KeyNotFoundException($"Opening hours with ID {id} not found.");
+            }
+
+            await _openingHoursRepository.DeleteAsync(openingHoursToDelete);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Reliable_Reservations.Models.DTOs;
+﻿using Reliable_Reservations.Models;
+using Reliable_Reservations.Models.DTOs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

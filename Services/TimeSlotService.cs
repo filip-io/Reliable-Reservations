@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Reliable_Reservations.Models;
 using Reliable_Reservations.Models.DTOs;
 using Reliable_Reservations.Repos.IRepos;
@@ -72,7 +73,14 @@ namespace Reliable_Reservations.Services
 
         public async Task DeleteTimeSlotAsync(int id)
         {
-            await _timeSlotRepository.DeleteTimeSlot(id);
+
+            var timeSlotToDelete = await _timeSlotRepository.GetTimeSlotById(id);
+            if (timeSlotToDelete == null)
+            {
+                throw new Exception($"No timeslot with ID {id} exists in database.");           
+            }
+
+            await _timeSlotRepository.DeleteTimeSlot(timeSlotToDelete);
         }
     }
 }

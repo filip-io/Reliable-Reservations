@@ -35,7 +35,7 @@ namespace Reliable_Reservations.Repos
 
         public async Task UpdateMenuItem(MenuItem menuItem)
         {
-            _context.MenuItems.Update(menuItem); // await with async method?
+            _context.MenuItems.Update(menuItem);
             await _context.SaveChangesAsync();
         }
 

@@ -11,6 +11,6 @@ namespace Reliable_Reservations.Repositories.IRepos
         Task<OpeningHours?> GetOpeningHoursByDateAsync(DateTime date);
         Task AddAsync(OpeningHours openingHours);
         Task UpdateAsync(OpeningHours openingHours);
-        Task DeleteAsync(int id);
+        Task DeleteAsync(OpeningHours openingHours);
     }
 }

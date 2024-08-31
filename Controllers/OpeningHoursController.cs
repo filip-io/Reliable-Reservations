@@ -103,7 +103,7 @@ namespace Reliable_Reservations.Controllers
             try
             {
                 await _openingHoursService.DeleteOpeningHoursAsync(id);
-                return NoContent(); // 204 No Content
+                return NoContent();
             }
             catch (KeyNotFoundException)
             {
