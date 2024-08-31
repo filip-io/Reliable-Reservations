@@ -33,6 +33,7 @@ namespace Reliable_Reservations.Repositories
         public async Task<List<Table>> GetTablesByNumbersAsync(List<int> tableNumbers)
         {
             // If no table numbers provided, return empty list to avoid unnecessary db query.
+            // Move check to service
             if (tableNumbers == null || !tableNumbers.Any())
             {
                 return new List<Table>();

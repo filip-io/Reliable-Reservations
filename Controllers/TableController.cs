@@ -65,14 +65,14 @@ namespace Reliable_Reservations.Controllers
         {
             try
             {
-                var createdTable = await _tableService.CreateTableAsync(tableCreateDto);
+                var newTable = await _tableService.CreateTableAsync(tableCreateDto);
 
-                var locationUrl = Url.Action(nameof(GetTableById), new { id = createdTable.TableId });
+                var locationUrl = Url.Action(nameof(GetTableById), new { id = newTable.TableId });
 
                 // Log the URL for debugging purposes
                 _logger.LogInformation("Redirecting to: {LocationUrl}", locationUrl);
 
-                return CreatedAtAction(nameof(GetTableById), new { id = createdTable.TableId }, createdTable);
+                return CreatedAtAction(nameof(GetTableById), new { id = newTable.TableId }, newTable);
             }
             catch (Exception ex)
             {

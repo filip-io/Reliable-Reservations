@@ -8,6 +8,7 @@ namespace Reliable_Reservations.Repositories.IRepos
     {
         Task<IEnumerable<OpeningHours>> GetAllAsync();
         Task<OpeningHours?> GetByIdAsync(int id);
+        Task<OpeningHours?> GetOpeningHoursByDateAsync(DateTime date);
         Task AddAsync(OpeningHours openingHours);
         Task UpdateAsync(OpeningHours openingHours);
         Task DeleteAsync(int id);

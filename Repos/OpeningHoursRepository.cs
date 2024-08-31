@@ -24,6 +24,12 @@ namespace Reliable_Reservations.Repositories
                 .ToListAsync();
         }
 
+        public async Task<OpeningHours?> GetOpeningHoursByDateAsync(DateTime date)
+        {
+            return await _context.OpeningHours
+                                 .FirstOrDefaultAsync(oh => oh.DayOfWeek == date.DayOfWeek);
+        }
+
         public async Task<OpeningHours?> GetByIdAsync(int id)
         {
             return await _context.OpeningHours

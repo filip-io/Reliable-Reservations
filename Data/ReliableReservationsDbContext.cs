@@ -8,7 +8,7 @@ namespace Reliable_Reservations.Data
         public ReliableReservationsDbContext(DbContextOptions<ReliableReservationsDbContext> options) : base(options) { }
 
         public DbSet<Customer> Customers { get; set; }
-        public DbSet<Menu> Menus { get; set; }
+        public DbSet<MenuItem> MenuItems { get; set; }
         public DbSet<OpeningHours> OpeningHours { get; set; }
         public DbSet<SpecialOpeningHours> SpecialOpeningHours { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
@@ -44,25 +44,25 @@ namespace Reliable_Reservations.Data
                 .HasMaxLength(100);
 
             // Menu
-            modelBuilder.Entity<Menu>()
+            modelBuilder.Entity<MenuItem>()
                 .HasKey(m => m.MenuItemId);
 
-            modelBuilder.Entity<Menu>()
+            modelBuilder.Entity<MenuItem>()
                 .Property(m => m.Name)
                 .IsRequired()
                 .HasMaxLength(100);
 
-            modelBuilder.Entity<Menu>()
+            modelBuilder.Entity<MenuItem>()
                 .Property(m => m.Description)
                 .IsRequired()
                 .HasMaxLength(500);
 
-            modelBuilder.Entity<Menu>()
+            modelBuilder.Entity<MenuItem>()
                 .Property(m => m.Price)
                 .IsRequired()
                 .HasColumnType("decimal(18,2)");
 
-            modelBuilder.Entity<Menu>()
+            modelBuilder.Entity<MenuItem>()
                 .Property(m => m.Category)
                 .IsRequired()
                 .HasMaxLength(50);

@@ -9,7 +9,7 @@ namespace Reliable_Reservations.Repositories
     {
         Task<IEnumerable<Reservation>> GetAllReservations();
         Task<Reservation?> GetReservationById(int reservationId);
-        Task<List<Reservation>> GetReservationsForTimeSlotAndTables(int timeSlotId, List<int> tableNumbers);
+        Task<IEnumerable<Reservation>> GetReservationsForTablesAsync(List<Table> tables, DateTime startTime, DateTime endTime);
         Task <Reservation> AddReservation(Reservation reservation);
         Task <Reservation> UpdateReservation(Reservation reservation);
         Task DeleteReservation(int reservationId);

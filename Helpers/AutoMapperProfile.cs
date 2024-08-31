@@ -6,7 +6,15 @@ public class AutoMapperProfile : Profile
 {
     public AutoMapperProfile()
     {
+
+        // Customer mappings
+
+        CreateMap<Customer, CustomerDto>();
+
+
         // Reservation mappings
+
+        CreateMap<Reservation, ReservationDto>();
 
         // Mapping from Reservation entity to ReservationDto
         CreateMap<Reservation, ReservationDto>()
@@ -40,14 +48,23 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.TimeSlot, opt => opt.Ignore())
             .ForMember(dest => dest.Tables, opt => opt.Ignore());
 
+
         // Table mappings
-        CreateMap<TableCreateDto, Table>();
+
+        CreateMap<Table, TableDto>().ReverseMap();
         CreateMap<Table, TableCreateDto>();
-        CreateMap<Table, TableDto>();
+
 
         // TimeSlot mappings
-        CreateMap<TimeSlotCreateDto, TimeSlot>();
-        CreateMap<TimeSlot, TimeSlotCreateDto>();
-        CreateMap<TimeSlot, TimeSlotDto>();
+
+        CreateMap<TimeSlot, TimeSlotDto>().ReverseMap();
+        CreateMap<TimeSlot, TimeSlotCreateDto>().ReverseMap();
+
+
+        // MenuItem mappings
+
+        CreateMap<MenuItem, MenuItemDto>().ReverseMap();
+        CreateMap<MenuItem, MenuItemCreateDto>().ReverseMap();
+
     }
 }

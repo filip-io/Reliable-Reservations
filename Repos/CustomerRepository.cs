@@ -26,6 +26,11 @@ namespace Reliable_Reservations.Repositories
             return await _context.Customers.FindAsync(id);
         }
 
+        public async Task<bool> CustomerExists(int customerId)
+        {
+            return await _context.Customers.AnyAsync(c => c.CustomerId == customerId);
+        }
+
         public async Task AddAsync(Customer customer)
         {
             _context.Customers.Add(customer);

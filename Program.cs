@@ -35,7 +35,7 @@ namespace Reliable_Reservations
             builder.Services.AddScoped<IOpeningHoursService, OpeningHoursService>();
             builder.Services.AddScoped<IOpeningHoursRepository, OpeningHoursRepository>();
 
-            // Reservations
+            // Reservation
             builder.Services.AddScoped<IReservationService, ReservationService>();
             builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 
@@ -46,6 +46,10 @@ namespace Reliable_Reservations
             // TimeSlot
             builder.Services.AddScoped<ITimeSlotService, TimeSlotService>();
             builder.Services.AddScoped<ITimeSlotRepository, TimeSlotRepository>();
+
+            // MenuItem
+            builder.Services.AddScoped<IMenuItemService, MenuItemService>();
+            builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
 
             builder.Services.AddControllers();
                 //.AddJsonOptions(options =>
