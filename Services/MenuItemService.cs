@@ -61,7 +61,7 @@ namespace Reliable_Reservations.Services
                 throw new KeyNotFoundException($"No menu item with ID {id} found.");
             }
 
-            _mapper.Map(menuItemToUpdate, menuItemDto);
+            _mapper.Map(menuItemDto, menuItemToUpdate);
             await _menuRepository.UpdateMenuItem(menuItemToUpdate);
             return _mapper.Map<MenuItemDto>(menuItemToUpdate);
         }

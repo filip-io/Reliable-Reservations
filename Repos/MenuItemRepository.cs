@@ -41,8 +41,12 @@ namespace Reliable_Reservations.Repos
 
         public async Task DeleteMenuItem(int id)
         {
-            _context.Remove(id);
-            await _context.SaveChangesAsync();
+            var menuItem = await _context.MenuItems.FindAsync(id);
+            if (menuItem != null)
+            {
+                _context.MenuItems.Remove(menuItem);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

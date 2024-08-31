@@ -62,7 +62,7 @@ namespace Reliable_Reservations.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<ActionResult<MenuItemDto>> CreateMenuItemAsync(MenuItemCreateDto menuItemCreateDto)
+        public async Task<ActionResult<MenuItemDto>> CreateMenuItemAsync([FromBody] MenuItemCreateDto menuItemCreateDto)
         {
             try
             {

@@ -9,7 +9,8 @@ public class AutoMapperProfile : Profile
 
         // Customer mappings
 
-        CreateMap<Customer, CustomerDto>();
+        CreateMap<Customer, CustomerDto>().ReverseMap();
+        CreateMap<Customer, CustomerCreateDto>().ReverseMap();
 
 
         // Reservation mappings

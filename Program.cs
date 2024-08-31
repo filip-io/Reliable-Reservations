@@ -6,6 +6,7 @@ using Reliable_Reservations.Repositories;
 using Reliable_Reservations.Repositories.IRepos;
 using Reliable_Reservations.Services;
 using Reliable_Reservations.Services.IServices;
+using System.Text.Json.Serialization;
 
 namespace Reliable_Reservations
 {
@@ -51,11 +52,11 @@ namespace Reliable_Reservations
             builder.Services.AddScoped<IMenuItemService, MenuItemService>();
             builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
 
-            builder.Services.AddControllers();
-                //.AddJsonOptions(options =>
-                // {
-                //     options.JsonSerializerOptions.Converters.Add(new JsonDateConverter());
-                // });
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

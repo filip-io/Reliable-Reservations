@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Reliable_Reservations.Models
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum Category
     {
         Appetizer,

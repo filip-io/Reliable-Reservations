@@ -43,7 +43,7 @@ namespace Reliable_Reservations.Data
                 .IsRequired()
                 .HasMaxLength(100);
 
-            // Menu
+            // MenuItem
             modelBuilder.Entity<MenuItem>()
                 .HasKey(m => m.MenuItemId);
 
@@ -65,7 +65,17 @@ namespace Reliable_Reservations.Data
             modelBuilder.Entity<MenuItem>()
                 .Property(m => m.Category)
                 .IsRequired()
+                .HasConversion<string>()
                 .HasMaxLength(50);
+
+            modelBuilder.Entity<MenuItem>()
+                .Property(m => m.AvailabilityStatus)
+                .IsRequired();
+
+            modelBuilder.Entity<MenuItem>()
+                .Property(m => m.LastUpdated)
+                .IsRequired()
+                .HasColumnType("datetime2(0)");
 
             // OpeningHours
             modelBuilder.Entity<OpeningHours>()
