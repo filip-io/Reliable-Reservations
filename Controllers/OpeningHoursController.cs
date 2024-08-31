@@ -29,7 +29,7 @@ namespace Reliable_Reservations.Controllers
                 var openingHours = await _openingHoursService.GetAllOpeningHoursAsync();
                 if (openingHours == null || !openingHours.Any())
                 {
-                    return Ok("No opening hours found.");
+                    return NotFound("No opening hours found.");
                 }
                 return Ok(openingHours);
             }

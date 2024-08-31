@@ -20,6 +20,7 @@ namespace Reliable_Reservations.Services
         private readonly ICustomerRepository _customerRepository;
         private readonly IOpeningHoursRepository _openingHoursRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<ReservationService> _logger;
 
         public ReservationService(
             IReservationRepository reservationRepository,
@@ -27,7 +28,8 @@ namespace Reliable_Reservations.Services
             ITimeSlotService timeSlotService,
             ICustomerRepository customerRepository,
             IOpeningHoursRepository openingHoursRepository,
-            IMapper mapper)
+            IMapper mapper,
+            ILogger<ReservationService> logger)
         {
             _reservationRepository = reservationRepository;
             _tableRepository = tableRepository;
@@ -35,6 +37,7 @@ namespace Reliable_Reservations.Services
             _customerRepository = customerRepository;
             _openingHoursRepository = openingHoursRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<ReservationDto>> GetAllReservationsAsync()
@@ -189,7 +192,13 @@ namespace Reliable_Reservations.Services
 
         public async Task DeleteReservationAsync(int reservationId)
         {
-            await _reservationRepository.DeleteReservation(reservationId);
+            var reservationToDelete = await _reservationRepository.GetReservationById(reservationId);
+            if (reservationToDelete == null)
+            {
+                throw new KeyNotFoundException();
+            }
+
+            await _reservationRepository.DeleteReservation(reservationToDelete);
         }
     }
 }

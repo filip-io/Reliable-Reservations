@@ -18,7 +18,7 @@ namespace Reliable_Reservations.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<CustomerDto>>> GetAllCustomers()
         {
             try
@@ -27,7 +27,7 @@ namespace Reliable_Reservations.Controllers
 
                 if (customers.IsNullOrEmpty())
                 {
-                    return Ok("No customers in database.");
+                    return NotFound("No customers in database.");
                 }
 
                 return Ok(customers);
@@ -57,7 +57,7 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<ActionResult<CustomerDto>> CreateCustomer(CustomerCreateDto customerCreateDto)
         {
             try

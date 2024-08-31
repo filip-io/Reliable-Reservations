@@ -20,7 +20,7 @@ namespace Reliable_Reservations.Controllers
             _logger = logger;
         }
 
-        [HttpGet("getAll")]
+        [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<TimeSlotDto>>> GetAllTimeSlots()
         {
             try

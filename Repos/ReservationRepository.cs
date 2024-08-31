@@ -74,14 +74,10 @@ namespace Reliable_Reservations.Repositories
             return updatedReservation;
         }
 
-        public async Task DeleteReservation(int reservationId)
+        public async Task DeleteReservation(Reservation reservationToDelete)
         {
-            var reservation = await GetReservationById(reservationId);
-            if (reservation != null)
-            {
-                _context.Reservations.Remove(reservation);
-                await _context.SaveChangesAsync();
-            }
+            _context.Reservations.Remove(reservationToDelete);
+            await _context.SaveChangesAsync();
         }
     }
 }

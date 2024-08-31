@@ -12,6 +12,6 @@ namespace Reliable_Reservations.Repositories
         Task<IEnumerable<Reservation>> GetReservationsForTablesAsync(List<Table> tables, DateTime startTime, DateTime endTime);
         Task <Reservation> AddReservation(Reservation reservation);
         Task <Reservation> UpdateReservation(Reservation reservation);
-        Task DeleteReservation(int reservationId);
+        Task DeleteReservation(Reservation reservationToDelete);
     }
 }
