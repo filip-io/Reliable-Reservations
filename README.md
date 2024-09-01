@@ -1,8 +1,9 @@
 ﻿# Reliable Reservations API
 
-![.NET](https://img.shields.io/badge/.NET-8.0-512BD4)
-![EF Core](https://img.shields.io/badge/EF%20Core-8.0.8-blue)
-![Swashbuckle](https://img.shields.io/badge/Swashbuckle-6.4.0-green)
+[![.NET](https://img.shields.io/badge/.NET-8.0-512BD4)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+[![EF Core](https://img.shields.io/badge/EF%20Core-8.0.8-blue)](https://learn.microsoft.com/en-us/ef/core/)
+[![Swashbuckle](https://img.shields.io/badge/Swashbuckle-6.4.0-green)](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)
+
 
 A robust backend system designed to streamline restaurant management operations.
 
