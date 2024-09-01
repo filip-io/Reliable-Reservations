@@ -51,7 +51,7 @@ Developed with ASP.NET Core 8 and Entity Framework Core 8, it provides a powerfu
 
 Here is the ER diagram illustrating the relationships between the entities in the system.
 
-![ER Diagram](/media/erdiagram.webp "ER Diagram")
+![ER Diagram](/Media/erdiagram.webp "ER Diagram")
 
 ---
 
@@ -895,7 +895,7 @@ API documentation is automatically generated using Swashbuckle. Once the applica
 
 ---
 
-## 🚀 Get Started Today!
+## 🚀 Start optimizing your restaurant management!
 
 Thank you for exploring the Reliable Reservations API documentation! I hope you find it valuable and easy to use.
 
