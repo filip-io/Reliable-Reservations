@@ -359,7 +359,6 @@ API documentation is automatically generated using Swashbuckle. Once the applica
     "dayOfWeek": "Monday",
     "openTime": "00:00:00",
     "closeTime": "00:00:00"
-    },
     "isClosed": true
   }
   ```
