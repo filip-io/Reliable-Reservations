@@ -1,11 +1,12 @@
-﻿# Reliable Reservations API
+﻿﻿# Reliable Reservations API
 
 [![.NET](https://img.shields.io/badge/.NET-8.0-512BD4)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 [![EF Core](https://img.shields.io/badge/EF%20Core-8.0.8-blue)](https://learn.microsoft.com/en-us/ef/core/)
 [![Swashbuckle](https://img.shields.io/badge/Swashbuckle-6.4.0-green)](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)
 
-
 ### A robust backend system designed to streamline restaurant management operations.
+
+&nbsp;
 
 ## Table of Contents
 - [🔭 Overview](#-overview)
@@ -18,13 +19,12 @@
 - [🦾 Technologies and Packages](#-technologies-and-packages)
 - [🌐 Endpoints](#-endpoints)
   - [CustomerController](#customercontroller)
-  - [TableController](#tablecontroller)
-  - [OpeningHoursController](#openinghourscontroller)
   - [MenuItemController](#menuitemcontroller)
+  - [OpeningHoursController](#openinghourscontroller)
   - [ReservationController](#reservationcontroller)
+  - [TableController](#tablecontroller)
 
-
----
+&nbsp;
 
 ## 🔭 Overview
 
@@ -35,25 +35,25 @@ The database is built using a code-first approach with Entity Framework Core, al
 
 Developed with ASP.NET Core 8 and Entity Framework Core 8, it provides a powerful and flexible foundation for handling restaurant data and processes.
 
----
+&nbsp;
 
 ## ✨ Features
 
 - 👥 Customer Management
 - 🪑 Table Management
 - 🕒 Opening Hours Management
-- 🍽️ Menu Item Management
+- 🍽️ Menu Management
 - 📅 Reservation System
 
----
+&nbsp;
 
 ## 🔗 ER Diagram
 
-Here is the ER diagram illustrating the relationships between the entities in the system.
+Illustration of the relationships between the entities in the system.
 
 ![ER Diagram](/Media/erdiagram.webp "ER Diagram")
 
----
+&nbsp;
 
 ## 🚀 Getting Started
 
@@ -89,7 +89,7 @@ Here is the ER diagram illustrating the relationships between the entities in th
    dotnet run
    ```
 
----
+&nbsp;
 
 ## 📚 API Documentation
 
@@ -97,18 +97,18 @@ The API is organized into several controllers, each managing a specific aspect o
 
 - **CustomerController**: 
     - Manages customer data
-- **TableController**: 
-    - Handles table information and availability
-- **OpeningHoursController**: 
-    - Manages restaurant opening hours
 - **MenuItemController**: 
     - Deals with menu items and their details
+- **OpeningHoursController**: 
+    - Manages restaurant opening hours
 - **ReservationController**: 
     - Manages the reservation system
-
----
+- **TableController**: 
+    - Handles table information and availability
 
 API documentation is automatically generated using Swashbuckle. Once the application is running, you can access the Swagger UI at `/swagger`.
+
+&nbsp;
 
 ## 🦾 Technologies and Packages
 
@@ -119,15 +119,17 @@ API documentation is automatically generated using Swashbuckle. Once the applica
 - **Environment Variables**: DotNetEnv 3.1.1
 - **API Documentation**: Swashbuckle.AspNetCore 6.4.0
 
----
+&nbsp;
 
 ## 🌐 Endpoints
 
 - [CustomerController](#customercontroller)
-- [OpeningHoursController](#openinghourscontroller)
 - [MenuItemController](#menuitemcontroller)
+- [OpeningHoursController](#openinghourscontroller)
 - [ReservationController](#reservationcontroller)
 - [TableController](#tablecontroller)
+
+&nbsp;
 
 ## CustomerController
 
@@ -248,129 +250,7 @@ API documentation is automatically generated using Swashbuckle. Once the applica
   }
   ```
 
-## OpeningHoursController
-
-### 1. **Get All Opening Hours**
-- **Endpoint**: `GET /api/OpeningHours/all`
-- **Description**: Retrieve a list of all opening hours.
-- **Responses**:
-  - `200 OK`: Returns a list of `OpeningHoursDto` objects
-  - `404 Not Found`: "No opening hours found."
-- **Example Response**:
-  ```json
-  [
-    {
-      "openingHoursId": 5,
-      "dayOfWeek": "Thursday",
-      "openTime": "10:00:00",
-      "closeTime": "23:00:00",
-      "isClosed": false
-    },
-    {
-      "openingHoursId": 6,
-      "dayOfWeek": "Friday",
-      "openTime": "10:00:00",
-      "closeTime": "23:00:00",
-      "isClosed": false
-    }
-  ]
-  ```
-
-### 2. **Get Opening Hours by ID**
-- **Endpoint**: `GET /api/OpeningHours/{id}`
-- **Description**: Retrieve specific opening hours by ID.
-- **Parameters**:
-  - `id` (path parameter): The ID of the opening hours to retrieve.
-- **Responses**:
-  - `200 OK`: Returns an `OpeningHoursDto` object.
-  - `404 Not Found`: When the opening hours with the specified ID are not found.
-- **Example Response**:
-  ```json
-  {
-    "openingHoursId": 4,
-    "dayOfWeek": "Wednesday",
-    "openTime": "10:00:00",
-    "closeTime": "23:00:00",
-    "isClosed": false
-  }
-  ```
-
-### 3. **Create Opening Hours**
-- **Endpoint**: `POST /api/OpeningHours/create`
-- **Description**: Create new opening hours.
-- **Request Body**: `OpeningHoursCreateDto` object
-- **Responses**:
-  - `201 Created`: Returns the created `OpeningHoursDto` object.
-- **Example Request**:
-  ```json
-  {
-    "dayOfWeek": "Sunday",
-    "openTime": {
-      "hour": 10,
-      "minute": 0
-    },
-    "closeTime": {
-      "hour": 23,
-      "minute": 0
-    },
-    "isClosed": false
-  }
-  ```
-- **Example Response**:
-  ```json
-  {
-    "openingHoursId": 1,
-    "dayOfWeek": "Sunday",
-    "openTime": "10:00",
-    "closeTime": "23:00"
-  }
-  ```
-
-### 4. **Update Opening Hours**
-- **Endpoint**: `PUT /api/OpeningHours/{id}`
-- **Description**: Update existing opening hours.
-- **Parameters**:
-  - `id` (path parameter): The ID of the opening hours to update.
-- **Request Body**: `OpeningHoursDto` object
-- **Responses**:
-  - `200 OK`: Returns the updated `OpeningHoursDto` object.
-  - `400 Bad Request`: When there's an ID mismatch.
-  - `404 Not Found`: When the opening hours with the specified ID are not found.
-- **Example Request**:
-  ```json
-  {
-    "openingHoursId": 2,
-    "dayOfWeek": "Monday",
-    "openTime": {
-      "hour": 0,
-      "minute": 0
-    },
-    "closeTime": {
-      "hour": 0,
-      "minute": 0
-    },
-    "isClosed": true
-  }
-  ```
-- **Example Response**:
-  ```json
-  {
-    "openingHoursId": 2,
-    "dayOfWeek": "Monday",
-    "openTime": "00:00:00",
-    "closeTime": "00:00:00"
-    "isClosed": true
-  }
-  ```
-
-### 5. **Delete Opening Hours**
-- **Endpoint**: `DELETE /api/OpeningHours/{id}`
-- **Description**: Delete opening hours.
-- **Parameters**:
-  - `id` (path parameter): The ID of the opening hours to delete.
-- **Responses**:
-  - `204 No Content`: When successfully deleted.
-  - `404 Not Found`: When the opening hours with the specified ID are not found.
+&nbsp;
 
 ## MenuItemController
 
@@ -501,6 +381,134 @@ API documentation is automatically generated using Swashbuckle. Once the applica
     "message": "Menu item with ID 1 was successfully deleted."
   }
   ```
+
+&nbsp;
+
+## OpeningHoursController
+
+### 1. **Get All Opening Hours**
+- **Endpoint**: `GET /api/OpeningHours/all`
+- **Description**: Retrieve a list of all opening hours.
+- **Responses**:
+  - `200 OK`: Returns a list of `OpeningHoursDto` objects
+  - `404 Not Found`: "No opening hours found."
+- **Example Response**:
+  ```json
+  [
+    {
+      "openingHoursId": 5,
+      "dayOfWeek": "Thursday",
+      "openTime": "10:00:00",
+      "closeTime": "23:00:00",
+      "isClosed": false
+    },
+    {
+      "openingHoursId": 6,
+      "dayOfWeek": "Friday",
+      "openTime": "10:00:00",
+      "closeTime": "23:00:00",
+      "isClosed": false
+    }
+  ]
+  ```
+
+### 2. **Get Opening Hours by ID**
+- **Endpoint**: `GET /api/OpeningHours/{id}`
+- **Description**: Retrieve specific opening hours by ID.
+- **Parameters**:
+  - `id` (path parameter): The ID of the opening hours to retrieve.
+- **Responses**:
+  - `200 OK`: Returns an `OpeningHoursDto` object.
+  - `404 Not Found`: When the opening hours with the specified ID are not found.
+- **Example Response**:
+  ```json
+  {
+    "openingHoursId": 4,
+    "dayOfWeek": "Wednesday",
+    "openTime": "10:00:00",
+    "closeTime": "23:00:00",
+    "isClosed": false
+  }
+  ```
+
+### 3. **Create Opening Hours**
+- **Endpoint**: `POST /api/OpeningHours/create`
+- **Description**: Create new opening hours.
+- **Request Body**: `OpeningHoursCreateDto` object
+- **Responses**:
+  - `201 Created`: Returns the created `OpeningHoursDto` object.
+- **Example Request**:
+  ```json
+  {
+    "dayOfWeek": "Sunday",
+    "openTime": {
+      "hour": 10,
+      "minute": 0
+    },
+    "closeTime": {
+      "hour": 23,
+      "minute": 0
+    },
+    "isClosed": false
+  }
+  ```
+- **Example Response**:
+  ```json
+  {
+    "openingHoursId": 1,
+    "dayOfWeek": "Sunday",
+    "openTime": "10:00",
+    "closeTime": "23:00"
+  }
+  ```
+
+### 4. **Update Opening Hours**
+- **Endpoint**: `PUT /api/OpeningHours/{id}`
+- **Description**: Update existing opening hours.
+- **Parameters**:
+  - `id` (path parameter): The ID of the opening hours to update.
+- **Request Body**: `OpeningHoursDto` object
+- **Responses**:
+  - `200 OK`: Returns the updated `OpeningHoursDto` object.
+  - `400 Bad Request`: When there's an ID mismatch.
+  - `404 Not Found`: When the opening hours with the specified ID are not found.
+- **Example Request**:
+  ```json
+  {
+    "openingHoursId": 2,
+    "dayOfWeek": "Monday",
+    "openTime": {
+      "hour": 0,
+      "minute": 0
+    },
+    "closeTime": {
+      "hour": 0,
+      "minute": 0
+    },
+    "isClosed": true
+  }
+  ```
+- **Example Response**:
+  ```json
+  {
+    "openingHoursId": 2,
+    "dayOfWeek": "Monday",
+    "openTime": "00:00:00",
+    "closeTime": "00:00:00"
+    "isClosed": true
+  }
+  ```
+
+### 5. **Delete Opening Hours**
+- **Endpoint**: `DELETE /api/OpeningHours/{id}`
+- **Description**: Delete opening hours.
+- **Parameters**:
+  - `id` (path parameter): The ID of the opening hours to delete.
+- **Responses**:
+  - `204 No Content`: When successfully deleted.
+  - `404 Not Found`: When the opening hours with the specified ID are not found.
+
+&nbsp;
 
 ## ReservationController
 
@@ -761,6 +769,8 @@ API documentation is automatically generated using Swashbuckle. Once the applica
   }
   ```
 
+&nbsp;
+
 ## TableController
 
 ### 1. **Get All Tables**
@@ -892,7 +902,7 @@ API documentation is automatically generated using Swashbuckle. Once the applica
   Table with ID 1 was successfully deleted.
   ```
 
----
+&nbsp;
 
 ## 🚀 Start optimizing your restaurant management!
 
