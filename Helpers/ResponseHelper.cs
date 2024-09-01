@@ -20,7 +20,7 @@ public static class ResponseHelper
     public static ActionResult HandleBadRequest(ILogger logger, string message)
     {
         logger.LogWarning(message);
-        return new BadRequestObjectResult(message);
+        return new BadRequestObjectResult(new { error = message });
     }
 
     public static ActionResult HandleSuccess(ILogger logger, string message)

@@ -10,6 +10,7 @@
 ## Table of Contents
 - [🔭 Overview](#-overview)
 - [✨ Features](#-features)
+- [🔗 ER Diagram](#-er-diagram)
 - [🚀 Getting Started](#-getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
@@ -22,6 +23,9 @@
   - [MenuItemController](#menuitemcontroller)
   - [ReservationController](#reservationcontroller)
 
+
+---
+
 ## 🔭 Overview
 
 Reliable Reservations API is a comprehensive solution for managing various aspects of restaurant operations.
@@ -31,6 +35,7 @@ The database is built using a code-first approach with Entity Framework Core, al
 
 Developed with ASP.NET Core 8 and Entity Framework Core 8, it provides a powerful and flexible foundation for handling restaurant data and processes.
 
+---
 
 ## ✨ Features
 
@@ -39,6 +44,16 @@ Developed with ASP.NET Core 8 and Entity Framework Core 8, it provides a powerfu
 - 🕒 Opening Hours Management
 - 🍽️ Menu Item Management
 - 📅 Reservation System
+
+---
+
+## 🔗 ER Diagram
+
+Here is the ER diagram illustrating the relationships between the entities in the system.
+
+![ER Diagram](/media/erdiagram.webp "ER Diagram")
+
+---
 
 ## 🚀 Getting Started
 
@@ -74,6 +89,8 @@ Developed with ASP.NET Core 8 and Entity Framework Core 8, it provides a powerfu
    dotnet run
    ```
 
+---
+
 ## 📚 API Documentation
 
 The API is organized into several controllers, each managing a specific aspect of the restaurant system:
@@ -89,6 +106,7 @@ The API is organized into several controllers, each managing a specific aspect o
 - **ReservationController**: 
     - Manages the reservation system
 
+---
 
 API documentation is automatically generated using Swashbuckle. Once the application is running, you can access the Swagger UI at `/swagger`.
 
@@ -100,11 +118,6 @@ API documentation is automatically generated using Swashbuckle. Once the applica
 - **Mapping**: AutoMapper 13.0.1
 - **Environment Variables**: DotNetEnv 3.1.1
 - **API Documentation**: Swashbuckle.AspNetCore 6.4.0
-
-
----
-
-⭐ Feel free to Star on GitHub — it helps!
 
 ---
 
@@ -888,4 +901,4 @@ Thank you for exploring the Reliable Reservations API documentation! I hope you 
 
 ⭐ **Star the project** on GitHub if you want to support! Your feedback and contributions are always welcome.
 
-Happy coding and best of luck with your restaurant management!
+I wish you success in optimizing your restaurant management operations.
