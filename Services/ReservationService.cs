@@ -106,7 +106,6 @@ namespace Reliable_Reservations.Services
             }
             catch (Exception ex)
             {
-                // Handle specific exceptions if needed, or log them
                 throw new InvalidOperationException("Failed to create time slot: " + ex.Message);
             }
 

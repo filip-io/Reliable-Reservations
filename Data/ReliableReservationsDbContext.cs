@@ -43,6 +43,7 @@ namespace Reliable_Reservations.Data
                 .IsRequired()
                 .HasMaxLength(100);
 
+
             // MenuItem
             modelBuilder.Entity<MenuItem>()
                 .HasKey(m => m.MenuItemId);
@@ -77,6 +78,255 @@ namespace Reliable_Reservations.Data
                 .IsRequired()
                 .HasColumnType("datetime2(0)");
 
+
+            // Seed data for MenuItem
+            modelBuilder.Entity<MenuItem>().HasData
+                (
+                    // Appetizer
+                    new MenuItem
+                    {
+                        MenuItemId = 1,
+                        Name = "Bruschetta",
+                        Description = "Grilled bread topped with diced tomatoes, garlic, and basil.",
+                        Price = 6.99m,
+                        Category = Category.Appetizer,
+                        AvailabilityStatus = true,
+                        LastUpdated = DateTime.UtcNow
+                    },
+                    new MenuItem
+                    {
+                        MenuItemId = 2,
+                        Name = "Stuffed Mushrooms",
+                        Description = "Mushrooms stuffed with garlic, herbs, and cream cheese.",
+                        Price = 7.99m,
+                        Category = Category.Appetizer,
+                        AvailabilityStatus = true,
+                        LastUpdated = DateTime.UtcNow
+                    },
+
+                    // Starter
+                    new MenuItem
+                    {
+                        MenuItemId = 3,
+                        Name = "Garlic Bread",
+                        Description = "Toasted bread slices with garlic butter.",
+                        Price = 4.99m,
+                        Category = Category.Starter,
+                        AvailabilityStatus = true,
+                        LastUpdated = DateTime.UtcNow
+                    },
+                    new MenuItem
+                    {
+                        MenuItemId = 4,
+                        Name = "Tomato Basil Soup",
+                        Description = "Creamy tomato soup with fresh basil.",
+                        Price = 5.99m,
+                        Category = Category.Starter,
+                        AvailabilityStatus = true,
+                        LastUpdated = DateTime.UtcNow
+                    },
+
+                    // Main Course
+                    new MenuItem
+                    {
+                        MenuItemId = 5,
+                        Name = "Grilled Salmon",
+                        Description = "Grilled salmon fillet served with lemon butter sauce.",
+                        Price = 15.99m,
+                        Category = Category.MainCourse,
+                        AvailabilityStatus = true,
+                        LastUpdated = DateTime.UtcNow
+                    },
+                    new MenuItem
+                    {
+                        MenuItemId = 6,
+                        Name = "Beef Steak",
+                        Description = "Juicy grilled beef steak with a side of vegetables.",
+                        Price = 19.99m,
+                        Category = Category.MainCourse,
+                        AvailabilityStatus = true,
+                        LastUpdated = DateTime.UtcNow
+                    },
+
+                    // Dessert
+                    new MenuItem
+                    {
+                        MenuItemId = 7,
+                        Name = "Chocolate Lava Cake",
+                        Description = "Warm chocolate cake with a gooey molten center.",
+                        Price = 6.99m,
+                        Category = Category.Dessert,
+                        AvailabilityStatus = true,
+                        LastUpdated = DateTime.UtcNow
+                    },
+                    new MenuItem
+                    {
+                        MenuItemId = 8,
+                        Name = "Tiramisu",
+                        Description = "Classic Italian dessert with layers of mascarpone and espresso-soaked ladyfingers.",
+                        Price = 5.99m,
+                        Category = Category.Dessert,
+                        AvailabilityStatus = true,
+                        LastUpdated = DateTime.UtcNow
+                    },
+
+                    // Beverage
+                    new MenuItem
+                    {
+                        MenuItemId = 9,
+                        Name = "Espresso",
+                        Description = "Strong and rich espresso coffee.",
+                        Price = 2.99m,
+                        Category = Category.Beverage,
+                        AvailabilityStatus = true,
+                        LastUpdated = DateTime.UtcNow
+                    },
+                    new MenuItem
+                    {
+                        MenuItemId = 10,
+                        Name = "Lemonade",
+                        Description = "Refreshing homemade lemonade.",
+                        Price = 3.99m,
+                        Category = Category.Beverage,
+                        AvailabilityStatus = true,
+                        LastUpdated = DateTime.UtcNow
+                    },
+
+                    // Side Dish
+                    new MenuItem
+                    {
+                        MenuItemId = 11,
+                        Name = "French Fries",
+                        Description = "Crispy golden fries with a side of ketchup.",
+                        Price = 3.99m,
+                        Category = Category.SideDish,
+                        AvailabilityStatus = true,
+                        LastUpdated = DateTime.UtcNow
+                    },
+                    new MenuItem
+                    {
+                        MenuItemId = 12,
+                        Name = "Mashed Potatoes",
+                        Description = "Creamy mashed potatoes with butter and herbs.",
+                        Price = 4.99m,
+                        Category = Category.SideDish,
+                        AvailabilityStatus = true,
+                        LastUpdated = DateTime.UtcNow
+                    },
+
+                    // Soup
+                    new MenuItem
+                    {
+                        MenuItemId = 13,
+                        Name = "Minestrone Soup",
+                        Description = "Hearty Italian soup with vegetables and pasta.",
+                        Price = 5.99m,
+                        Category = Category.Soup,
+                        AvailabilityStatus = true,
+                        LastUpdated = DateTime.UtcNow
+                    },
+                    new MenuItem
+                    {
+                        MenuItemId = 14,
+                        Name = "Chicken Noodle Soup",
+                        Description = "Classic chicken soup with noodles and vegetables.",
+                        Price = 5.99m,
+                        Category = Category.Soup,
+                        AvailabilityStatus = true,
+                        LastUpdated = DateTime.UtcNow
+                    },
+
+                    // Salad
+                    new MenuItem
+                    {
+                        MenuItemId = 15,
+                        Name = "Greek Salad",
+                        Description = "Salad with tomatoes, cucumbers, olives, and feta cheese.",
+                        Price = 6.99m,
+                        Category = Category.Salad,
+                        AvailabilityStatus = true,
+                        LastUpdated = DateTime.UtcNow
+                    },
+                    new MenuItem
+                    {
+                        MenuItemId = 16,
+                        Name = "Caprese Salad",
+                        Description = "Fresh tomatoes, mozzarella, and basil with balsamic glaze.",
+                        Price = 7.99m,
+                        Category = Category.Salad,
+                        AvailabilityStatus = true,
+                        LastUpdated = DateTime.UtcNow
+                    },
+
+                    // Special
+                    new MenuItem
+                    {
+                        MenuItemId = 17,
+                        Name = "Lobster Tail",
+                        Description = "Succulent lobster tail served with drawn butter.",
+                        Price = 29.99m,
+                        Category = Category.Special,
+                        AvailabilityStatus = true,
+                        LastUpdated = DateTime.UtcNow
+                    },
+                    new MenuItem
+                    {
+                        MenuItemId = 18,
+                        Name = "Truffle Risotto",
+                        Description = "Creamy risotto with truffle oil and parmesan.",
+                        Price = 24.99m,
+                        Category = Category.Special,
+                        AvailabilityStatus = true,
+                        LastUpdated = DateTime.UtcNow
+                    },
+
+                    // Kids
+                    new MenuItem
+                    {
+                        MenuItemId = 19,
+                        Name = "Chicken Nuggets",
+                        Description = "Crispy chicken nuggets served with fries.",
+                        Price = 5.99m,
+                        Category = Category.Kids,
+                        AvailabilityStatus = true,
+                        LastUpdated = DateTime.UtcNow
+                    },
+                    new MenuItem
+                    {
+                        MenuItemId = 20,
+                        Name = "Mac and Cheese",
+                        Description = "Creamy macaroni and cheese.",
+                        Price = 4.99m,
+                        Category = Category.Kids,
+                        AvailabilityStatus = true,
+                        LastUpdated = DateTime.UtcNow
+                    },
+
+                    // Vegetarian
+                    new MenuItem
+                    {
+                        MenuItemId = 21,
+                        Name = "Vegetable Stir-Fry",
+                        Description = "Mixed vegetables stir-fried with soy sauce and served over rice.",
+                        Price = 9.99m,
+                        Category = Category.Vegetarian,
+                        AvailabilityStatus = true,
+                        LastUpdated = DateTime.UtcNow
+                    },
+                    new MenuItem
+                    {
+                        MenuItemId = 22,
+                        Name = "Vegetarian Lasagna",
+                        Description = "Lasagna layered with spinach, ricotta, and marinara sauce.",
+                        Price = 11.99m,
+                        Category = Category.Vegetarian,
+                        AvailabilityStatus = true,
+                        LastUpdated = DateTime.UtcNow
+                    }
+                );
+
+
+
             // OpeningHours
             modelBuilder.Entity<OpeningHours>()
                 .HasKey(o => o.OpeningHoursId);
@@ -103,128 +353,6 @@ namespace Reliable_Reservations.Data
                 .HasMany(o => o.TimeSlots)
                 .WithOne(t => t.OpeningHours)
                 .HasForeignKey(t => t.OpeningHoursId);
-
-            // SpecialOpeningHours
-            modelBuilder.Entity<SpecialOpeningHours>()
-                .HasKey(s => s.SpecialOpeningHoursId);
-
-            modelBuilder.Entity<SpecialOpeningHours>()
-                .Property(s => s.Date)
-                .IsRequired();
-
-            modelBuilder.Entity<SpecialOpeningHours>()
-                .Property(s => s.OpenTime)
-                .IsRequired(false)
-                .HasColumnType("time(0)");
-
-            modelBuilder.Entity<SpecialOpeningHours>()
-                .Property(s => s.CloseTime)
-                .IsRequired(false)
-                .HasColumnType("time(0)");
-
-            modelBuilder.Entity<SpecialOpeningHours>()
-                .Property(s => s.IsClosed)
-                .IsRequired();
-
-            modelBuilder.Entity<SpecialOpeningHours>()
-                .HasOne(s => s.OpeningHours)
-                .WithMany(o => o.SpecialOpeningHours)
-                .HasForeignKey(s => s.OpeningHoursId);
-
-            // Reservation
-            modelBuilder.Entity<Reservation>()
-                .HasKey(r => r.ReservationId);
-
-            modelBuilder.Entity<Reservation>()
-                .HasOne(r => r.Customer)
-                .WithMany(c => c.Reservations)
-                .HasForeignKey(r => r.CustomerId);
-
-            modelBuilder.Entity<Reservation>()
-                .HasOne(r => r.TimeSlot)
-                .WithMany(t => t.Reservations)
-                .HasForeignKey(r => r.TimeSlotId);
-
-            modelBuilder.Entity<Reservation>()
-                .Property(r => r.ReservationDate)
-                .IsRequired()
-                .HasColumnType("datetime2(0)");
-
-            modelBuilder.Entity<Reservation>()
-                .HasMany(r => r.Tables)
-                .WithMany(t => t.Reservations)
-                .UsingEntity<Dictionary<string, object>>
-                (
-                    "ReservationTables",
-                    j => j
-                        .HasOne<Table>()
-                        .WithMany()
-                        .HasForeignKey("TableId")
-                        .OnDelete(DeleteBehavior.Cascade),
-                    j => j
-                        .HasOne<Reservation>()
-                        .WithMany()
-                        .HasForeignKey("ReservationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                );
-
-            modelBuilder.Entity<Reservation>()
-                .Property(r => r.NumberOfGuests)
-                .IsRequired()
-                .HasDefaultValue(1);
-
-            modelBuilder.Entity<Reservation>()
-                .Property(r => r.SpecialRequests)
-                .HasMaxLength(300);
-
-            // Table
-            modelBuilder.Entity<Table>()
-                .HasKey(t => t.TableId);
-
-            modelBuilder.Entity<Table>()
-                .Property(t => t.TableNumber)
-                .IsRequired();
-
-            modelBuilder.Entity<Table>()
-                .Property(t => t.SeatingCapacity)
-                .IsRequired();
-
-            modelBuilder.Entity<Table>()
-                .Property(t => t.Location)
-                .HasMaxLength(50);
-
-            modelBuilder.Entity<Table>()
-                .HasIndex(t => t.TableNumber)
-                .IsUnique();
-
-            // TimeSlot
-            modelBuilder.Entity<TimeSlot>()
-                .HasKey(t => t.TimeSlotId);
-
-            modelBuilder.Entity<TimeSlot>()
-                .Property(t => t.StartTime)
-                .IsRequired()
-                .HasColumnType("datetime2(0)");
-
-            modelBuilder.Entity<TimeSlot>()
-                .Property(t => t.EndTime)
-                .IsRequired()
-                .HasColumnType("datetime2(0)");
-
-
-            modelBuilder.Entity<TimeSlot>()
-                .Property(t => t.SlotDuration)
-                .IsRequired();
-
-            modelBuilder.Entity<TimeSlot>()
-                .HasOne(t => t.OpeningHours)
-                .WithMany(o => o.TimeSlots)
-                .HasForeignKey(t => t.OpeningHoursId);
-
-            modelBuilder.Entity<TimeSlot>()
-                .HasMany(t => t.Reservations)
-                .WithOne(r => r.TimeSlot)
-                .HasForeignKey(r => r.TimeSlotId);
 
             // Seed data for OpeningHours
             modelBuilder.Entity<OpeningHours>().HasData
@@ -286,6 +414,132 @@ namespace Reliable_Reservations.Data
                         IsClosed = false
                     }
                 );
+
+
+            // SpecialOpeningHours
+            modelBuilder.Entity<SpecialOpeningHours>()
+                .HasKey(s => s.SpecialOpeningHoursId);
+
+            modelBuilder.Entity<SpecialOpeningHours>()
+                .Property(s => s.Date)
+                .IsRequired();
+
+            modelBuilder.Entity<SpecialOpeningHours>()
+                .Property(s => s.OpenTime)
+                .IsRequired(false)
+                .HasColumnType("time(0)");
+
+            modelBuilder.Entity<SpecialOpeningHours>()
+                .Property(s => s.CloseTime)
+                .IsRequired(false)
+                .HasColumnType("time(0)");
+
+            modelBuilder.Entity<SpecialOpeningHours>()
+                .Property(s => s.IsClosed)
+                .IsRequired();
+
+            modelBuilder.Entity<SpecialOpeningHours>()
+                .HasOne(s => s.OpeningHours)
+                .WithMany(o => o.SpecialOpeningHours)
+                .HasForeignKey(s => s.OpeningHoursId);
+
+
+            // Reservation
+            modelBuilder.Entity<Reservation>()
+                .HasKey(r => r.ReservationId);
+
+            modelBuilder.Entity<Reservation>()
+                .HasOne(r => r.Customer)
+                .WithMany(c => c.Reservations)
+                .HasForeignKey(r => r.CustomerId);
+
+            modelBuilder.Entity<Reservation>()
+                .HasOne(r => r.TimeSlot)
+                .WithMany(t => t.Reservations)
+                .HasForeignKey(r => r.TimeSlotId);
+
+            modelBuilder.Entity<Reservation>()
+                .Property(r => r.ReservationDate)
+                .IsRequired()
+                .HasColumnType("datetime2(0)");
+
+            modelBuilder.Entity<Reservation>()
+                .HasMany(r => r.Tables)
+                .WithMany(t => t.Reservations)
+                .UsingEntity<Dictionary<string, object>>
+                (
+                    "ReservationTables",
+                    j => j
+                        .HasOne<Table>()
+                        .WithMany()
+                        .HasForeignKey("TableId")
+                        .OnDelete(DeleteBehavior.Cascade),
+                    j => j
+                        .HasOne<Reservation>()
+                        .WithMany()
+                        .HasForeignKey("ReservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                );
+
+            modelBuilder.Entity<Reservation>()
+                .Property(r => r.NumberOfGuests)
+                .IsRequired()
+                .HasDefaultValue(1);
+
+            modelBuilder.Entity<Reservation>()
+                .Property(r => r.SpecialRequests)
+                .HasMaxLength(300);
+
+
+            // Table
+            modelBuilder.Entity<Table>()
+                .HasKey(t => t.TableId);
+
+            modelBuilder.Entity<Table>()
+                .Property(t => t.TableNumber)
+                .IsRequired();
+
+            modelBuilder.Entity<Table>()
+                .Property(t => t.SeatingCapacity)
+                .IsRequired();
+
+            modelBuilder.Entity<Table>()
+                .Property(t => t.Location)
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<Table>()
+                .HasIndex(t => t.TableNumber)
+                .IsUnique();
+
+
+            // TimeSlot
+            modelBuilder.Entity<TimeSlot>()
+                .HasKey(t => t.TimeSlotId);
+
+            modelBuilder.Entity<TimeSlot>()
+                .Property(t => t.StartTime)
+                .IsRequired()
+                .HasColumnType("datetime2(0)");
+
+            modelBuilder.Entity<TimeSlot>()
+                .Property(t => t.EndTime)
+                .IsRequired()
+                .HasColumnType("datetime2(0)");
+
+
+            modelBuilder.Entity<TimeSlot>()
+                .Property(t => t.SlotDuration)
+                .IsRequired();
+
+            modelBuilder.Entity<TimeSlot>()
+                .HasOne(t => t.OpeningHours)
+                .WithMany(o => o.TimeSlots)
+                .HasForeignKey(t => t.OpeningHoursId);
+
+            modelBuilder.Entity<TimeSlot>()
+                .HasMany(t => t.Reservations)
+                .WithOne(r => r.TimeSlot)
+                .HasForeignKey(r => r.TimeSlotId);
         }
     }
 }

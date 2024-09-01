@@ -307,11 +307,11 @@ API documentation is automatically generated using Swashbuckle. Once the applica
     "dayOfWeek": "Sunday",
     "openTime": {
       "hour": 10,
-      "minute": 00
+      "minute": 0
     },
     "closeTime": {
       "hour": 23,
-      "minute": 00
+      "minute": 0
     },
     "isClosed": false
   }

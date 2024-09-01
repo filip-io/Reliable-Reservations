@@ -39,11 +39,11 @@ namespace Reliable_Reservations.Repositories
         public async Task<IEnumerable<Reservation>> GetReservationsForTablesAsync(List<Table> tables, DateTime startTime, DateTime endTime)
         {
             return await _context.Reservations
-                .Include(r => r.TimeSlot) // Eagerly load the TimeSlot associated with each Reservation
-                .Where(r => r.Tables.Any(t => tables.Contains(t)) && // Check if any of the selected tables are in the reservation
-                            r.TimeSlot.StartTime < endTime && // Ensure the TimeSlot overlaps with the specified time range
+                .Include(r => r.TimeSlot)
+                .Where(r => r.Tables.Any(t => tables.Contains(t)) &&
+                            r.TimeSlot.StartTime < endTime &&
                             r.TimeSlot.EndTime > startTime)
-                .ToListAsync(); // Execute the query and return the result as a list
+                .ToListAsync();
         }
 
         public async Task<Reservation> AddReservation(Reservation reservation)
