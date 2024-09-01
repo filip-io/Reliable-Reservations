@@ -1,6 +1,88 @@
-# API Controllers Documentation
+﻿# Reliable Reservations API
 
-This document provides an overview of the various controllers in the Reliable Reservations API.
+![.NET](https://img.shields.io/badge/.NET-8.0-512BD4)
+![EF Core](https://img.shields.io/badge/EF%20Core-8.0.8-blue)
+![Swashbuckle](https://img.shields.io/badge/Swashbuckle-6.4.0-green)
+
+A robust backend system designed to streamline restaurant management operations.
+
+## 🍽️ Overview
+
+Reliable Reservations API is a comprehensive solution for managing various aspects of restaurant operations. 
+It uses repositories, services, and dependency injection to promote modularity, testability, and scalability.
+
+Built with ASP.NET Core 8 and Entity Framework Core 8, it offers a powerful and flexible foundation for handling restaurant data and processes.
+
+
+## ✨ Features
+
+- 👥 Customer Management
+- 🪑 Table Management
+- 🕒 Opening Hours Management
+- 🍽️ Menu Item Management
+- 📅 Reservation System
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- .NET 8.0 SDK
+- SQL Server
+
+### Installation
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/yourusername/reliable-reservations-api.git
+   ```
+2. Navigate to the project directory:
+   ```
+   cd reliable-reservations-api
+   ```
+3. Restore dependencies:
+   ```
+   dotnet restore
+   ```
+4. Create a `.env` file in the root directory and add your database connection string:
+   ```
+   DATABASE_CONNECTION_STRING=your_connection_string_here
+   ```
+5. Apply database migrations:
+   ```
+   dotnet ef database update
+   ```
+6. Run the application:
+   ```
+   dotnet run
+   ```
+
+## 📚 API Documentation
+
+Our API is organized into several controllers, each managing a specific aspect of the restaurant system:
+
+- **CustomerController**: Manages customer data
+- **TableController**: Handles table information and availability
+- **OpeningHoursController**: Manages restaurant opening hours
+- **MenuItemController**: Deals with menu items and their details
+- **ReservationController**: Manages the reservation system
+
+API documentation is automatically generated using Swashbuckle. Once the application is running, you can access the Swagger UI at `/swagger`.
+
+## 🛠️ Technologies and Packages
+
+- **Framework**: ASP.NET Core 8.0
+- **ORM**: Entity Framework Core 8.0.8
+- **Database**: SQL Server
+- **Mapping**: AutoMapper 13.0.1
+- **Environment Variables**: DotNetEnv 3.1.1
+- **API Documentation**: Swashbuckle.AspNetCore 6.4.0
+
+
+---
+
+⭐ Feel free to Star on GitHub — it helps!
+
+---
 
 ## Table of Contents
 - [CustomerController](#customercontroller)
