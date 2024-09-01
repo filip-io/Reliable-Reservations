@@ -5,14 +5,31 @@
 [![Swashbuckle](https://img.shields.io/badge/Swashbuckle-6.4.0-green)](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)
 
 
-A robust backend system designed to streamline restaurant management operations.
+### A robust backend system designed to streamline restaurant management operations.
 
-## 🍽️ Overview
+## Table of Contents
+- [🔭 Overview](#-overview)
+- [✨ Features](#-features)
+- [🚀 Getting Started](#-getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [📚 API Documentation](#-api-documentation)
+- [🦾 Technologies and Packages](#-technologies-and-packages)
+- [🌐 Endpoints](#-endpoints)
+  - [CustomerController](#customercontroller)
+  - [TableController](#tablecontroller)
+  - [OpeningHoursController](#openinghourscontroller)
+  - [MenuItemController](#menuitemcontroller)
+  - [ReservationController](#reservationcontroller)
 
-Reliable Reservations API is a comprehensive solution for managing various aspects of restaurant operations. 
-It uses repositories, services, and dependency injection to promote modularity, testability, and scalability.
+## 🔭 Overview
 
-Built with ASP.NET Core 8 and Entity Framework Core 8, it offers a powerful and flexible foundation for handling restaurant data and processes.
+Reliable Reservations API is a comprehensive solution for managing various aspects of restaurant operations.
+
+I built the system using a layered architecture with controllers, services, and repositories, leveraging dependency injection to enhance modularity, testability, and scalability. 
+The database is built using a code-first approach with Entity Framework Core, allowing the schema to be generated and managed directly from the application's data models.
+
+Developed with ASP.NET Core 8 and Entity Framework Core 8, it provides a powerful and flexible foundation for handling restaurant data and processes.
 
 
 ## ✨ Features
@@ -59,17 +76,23 @@ Built with ASP.NET Core 8 and Entity Framework Core 8, it offers a powerful and 
 
 ## 📚 API Documentation
 
-Our API is organized into several controllers, each managing a specific aspect of the restaurant system:
+The API is organized into several controllers, each managing a specific aspect of the restaurant system:
 
-- **CustomerController**: Manages customer data
-- **TableController**: Handles table information and availability
-- **OpeningHoursController**: Manages restaurant opening hours
-- **MenuItemController**: Deals with menu items and their details
-- **ReservationController**: Manages the reservation system
+- **CustomerController**: 
+    - Manages customer data
+- **TableController**: 
+    - Handles table information and availability
+- **OpeningHoursController**: 
+    - Manages restaurant opening hours
+- **MenuItemController**: 
+    - Deals with menu items and their details
+- **ReservationController**: 
+    - Manages the reservation system
+
 
 API documentation is automatically generated using Swashbuckle. Once the application is running, you can access the Swagger UI at `/swagger`.
 
-## 🛠️ Technologies and Packages
+## 🦾 Technologies and Packages
 
 - **Framework**: ASP.NET Core 8.0
 - **ORM**: Entity Framework Core 8.0.8
@@ -85,7 +108,8 @@ API documentation is automatically generated using Swashbuckle. Once the applica
 
 ---
 
-## Table of Contents
+## 🌐 Endpoints
+
 - [CustomerController](#customercontroller)
 - [OpeningHoursController](#openinghourscontroller)
 - [MenuItemController](#menuitemcontroller)
@@ -99,7 +123,7 @@ API documentation is automatically generated using Swashbuckle. Once the applica
 - **Description**: Retrieve a list of all customers.
 - **Responses**:
   - `200 OK`: Returns a list of `CustomerDto` objects.
-  - `200 OK`: "No customers in database." (when no customers are found)
+  - `404 Not Found`: "No customers in database." (when no customers are found)
 - **Example Response**:
   ```json
   [
@@ -147,21 +171,21 @@ API documentation is automatically generated using Swashbuckle. Once the applica
   - `201 Created`: Returns the created `CustomerDto` object.
 - **Example Request**:
   ```json
-  {
-    "firstName": "Alice",
-    "lastName": "Johnson",
-    "phoneNumber": "555-123-4567",
-    "email": "alice.johnson@example.com"
-  }
+    {
+      "firstName": "Tom",
+      "lastName": "Cruise",
+      "phoneNumber": "555-123-4567",
+      "email": "tom@cruise.com"
+    }
   ```
 - **Example Response**:
   ```json
   {
     "customerId": 3,
-    "firstName": "Alice",
-    "lastName": "Johnson",
-    "phoneNumber": "555-123-4567",
-    "email": "alice.johnson@example.com"
+      "firstName": "Tom",
+      "lastName": "Cruise",
+      "phoneNumber": "555-123-4567",
+      "email": "tom@cruise.com"
   }
   ```
 
@@ -179,20 +203,20 @@ API documentation is automatically generated using Swashbuckle. Once the applica
   ```json
   {
     "customerId": 1,
-    "firstName": "John",
-    "lastName": "Doe",
+    "firstName": "Matthew",
+    "lastName": "McConaughey",
     "phoneNumber": "123-456-7899",
-    "email": "john.doe.updated@example.com"
+    "email": "matthew@example.com"
   }
   ```
 - **Example Response**:
   ```json
   {
     "customerId": 1,
-    "firstName": "John",
-    "lastName": "Doe",
+    "firstName": "Matthew",
+    "lastName": "McConaughey",
     "phoneNumber": "123-456-7899",
-    "email": "john.doe.updated@example.com"
+    "email": "matthew@example.com"
   }
   ```
 
@@ -855,3 +879,13 @@ API documentation is automatically generated using Swashbuckle. Once the applica
   ```
   Table with ID 1 was successfully deleted.
   ```
+
+---
+
+## 🚀 Get Started Today!
+
+Thank you for exploring the Reliable Reservations API documentation! I hope you find it valuable and easy to use.
+
+⭐ **Star the project** on GitHub if you want to support! Your feedback and contributions are always welcome.
+
+Happy coding and best of luck with your restaurant management!
