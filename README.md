@@ -1,4 +1,4 @@
-﻿
+﻿﻿
 # Reliable Reservations API
   
 [![.NET](https://img.shields.io/badge/.NET-8.0-512BD4)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
@@ -7,11 +7,7 @@
 
 
 &nbsp;
-<p align="center" style="font-size:22px; font-weight:bold;">
-  A backend system designed to simplify restaurant management operations.
-</p>
 
-&nbsp;
 
 <div align="center">
   <img src="/Media/apisystem_logo.jpg" alt="API System Logo" width="50%">
