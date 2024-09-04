@@ -10,9 +10,7 @@ namespace Reliable_Reservations.Models.ViewModels
     {
         public int ReservationId { get; set; }
 
-        public int CustomerId { get; set; }
-
-        public string CustomerName { get; set; }  // Full name of the customer
+        public CustomerViewModel Customer { get; set; }
 
         public DateTime StartTime { get; set; }
 
