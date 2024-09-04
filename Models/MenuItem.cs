@@ -23,7 +23,7 @@ namespace Reliable_Reservations.Models
     {
         [Required]
         public required int MenuItemId { get; set; }
-        
+
         [Required]
         public required string Name { get; set; }
 

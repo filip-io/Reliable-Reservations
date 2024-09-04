@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Reliable_Reservations.Models;
+﻿using Reliable_Reservations.Models;
 public class Table
 {
     public int TableId { get; set; }

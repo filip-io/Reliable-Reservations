@@ -1,8 +1,6 @@
 ﻿using Reliable_Reservations.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace Reliable_Reservations.Repositories.IRepos
+namespace Reliable_Reservations.Data.Repos.IRepos
 {
     public interface IOpeningHoursRepository
     {

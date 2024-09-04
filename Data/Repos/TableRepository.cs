@@ -1,10 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
-using Reliable_Reservations.Data;
-using Reliable_Reservations.Models;
-using Reliable_Reservations.Repositories.IRepos;
+using Reliable_Reservations.Data.Repos.IRepos;
 
-namespace Reliable_Reservations.Repositories
+namespace Reliable_Reservations.Data.Repos
 {
     public class TableRepository : ITableRepository
     {

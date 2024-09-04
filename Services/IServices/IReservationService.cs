@@ -1,9 +1,5 @@
-﻿using Reliable_Reservations.Models;
-using Reliable_Reservations.Models.DTOs;
+﻿using Reliable_Reservations.Models.DTOs;
 using Reliable_Reservations.Models.ViewModels;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 
 namespace Reliable_Reservations.Services
 {

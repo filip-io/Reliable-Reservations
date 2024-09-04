@@ -1,6 +1,6 @@
 ﻿using Reliable_Reservations.Models;
 
-namespace Reliable_Reservations.Repositories.IRepos
+namespace Reliable_Reservations.Data.Repos.IRepos
 {
     public interface ICustomerRepository
     {

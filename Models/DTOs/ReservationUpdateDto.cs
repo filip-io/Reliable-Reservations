@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Reliable_Reservations.Models.DTOs
 {
@@ -9,7 +7,7 @@ namespace Reliable_Reservations.Models.DTOs
         [Required]
         public int CustomerId { get; set; }
 
-        [Required] public int ReservationId { get; set ;}
+        [Required] public int ReservationId { get; set; }
 
         [Required]
         public DateTime ReservationDate { get; set; }

@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Reliable_Reservations.Models;
 using Reliable_Reservations.Models.DTOs;
-using Reliable_Reservations.Services;
 using Reliable_Reservations.Services.IServices;
 
 namespace Reliable_Reservations.Controllers
@@ -26,7 +24,7 @@ namespace Reliable_Reservations.Controllers
             try
             {
                 var timeSlots = await _timeSlotService.GetAllTimeSlotsAsync();
-                
+
                 if (timeSlots.IsNullOrEmpty())
                 {
                     return Ok("No timeslots in database.");
@@ -48,7 +46,7 @@ namespace Reliable_Reservations.Controllers
             try
             {
                 var timeSlot = await _timeSlotService.GetTimeSlotByIdAsync(id);
-                
+
                 if (timeSlot == null)
                 {
                     return ResponseHelper.HandleNotFound(_logger, id);

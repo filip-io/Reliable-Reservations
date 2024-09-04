@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Reliable_Reservations.Data;
+using Reliable_Reservations.Data.Repos.IRepos;
 using Reliable_Reservations.Models;
-using Reliable_Reservations.Repos.IRepos;
 
-namespace Reliable_Reservations.Repos
+namespace Reliable_Reservations.Data.Repos
 {
     public class TimeSlotRepository : ITimeSlotRepository
     {
@@ -36,9 +35,9 @@ namespace Reliable_Reservations.Repos
             var timeOnly = reservationDate.TimeOfDay;
 
             return await _context.TimeSlots
-                .Where(ts => 
-                ts.StartTime.Date == dateOnly && 
-                ts.StartTime.TimeOfDay <= timeOnly && 
+                .Where(ts =>
+                ts.StartTime.Date == dateOnly &&
+                ts.StartTime.TimeOfDay <= timeOnly &&
                 ts.EndTime.TimeOfDay >= timeOnly)
                 .FirstOrDefaultAsync();
         }

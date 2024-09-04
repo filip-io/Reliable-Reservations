@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace Reliable_Reservations.Models.DTOs
-{    public class TableDto
+{
+    public class TableDto
     {
         [Required]
         public required int TableId { get; set; }

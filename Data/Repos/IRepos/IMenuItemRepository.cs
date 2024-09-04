@@ -1,7 +1,6 @@
 ﻿using Reliable_Reservations.Models;
-using Reliable_Reservations.Models.DTOs;
 
-namespace Reliable_Reservations.Repos.IRepos
+namespace Reliable_Reservations.Data.Repos.IRepos
 {
     public interface IMenuItemRepository
     {

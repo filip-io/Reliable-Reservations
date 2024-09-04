@@ -1,15 +1,9 @@
 ﻿using AutoMapper;
+using Reliable_Reservations.Data.Repos.IRepos;
 using Reliable_Reservations.Models;
 using Reliable_Reservations.Models.DTOs;
 using Reliable_Reservations.Models.ViewModels;
-using Reliable_Reservations.Repos.IRepos;
-using Reliable_Reservations.Repositories;
-using Reliable_Reservations.Repositories.IRepos;
 using Reliable_Reservations.Services.IServices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Reliable_Reservations.Services
 {

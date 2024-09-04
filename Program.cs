@@ -1,9 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Reliable_Reservations.Data;
-using Reliable_Reservations.Repos;
-using Reliable_Reservations.Repos.IRepos;
-using Reliable_Reservations.Repositories;
-using Reliable_Reservations.Repositories.IRepos;
+using Reliable_Reservations.Data.Repos;
+using Reliable_Reservations.Data.Repos.IRepos;
 using Reliable_Reservations.Services;
 using Reliable_Reservations.Services.IServices;
 using System.Text.Json.Serialization;
