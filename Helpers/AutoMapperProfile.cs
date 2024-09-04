@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Reliable_Reservations.Models;
 using Reliable_Reservations.Models.DTOs;
+using Reliable_Reservations.Models.ViewModels;
 
 public class AutoMapperProfile : Profile
 {
@@ -15,13 +16,16 @@ public class AutoMapperProfile : Profile
 
         // Reservation mappings
 
-        CreateMap<Reservation, ReservationDto>();
+        CreateMap<Reservation, ReservationDto>().ReverseMap();
+        CreateMap<ReservationUpdateDto, Reservation>().ReverseMap();
+        CreateMap<ReservationUpdateDto, ReservationDetailsViewModel>();
 
-        // Mapping from Reservation entity to ReservationDto
-        CreateMap<Reservation, ReservationDto>()
-            .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer))
-            .ForMember(dest => dest.TimeSlot, opt => opt.MapFrom(src => src.TimeSlot))
-            .ForMember(dest => dest.Tables, opt => opt.MapFrom(src => src.Tables));
+        // Mapping from Reservation entity to ReservationDetailsViewModel
+        CreateMap<Reservation, ReservationDetailsViewModel>()
+            .ForMember(dest => dest.Tables, opt => opt.MapFrom(src => src.Tables))
+            .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.Customer))
+            .ForMember(dest => dest.NumberOfGuests, opt => opt.MapFrom(src => src.NumberOfGuests))
+            .ForMember(dest => dest.ReservationDate, opt => opt.MapFrom(src => src.ReservationDate));
 
         // Mapping from ReservationDto to Reservation entity
         CreateMap<ReservationDto, Reservation>()
@@ -35,19 +39,21 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.TimeSlot, opt => opt.Ignore())
             .ForMember(dest => dest.Tables, opt => opt.Ignore());
 
-        // Mapping from Reservation entity to ReservationDetailsDto
-        CreateMap<Reservation, ReservationDetailsDto>()
+        // Mapping from Reservation entity to ReservationDetailsViewModel
+        CreateMap<Reservation, ReservationDetailsViewModel>()
             .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => $"{src.Customer.FirstName} {src.Customer.LastName}"))
             .ForMember(dest => dest.StartTime, opt => opt.MapFrom(src => src.TimeSlot.StartTime))
             .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.TimeSlot.EndTime))
-            .ForMember(dest => dest.PartySize, opt => opt.MapFrom(src => src.NumberOfGuests))
+            .ForMember(dest => dest.NumberOfGuests, opt => opt.MapFrom(src => src.NumberOfGuests))
             .ForMember(dest => dest.Tables, opt => opt.MapFrom(src => src.Tables));
 
         // Mapping from ReservationDetailsDto to Reservation entity
-        CreateMap<ReservationDetailsDto, Reservation>()
+        CreateMap<ReservationDetailsViewModel, Reservation>()
             .ForMember(dest => dest.Customer, opt => opt.Ignore())
             .ForMember(dest => dest.TimeSlot, opt => opt.Ignore())
             .ForMember(dest => dest.Tables, opt => opt.Ignore());
+
+
 
 
         // Table mappings
@@ -60,6 +66,8 @@ public class AutoMapperProfile : Profile
 
         CreateMap<TimeSlot, TimeSlotDto>().ReverseMap();
         CreateMap<TimeSlot, TimeSlotCreateDto>().ReverseMap();
+        CreateMap<TimeSlotUpdateDto, TimeSlotDto>().ReverseMap();
+        CreateMap<TimeSlotUpdateDto, TimeSlot>().ReverseMap();
 
 
         // MenuItem mappings

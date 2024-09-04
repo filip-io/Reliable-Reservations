@@ -29,7 +29,7 @@ namespace Reliable_Reservations.Models
         [Required]
         public int NumberOfGuests { get; set; }
 
-        public string? SpecialRequests { get; set; }
+        public string? SpecialRequests { get; set; } = null;
 
         [Required]
         public ReservationStatus Status { get; set; } = ReservationStatus.Pending;

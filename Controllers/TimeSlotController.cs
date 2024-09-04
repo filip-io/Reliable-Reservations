@@ -76,11 +76,11 @@ namespace Reliable_Reservations.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTimeSlot(int id, TimeSlotCreateDto timeSlotCreateDto)
+        public async Task<IActionResult> UpdateTimeSlot(int id, TimeSlotUpdateDto timeSlotUpdateDto)
         {
             try
             {
-                await _timeSlotService.UpdateTimeSlotAsync(id, timeSlotCreateDto);
+                await _timeSlotService.UpdateTimeSlotAsync(id, timeSlotUpdateDto);
                 return NoContent();
             }
             catch (Exception ex)

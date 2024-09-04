@@ -66,7 +66,6 @@ namespace Reliable_Reservations.Repositories
             await _context.SaveChangesAsync();
 
             var updatedReservation = await _context.Reservations
-                .Include(r => r.TimeSlot)
                 .Include(r => r.Tables)
                 .Include(r => r.Customer)
                 .FirstOrDefaultAsync(r => r.ReservationId == reservation.ReservationId);

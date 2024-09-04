@@ -61,12 +61,12 @@ namespace Reliable_Reservations.Services
             return _mapper.Map<TimeSlotDto>(timeSlot);
         }
 
-        public async Task UpdateTimeSlotAsync(int id, TimeSlotCreateDto timeSlotCreateDto)
+        public async Task UpdateTimeSlotAsync(int id, TimeSlotUpdateDto timeSlotUpdateDto)
         {
             var timeSlot = await _timeSlotRepository.GetTimeSlotById(id);
             if (timeSlot != null)
             {
-                _mapper.Map(timeSlotCreateDto, timeSlot);
+                _mapper.Map(timeSlotUpdateDto, timeSlot);
                 await _timeSlotRepository.UpdateTimeSlot(timeSlot);
             }
         }

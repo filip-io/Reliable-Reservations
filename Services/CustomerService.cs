@@ -20,6 +20,8 @@ namespace Reliable_Reservations.Services
         {
             var customers = await _customerRepository.GetAllAsync();
 
+
+
             List<CustomerDto> customerDtos = customers
                 .Select(c => new CustomerDto()
                 {

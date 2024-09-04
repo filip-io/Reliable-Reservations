@@ -14,9 +14,6 @@ namespace Reliable_Reservations.Models.DTOs
         [Required]
         public required string LastName { get; set; }
 
-        [JsonIgnore]
-        public string FullName => $"{FirstName} {LastName}"; // Not stored (read-only), just for convenience
-
         [Required]
         [Phone(ErrorMessage = "Not a valid phone number.")]
         public required string PhoneNumber { get; set; }

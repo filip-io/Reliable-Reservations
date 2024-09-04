@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using Reliable_Reservations.Models.DTOs;
 using Reliable_Reservations.Services.IServices;
 using Reliable_Reservations.Services;
+using Reliable_Reservations.Models.ViewModels;
 
 namespace Reliable_Reservations.Controllers
 {
@@ -20,7 +21,7 @@ namespace Reliable_Reservations.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<IEnumerable<ReservationDto>>> GetAllReservations()
+        public async Task<ActionResult<IEnumerable<ReservationDetailsViewModel>>> GetAllReservations()
         {
             try
             {
@@ -40,7 +41,7 @@ namespace Reliable_Reservations.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ReservationDto>> GetReservationById(int id)
+        public async Task<ActionResult<ReservationDetailsViewModel>> GetReservationById(int id)
         {
             try
             {
@@ -59,7 +60,7 @@ namespace Reliable_Reservations.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<ActionResult<ReservationDto>> CreateReservation(ReservationCreateDto reservationCreateDto)
+        public async Task<ActionResult<ReservationDetailsViewModel>> CreateReservation(ReservationCreateDto reservationCreateDto)
         {
             try
             {
@@ -77,15 +78,15 @@ namespace Reliable_Reservations.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateReservation(int id, ReservationDto reservationDto)
+        public async Task<ActionResult<ReservationDetailsViewModel>> UpdateReservation(int id, ReservationUpdateDto reservationUpdateDto)
         {
-            if (id != reservationDto.ReservationId)
+            if (id != reservationUpdateDto.ReservationId)
             {
                 return ResponseHelper.HandleBadRequest(_logger, "Reservation ID mismatch. Make sure ID matches in both URL and request body.");
             }
             try
             {
-                var updatedReservation = await _reservationService.UpdateReservationAsync(reservationDto);
+                var updatedReservation = await _reservationService.UpdateReservationAsync(reservationUpdateDto);
                 return CreatedAtAction(nameof(GetReservationById), new { id = updatedReservation.ReservationId }, updatedReservation);
             }
             catch (KeyNotFoundException)

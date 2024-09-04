@@ -1,5 +1,6 @@
 ﻿using Reliable_Reservations.Models;
 using Reliable_Reservations.Models.DTOs;
+using Reliable_Reservations.Models.ViewModels;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -8,10 +9,10 @@ namespace Reliable_Reservations.Services
 {
     public interface IReservationService
     {
-        Task<IEnumerable<ReservationDto>> GetAllReservationsAsync();
-        Task<ReservationDto?> GetReservationByIdAsync(int reservationId);
-        Task<ReservationDto> CreateReservationAsync(ReservationCreateDto reservationCreateDto);
-        Task<ReservationDto> UpdateReservationAsync(ReservationDto reservationUpdateDto);
+        Task<IEnumerable<ReservationDetailsViewModel>> GetAllReservationsAsync();
+        Task<ReservationDetailsViewModel?> GetReservationByIdAsync(int reservationId);
+        Task<ReservationDetailsViewModel> CreateReservationAsync(ReservationCreateDto reservationCreateDto);
+        Task<ReservationDetailsViewModel> UpdateReservationAsync(ReservationUpdateDto reservationUpdateDto);
         Task DeleteReservationAsync(int reservationId);
     }
 }

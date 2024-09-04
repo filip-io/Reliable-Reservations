@@ -7,7 +7,7 @@ namespace Reliable_Reservations.Services.IServices
         Task<TimeSlotDto> GetTimeSlotByIdAsync(int id);
         Task<IEnumerable<TimeSlotDto>> GetAllTimeSlotsAsync();
         Task<TimeSlotDto> CreateTimeSlotAsync(TimeSlotCreateDto timeSlotCreateDto);
-        Task UpdateTimeSlotAsync(int id, TimeSlotCreateDto timeSlotCreateDto);
+        Task UpdateTimeSlotAsync(int id, TimeSlotUpdateDto timeSlotCreateDto);
         Task DeleteTimeSlotAsync(int id);
     }
 }
