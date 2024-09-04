@@ -12,11 +12,9 @@ namespace Reliable_Reservations.Models.ViewModels
 
         public CustomerViewModel Customer { get; set; }
 
-        public DateTime StartTime { get; set; }
-
-        public DateTime EndTime { get; set; }
-
         public DateTime ReservationDate { get; set; }
+
+        public int SlotDuration { get; set; }
 
         public int NumberOfGuests { get; set; }
 

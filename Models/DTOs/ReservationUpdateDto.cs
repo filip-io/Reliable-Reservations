@@ -4,10 +4,14 @@ namespace Reliable_Reservations.Models.DTOs
 {
     public class ReservationUpdateDto
     {
+
+        [Required] 
+        public int ReservationId { get; set; }
+
+
         [Required]
         public int CustomerId { get; set; }
 
-        [Required] public int ReservationId { get; set; }
 
         [Required]
         public DateTime ReservationDate { get; set; }

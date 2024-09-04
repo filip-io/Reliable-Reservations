@@ -524,29 +524,23 @@ API documentation is automatically generated using Swashbuckle. Once the applica
 - **Endpoint**: `GET /api/Reservation/all`
 - **Description**: Retrieve a list of all reservations.
 - **Responses**:
-  - `200 OK`: Returns a list of `ReservationDto` objects or "No reservations in the database."
+  - `200 OK`: Returns a list of `ReservationDetailsViewModel` objects or "No reservations in the database."
 - **Example Response**:
   ```json
   [
     {
       "reservationId": 1,
-      "customerId": 1,
       "customer": {
         "customerId": 1,
         "firstName": "Arnold",
         "lastName": "Schwarzenegger",
         "phoneNumber": "123456789",
-        "email": "user@example.com"
+        "email": "user@example.com",
+        "fullName": "Arnold Schwarzenegger"
       },
-      "timeSlotId": 11,
-      "timeSlot": {
-        "timeSlotId": 11,
-        "startTime": "2024-08-31T14:20:01",
-        "endTime": "2024-08-31T15:20:01",
-        "slotDuration": 60
-      },
-      "reservationDate": "2024-08-31T14:20:01",
-      "numberOfGuests": 15,
+      "reservationDate": "2024-08-31T14:20:00",
+      "slotDuration": 60,
+      "numberOfGuests": 5,
       "specialRequests": "Cuban cigars",
       "status": "Pending",
       "tables": [
@@ -560,7 +554,6 @@ API documentation is automatically generated using Swashbuckle. Once the applica
     },
     {
       "reservationId": 2,
-      "customerId": 1,
       "customer": {
         "customerId": 1,
         "firstName": "Tony",
@@ -568,15 +561,9 @@ API documentation is automatically generated using Swashbuckle. Once the applica
         "phoneNumber": "123456789",
         "email": "user@example.com"
       },
-      "timeSlotId": 12,
-      "timeSlot": {
-        "timeSlotId": 12,
-        "startTime": "2024-09-01T14:20:01",
-        "endTime": "2024-09-01T15:20:01",
-        "slotDuration": 60
-      },
-      "reservationDate": "2024-09-01T14:20:01",
-      "numberOfGuests": 15,
+      "reservationDate": "2024-09-01T14:14:20",
+      "slotDuration": 60,
+      "numberOfGuests": 3,
       "specialRequests": "Iron",
       "status": "Confirmed",
       "tables": [
@@ -597,29 +584,23 @@ API documentation is automatically generated using Swashbuckle. Once the applica
 - **Parameters**:
   - `id` (path parameter): The ID of the reservation to retrieve.
 - **Responses**:
-  - `200 OK`: Returns a `ReservationDto` object.
+  - `200 OK`: Returns a `ReservationDetailsViewModel` object.
   - `404 Not Found`: When the reservation with the specified ID is not found.
 - **Example Response**:
   ```json
   {
     "reservationId": 1,
-    "customerId": 1,
     "customer": {
       "customerId": 1,
       "firstName": "Arnold",
       "lastName": "Schwarzenegger",
       "phoneNumber": "123456789",
-      "email": "user@example.com"
+      "email": "user@example.com",
+      "fullName": "Arnold Schwarzenegger"
     },
-    "timeSlotId": 11,
-    "timeSlot": {
-      "timeSlotId": 11,
-      "startTime": "2024-08-31T14:20:01",
-      "endTime": "2024-08-31T15:20:01",
-      "slotDuration": 60
-    },
-    "reservationDate": "2024-08-31T14:20:01",
-    "numberOfGuests": 15,
+    "reservationDate": "2024-08-31T14:20:00",
+    "slotDuration": 60,
+    "numberOfGuests": 5,
     "specialRequests": "Cuban cigars",
     "status": "Pending",
     "tables": [
@@ -638,12 +619,12 @@ API documentation is automatically generated using Swashbuckle. Once the applica
 - **Description**: Create a new reservation.
 - **Request Body**: `ReservationCreateDto` object
 - **Responses**:
-  - `201 Created`: Returns the created `ReservationDto` object.
+  - `201 Created`: Returns a `ReservationDetailsViewModel` object.
 - **Example Request**:
   ```json
   {
     "customerId": 1,
-    "reservationDate": "2024-08-31T23:05:30.938Z",
+    "reservationDate": "2024-08-31T14:20:00",
     "numberOfGuests": 5,
     "tableNumbers": [
       1
@@ -656,23 +637,17 @@ API documentation is automatically generated using Swashbuckle. Once the applica
   ```json
   {
     "reservationId": 1,
-    "customerId": 1,
     "customer": {
       "customerId": 1,
       "firstName": "Arnold",
       "lastName": "Schwarzenegger",
       "phoneNumber": "123456789",
-      "email": "user@example.com"
+      "email": "user@example.com",
+      "fullName": "Arnold Schwarzenegger"
     },
-    "timeSlotId": 11,
-    "timeSlot": {
-      "timeSlotId": 11,
-      "startTime": "2024-08-31T14:20:01",
-      "endTime": "2024-08-31T15:20:01",
-      "slotDuration": 60
-    },
-    "reservationDate": "2024-08-31T14:20:01",
-    "numberOfGuests": 15,
+    "reservationDate": "2024-08-31T14:20:00",
+    "slotDuration": 60,
+    "numberOfGuests": 5,
     "specialRequests": "Cuban cigars",
     "status": "Pending",
     "tables": [
@@ -693,29 +668,37 @@ API documentation is automatically generated using Swashbuckle. Once the applica
   - `id` (path parameter): The ID of the reservation to update.
 - **Request Body**: `ReservationDto` object
 - **Responses**:
-  - `201 Created`: Returns the updated `ReservationDto` object.
+  - `201 Created`: Returns a `ReservationDetailsViewModel` object.
   - `400 Bad Request`: When there's an ID mismatch between the URL and request body.
   - `404 Not Found`: When the reservation with the specified ID is not found.
 - **Example Request**:
   ```json
   {
-    "reservationId": 1,
     "customerId": 1,
+    "reservationId": 1,
+    "reservationDate": "2024-08-31T14:20:00",
+    "numberOfGuests": 15,
+    "tableNumbers": [
+        1, 2
+    ],
+    "seatingDuration": 60,
+    "specialRequests": "Cuban cigars"
+  }
+  ```
+- **Example Response**:
+  ```json
+  {
+    "reservationId": 1,
     "customer": {
       "customerId": 1,
       "firstName": "Arnold",
       "lastName": "Schwarzenegger",
       "phoneNumber": "123456789",
-      "email": "user@example.com"
+      "email": "user@example.com",
+      "fullName": "Arnold Schwarzenegger"
     },
-    "timeSlotId": 11,
-    "timeSlot": {
-      "timeSlotId": 11,
-      "startTime": "2024-08-31T14:20:01",
-      "endTime": "2024-08-31T15:20:01",
-      "slotDuration": 60
-    },
-    "reservationDate": "2024-08-31T14:20:01",
+    "reservationDate": "2024-08-31T14:20:00",
+    "slotDuration": 60,
     "numberOfGuests": 15,
     "specialRequests": "Cuban cigars",
     "status": "Pending",
@@ -725,38 +708,11 @@ API documentation is automatically generated using Swashbuckle. Once the applica
         "tableNumber": 1,
         "seatingCapacity": 5,
         "location": "Inside"
-      }
-    ]
-  }
-  ```
-- **Example Response**:
-  ```json
-  {
-    "reservationId": 1,
-    "customerId": 1,
-    "customer": {
-      "customerId": 1,
-      "firstName": "Arnold",
-      "lastName": "Schwarzenegger",
-      "phoneNumber": "123456789",
-      "email": "user@example.com"
-    },
-    "timeSlotId": 11,
-    "timeSlot": {
-      "timeSlotId": 11,
-      "startTime": "2024-08-31T14:20:01",
-      "endTime": "2024-08-31T15:20:01",
-      "slotDuration": 60
-    },
-    "reservationDate": "2024-08-31T14:20:01",
-    "numberOfGuests": 15,
-    "specialRequests": "Cuban cigars",
-    "status": "Pending",
-    "tables": [
+      },
       {
-        "tableId": 1,
-        "tableNumber": 1,
-        "seatingCapacity": 5,
+        "tableId": 2,
+        "tableNumber": 2,
+        "seatingCapacity": 10,
         "location": "Inside"
       }
     ]

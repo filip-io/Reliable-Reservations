@@ -41,16 +41,15 @@ public class AutoMapperProfile : Profile
             // Mapping from Reservation entity to ReservationDetailsViewModel
             CreateMap<Reservation, ReservationDetailsViewModel>()
                 .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer)) // Map Customer to CustomerViewModel
-                .ForMember(dest => dest.StartTime, opt => opt.MapFrom(src => src.TimeSlot.StartTime))
-                .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.TimeSlot.EndTime))
+                .ForMember(dest => dest.SlotDuration, opt => opt.MapFrom(src => src.TimeSlot.SlotDuration))
                 .ForMember(dest => dest.NumberOfGuests, opt => opt.MapFrom(src => src.NumberOfGuests))
                 .ForMember(dest => dest.Tables, opt => opt.MapFrom(src => src.Tables));
 
             // Mapping from ReservationDetailsDto to Reservation entity
             CreateMap<ReservationDetailsViewModel, Reservation>()
-                .ForMember(dest => dest.Customer, opt => opt.Ignore())
-                .ForMember(dest => dest.TimeSlot, opt => opt.Ignore())
-                .ForMember(dest => dest.Tables, opt => opt.Ignore());
+                    .ForMember(dest => dest.Customer, opt => opt.Ignore())
+                    .ForMember(dest => dest.TimeSlot, opt => opt.Ignore())
+                    .ForMember(dest => dest.Tables, opt => opt.Ignore());
 
 
 
