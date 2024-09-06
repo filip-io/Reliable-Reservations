@@ -9,6 +9,6 @@ namespace Reliable_Reservations.Data.Repos.IRepos
         Task<bool> CustomerExists(int customerId);
         Task AddAsync(Customer customer);
         Task UpdateAsync(Customer customer);
-        Task DeleteAsync(int id);
+        Task DeleteAsync(Customer customer);
     }
 }

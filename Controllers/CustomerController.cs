@@ -10,6 +10,7 @@ namespace Reliable_Reservations.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ILogger<CustomerController> _logger;
 
         public CustomerController(ICustomerService customerService, ILogger<CustomerController> logger)
@@ -38,24 +39,25 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
+
         [HttpGet("{id}")]
         public async Task<ActionResult<CustomerDto>> GetCustomerById(int id)
         {
             try
             {
                 var customer = await _customerService.GetCustomerByIdAsync(id);
-
-                if (customer == null)
-                {
-                    return ResponseHelper.HandleNotFound(_logger, id);
-                }
                 return Ok(customer);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return ResponseHelper.HandleNotFound(_logger, ex.Message);
             }
             catch (Exception ex)
             {
                 return ResponseHelper.HandleException(_logger, ex);
             }
         }
+
 
         [HttpPost("create")]
         public async Task<ActionResult<CustomerDto>> CreateCustomer(CustomerCreateDto customerCreateDto)
@@ -88,11 +90,11 @@ namespace Reliable_Reservations.Controllers
             try
             {
                 var updatedCustomer = await _customerService.UpdateCustomerAsync(customerDto);
-                return CreatedAtAction(nameof(GetCustomerById), new { id = updatedCustomer.CustomerId }, updatedCustomer);
+                return Ok(updatedCustomer);
             }
-            catch (KeyNotFoundException)
+            catch (KeyNotFoundException ex)
             {
-                return ResponseHelper.HandleNotFound(_logger, id);
+                return ResponseHelper.HandleNotFound(_logger, ex.Message);
             }
             catch (Exception ex)
             {
@@ -108,9 +110,9 @@ namespace Reliable_Reservations.Controllers
                 await _customerService.DeleteCustomerAsync(id);
                 return ResponseHelper.HandleSuccess(_logger, $"Customer with ID {id} has been successfully deleted.");
             }
-            catch (KeyNotFoundException)
+            catch (KeyNotFoundException ex)
             {
-                return ResponseHelper.HandleNotFound(_logger, id);
+                return ResponseHelper.HandleNotFound(_logger, ex.Message);
             }
             catch (Exception ex)
             {

@@ -42,16 +42,15 @@ namespace Reliable_Reservations.Controllers
             try
             {
                 var openingHours = await _openingHoursService.GetOpeningHoursByIdAsync(id);
-                if (openingHours == null)
-                {
-                    return NotFound($"Opening hours with ID {id} not found.");
-                }
                 return Ok(openingHours);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return ResponseHelper.HandleNotFound(_logger, ex.Message);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"An error occurred while getting opening hours with ID {id}.");
-                return StatusCode(500, "Internal server error");
+                return ResponseHelper.HandleException(_logger, ex);
             }
         }
 

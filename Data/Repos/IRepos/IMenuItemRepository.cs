@@ -8,6 +8,6 @@ namespace Reliable_Reservations.Data.Repos.IRepos
         Task<MenuItem?> GetMenuItemById(int id);
         Task AddMenuItem(MenuItem menuItem);
         Task UpdateMenuItem(MenuItem menuItem);
-        Task DeleteMenuItem(int id);
+        Task DeleteMenuItem(MenuItem menuItem);
     }
 }

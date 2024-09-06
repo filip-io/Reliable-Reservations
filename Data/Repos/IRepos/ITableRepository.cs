@@ -8,6 +8,6 @@
         Task<List<Table>> GetTablesByNumbersAsync(List<int> tableNumbers);
         Task AddAsync(Table table);
         Task UpdateAsync(Table table);
-        Task DeleteAsync(int id);
+        Task DeleteAsync(Table table);
     }
 }

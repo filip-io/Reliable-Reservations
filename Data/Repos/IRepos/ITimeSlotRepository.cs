@@ -9,6 +9,7 @@ namespace Reliable_Reservations.Data.Repos.IRepos
         Task<bool> TimeSlotExists(int id);
         Task<TimeSlot> GetTimeSlotByDate(DateTime reservationDate);
         Task AddTimeSlot(TimeSlot timeSlot);
+        Task AddMultipleTimeSlots(IEnumerable<TimeSlot> timeSlots);
         Task UpdateTimeSlot(TimeSlot timeSlot);
         Task DeleteTimeSlot(TimeSlot timeslot);
     }

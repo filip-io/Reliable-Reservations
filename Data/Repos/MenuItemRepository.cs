@@ -21,8 +21,7 @@ namespace Reliable_Reservations.Data.Repos
 
         public async Task<MenuItem?> GetMenuItemById(int id)
         {
-            MenuItem? menuItem = await _context.MenuItems.FirstOrDefaultAsync(i => i.MenuItemId == id);
-            return menuItem;
+            return await _context.MenuItems.FindAsync(id);
         }
 
         public async Task AddMenuItem(MenuItem menuItem)
@@ -37,14 +36,10 @@ namespace Reliable_Reservations.Data.Repos
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteMenuItem(int id)
+        public async Task DeleteMenuItem(MenuItem menuItem)
         {
-            var menuItem = await _context.MenuItems.FindAsync(id);
-            if (menuItem != null)
-            {
-                _context.MenuItems.Remove(menuItem);
-                await _context.SaveChangesAsync();
-            }
+            _context.MenuItems.Remove(menuItem);
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -48,7 +48,7 @@ namespace Reliable_Reservations.Services
             return _mapper.Map<TableDto>(table);
         }
 
-        public async Task<TableDto> UpdateTableAsync(int id, TableCreateDto tableCreateDto)
+        public async Task<TableDto> UpdateTableAsync(int id, TableUpdateDto tableUpdateDto)
         {
             var table = await _tableRepository.GetByIdAsync(id);
 
@@ -57,14 +57,21 @@ namespace Reliable_Reservations.Services
                 throw new KeyNotFoundException($"No table with ID {id} found.");
             }
 
-            _mapper.Map(tableCreateDto, table);
+            _mapper.Map(tableUpdateDto, table);
             await _tableRepository.UpdateAsync(table);
             return _mapper.Map<TableDto>(table);
         }
 
         public async Task DeleteTableAsync(int id)
         {
-            await _tableRepository.DeleteAsync(id);
+            var table = await _tableRepository.GetByIdAsync(id);
+
+            if (table == null)
+            {
+                throw new KeyNotFoundException($"Table with {id} not found.");
+            }
+
+            await _tableRepository.DeleteAsync(table);
         }
     }
 }

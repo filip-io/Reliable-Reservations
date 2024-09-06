@@ -19,7 +19,8 @@ namespace Reliable_Reservations.Models.DTOs
         public required bool IsClosed { get; set; } // Whether the restaurant is closed that day
 
         public virtual ICollection<SpecialOpeningHoursDto> SpecialOpeningHours { get; set; } = new List<SpecialOpeningHoursDto>(); // Initialize to avoid null reference
-        public virtual ICollection<TimeSlotDto> TimeSlots { get; set; }
+        
+        // public virtual ICollection<TimeSlotDto> TimeSlots { get; set; }
     }
 
     public class SpecialOpeningHoursDto

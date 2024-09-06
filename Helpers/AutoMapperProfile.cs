@@ -73,5 +73,19 @@ public class AutoMapperProfile : Profile
         CreateMap<MenuItem, MenuItemDto>().ReverseMap();
         CreateMap<MenuItem, MenuItemCreateDto>().ReverseMap();
 
+
+        // OpeningHours mappings
+
+        CreateMap<OpeningHours, OpeningHoursDto>().ReverseMap();
+
+        CreateMap<OpeningHours, OpeningHoursDto>()
+            .ForMember(dest => dest.SpecialOpeningHours, opt => opt.MapFrom(src => src.SpecialOpeningHours));
+            //.ForMember(dest => dest.TimeSlots, opt => opt.MapFrom(src => src.TimeSlots));
+
+
+        // SpecialOpeningHours mappings
+
+        CreateMap<SpecialOpeningHours, SpecialOpeningHoursDto>();
+
     }
 }

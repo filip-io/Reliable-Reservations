@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Reliable_Reservations.Models;
 using Reliable_Reservations.Models.DTOs;
 using Reliable_Reservations.Services.IServices;
 
@@ -45,14 +46,12 @@ namespace Reliable_Reservations.Controllers
         {
             try
             {
-                var menuItem = await _menuService.GetMenuItemById(id);
-
-                if (menuItem == null)
-                {
-                    return ResponseHelper.HandleNotFound(_logger, id);
-                }
-
-                return Ok(menuItem);
+                var menuItemDto = await _menuService.GetMenuItemById(id);
+                return Ok(menuItemDto);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return ResponseHelper.HandleNotFound(_logger, ex.Message);
             }
             catch (Exception ex)
             {
@@ -95,11 +94,11 @@ namespace Reliable_Reservations.Controllers
             try
             {
                 await _menuService.DeleteMenuItem(id);
-                return Ok($"Menu item with ID {id} was successfully deleted.");
+                return ResponseHelper.HandleSuccess(_logger, $"Menu item with ID {id} was successfully deleted.");
             }
-            catch (KeyNotFoundException)
+            catch (KeyNotFoundException ex)
             {
-                return ResponseHelper.HandleNotFound(_logger, id);
+                return ResponseHelper.HandleNotFound(_logger, ex.Message);
             }
             catch (Exception ex)
             {

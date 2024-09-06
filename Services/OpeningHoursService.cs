@@ -1,4 +1,5 @@
-﻿using Reliable_Reservations.Data.Repos.IRepos;
+﻿using AutoMapper;
+using Reliable_Reservations.Data.Repos.IRepos;
 using Reliable_Reservations.Models;
 using Reliable_Reservations.Models.DTOs;
 using Reliable_Reservations.Services.IServices;
@@ -8,73 +9,30 @@ namespace Reliable_Reservations.Services
     public class OpeningHoursService : IOpeningHoursService
     {
         private readonly IOpeningHoursRepository _openingHoursRepository;
+        private readonly IMapper _mapper;
 
-        public OpeningHoursService(IOpeningHoursRepository openingHoursRepository)
+        public OpeningHoursService(IOpeningHoursRepository openingHoursRepository, IMapper mapper)
         {
             _openingHoursRepository = openingHoursRepository;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<OpeningHoursDto>> GetAllOpeningHoursAsync()
         {
             var openingHours = await _openingHoursRepository.GetAllAsync();
-            return openingHours.Select(o => new OpeningHoursDto
-            {
-                OpeningHoursId = o.OpeningHoursId,
-                DayOfWeek = o.DayOfWeek,
-                OpenTime = o.OpenTime,
-                CloseTime = o.CloseTime,
-                IsClosed = o.IsClosed,
-                SpecialOpeningHours = o.SpecialOpeningHours.Select(s => new SpecialOpeningHoursDto
-                {
-                    SpecialOpeningHoursId = s.SpecialOpeningHoursId,
-                    Date = s.Date,
-                    OpenTime = s.OpenTime,
-                    CloseTime = s.CloseTime,
-                    IsClosed = s.IsClosed,
-                    OpeningHoursId = s.OpeningHoursId // Ensure foreign key is included
-                }).ToList(),
-                TimeSlots = o.TimeSlots.Select(t => new TimeSlotDto
-                {
-                    TimeSlotId = t.TimeSlotId,
-                    StartTime = t.StartTime,
-                    EndTime = t.EndTime,
-                    SlotDuration = t.SlotDuration
-                }).ToList()
-            }).ToList();
+            return _mapper.Map<IEnumerable<OpeningHoursDto>>(openingHours);
         }
 
         public async Task<OpeningHoursDto?> GetOpeningHoursByIdAsync(int id)
         {
             var openingHours = await _openingHoursRepository.GetByIdAsync(id);
+
             if (openingHours == null)
             {
-                return null;
+                throw new KeyNotFoundException($"OpeningHours with ID {id} not found.");
             }
 
-            return new OpeningHoursDto
-            {
-                OpeningHoursId = openingHours.OpeningHoursId,
-                DayOfWeek = openingHours.DayOfWeek,
-                OpenTime = openingHours.OpenTime,
-                CloseTime = openingHours.CloseTime,
-                IsClosed = openingHours.IsClosed,
-                SpecialOpeningHours = openingHours.SpecialOpeningHours.Select(s => new SpecialOpeningHoursDto
-                {
-                    SpecialOpeningHoursId = s.SpecialOpeningHoursId,
-                    Date = s.Date,
-                    OpenTime = s.OpenTime,
-                    CloseTime = s.CloseTime,
-                    IsClosed = s.IsClosed,
-                    OpeningHoursId = s.OpeningHoursId // Ensure foreign key is included
-                }).ToList(),
-                TimeSlots = openingHours.TimeSlots.Select(t => new TimeSlotDto
-                {
-                    TimeSlotId = t.TimeSlotId,
-                    StartTime = t.StartTime,
-                    EndTime = t.EndTime,
-                    SlotDuration = t.SlotDuration
-                }).ToList()
-            };
+            return _mapper.Map<OpeningHoursDto>(openingHours);
         }
 
         public async Task<OpeningHoursDto> CreateOpeningHoursAsync(OpeningHoursCreateDto openingHoursCreateDto)

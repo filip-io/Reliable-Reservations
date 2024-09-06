@@ -45,14 +45,12 @@ namespace Reliable_Reservations.Controllers
         {
             try
             {
-                var table = await _tableService.GetTableByIdAsync(id);
-
-                if (table == null)
-                {
-                    return ResponseHelper.HandleNotFound(_logger, id);
-                }
-
-                return Ok(table);
+                var tableDto = await _tableService.GetTableByIdAsync(id);
+                return Ok(tableDto);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return ResponseHelper.HandleNotFound(_logger, ex.Message);
             }
             catch (Exception ex)
             {
@@ -81,17 +79,20 @@ namespace Reliable_Reservations.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<TableDto>> UpdateTableAsync(int id, TableCreateDto tableCreateDto)
+        public async Task<ActionResult<TableUpdateDto>> UpdateTableAsync(int id, TableUpdateDto tableUpdateDto)
         {
+            if (id != tableUpdateDto.TableId)
+            {
+                return ResponseHelper.HandleBadRequest(_logger, "Table ID mismatch. Make sure ID matches in both URL and request body.");
+            }
             try
             {
-                var updatedTable = await _tableService.UpdateTableAsync(id, tableCreateDto);
-
-                return CreatedAtAction(nameof(GetTableById), new { id = updatedTable.TableId }, updatedTable);
+                var updatedTable = await _tableService.UpdateTableAsync(id, tableUpdateDto);
+                return Ok(updatedTable);
             }
-            catch (KeyNotFoundException)
+            catch (KeyNotFoundException ex)
             {
-                return ResponseHelper.HandleNotFound(_logger, id);
+                return ResponseHelper.HandleNotFound(_logger, ex.Message);
             }
             catch (Exception ex)
             {
@@ -107,9 +108,9 @@ namespace Reliable_Reservations.Controllers
                 await _tableService.DeleteTableAsync(id);
                 return Ok($"Table with ID {id} was successfully deleted.");
             }
-            catch (KeyNotFoundException)
+            catch (KeyNotFoundException ex)
             {
-                return ResponseHelper.HandleNotFound(_logger, id);
+                return ResponseHelper.HandleNotFound(_logger, ex.Message);
             }
             catch (Exception ex)
             {

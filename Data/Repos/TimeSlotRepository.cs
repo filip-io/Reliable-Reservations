@@ -48,6 +48,12 @@ namespace Reliable_Reservations.Data.Repos
             await _context.SaveChangesAsync();
         }
 
+        public async Task AddMultipleTimeSlots(IEnumerable<TimeSlot> timeSlots)
+        {
+            await _context.TimeSlots.AddRangeAsync(timeSlots);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task UpdateTimeSlot(TimeSlot timeSlot)
         {
             _context.Entry(timeSlot).State = EntityState.Modified;

@@ -7,7 +7,7 @@ namespace Reliable_Reservations.Services.IServices
         Task<IEnumerable<TableDto>> GetAllTablesAsync();
         Task<TableDto?> GetTableByIdAsync(int id);
         Task<TableDto> CreateTableAsync(TableCreateDto tableCreateDto);
-        Task<TableDto> UpdateTableAsync(int id, TableCreateDto tableCreateDto);
+        Task<TableDto> UpdateTableAsync(int id, TableUpdateDto tableCreateDto);
         Task DeleteTableAsync(int id);
     }
 }

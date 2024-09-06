@@ -44,9 +44,15 @@ namespace Reliable_Reservations.Services
             return _mapper.Map<IEnumerable<ReservationDetailsViewModel>>(reservations);
         }
 
-        public async Task<ReservationDetailsViewModel?> GetReservationByIdAsync(int reservationId)
+        public async Task<ReservationDetailsViewModel?> GetReservationByIdAsync(int id)
         {
-            var reservation = await _reservationRepository.GetReservationById(reservationId);
+            var reservation = await _reservationRepository.GetReservationById(id);
+
+            if (reservation == null)
+            {
+                throw new KeyNotFoundException($"Reservation with ID {id} not found.");
+            }
+
             return _mapper.Map<ReservationDetailsViewModel?>(reservation);
         }
 
@@ -199,7 +205,7 @@ namespace Reliable_Reservations.Services
             // Check if the customer exists
             if (!await _customerRepository.CustomerExists(reservationUpdateDto.CustomerId))
             {
-                throw new ArgumentException("Customer does not exist.");
+                throw new KeyNotFoundException($"Customer with ID {reservationUpdateDto.CustomerId} does not exist.");
             }
 
             // Validate the new reservation time
@@ -277,12 +283,12 @@ namespace Reliable_Reservations.Services
         }
 
 
-        public async Task DeleteReservationAsync(int reservationId)
+        public async Task DeleteReservationAsync(int id)
         {
-            var reservationToDelete = await _reservationRepository.GetReservationById(reservationId);
+            var reservationToDelete = await _reservationRepository.GetReservationById(id);
             if (reservationToDelete == null)
             {
-                throw new KeyNotFoundException();
+                throw new KeyNotFoundException($"Reservation with ID {id} not found.");
             }
 
             await _reservationRepository.DeleteReservation(reservationToDelete);

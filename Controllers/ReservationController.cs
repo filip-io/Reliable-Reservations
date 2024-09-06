@@ -45,12 +45,11 @@ namespace Reliable_Reservations.Controllers
             try
             {
                 var reservation = await _reservationService.GetReservationByIdAsync(id);
-
-                if (reservation == null)
-                {
-                    return ResponseHelper.HandleNotFound(_logger, id);
-                }
                 return Ok(reservation);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return ResponseHelper.HandleNotFound(_logger, ex.Message);
             }
             catch (Exception ex)
             {
@@ -86,11 +85,11 @@ namespace Reliable_Reservations.Controllers
             try
             {
                 var updatedReservation = await _reservationService.UpdateReservationAsync(reservationUpdateDto);
-                return CreatedAtAction(nameof(GetReservationById), new { id = updatedReservation.ReservationId }, updatedReservation);
+                return Ok(updatedReservation);
             }
-            catch (KeyNotFoundException)
+            catch (KeyNotFoundException ex)
             {
-                return ResponseHelper.HandleNotFound(_logger, id);
+                return ResponseHelper.HandleNotFound(_logger, ex.Message);
             }
             catch (Exception ex)
             {
@@ -106,9 +105,9 @@ namespace Reliable_Reservations.Controllers
                 await _reservationService.DeleteReservationAsync(id);
                 return ResponseHelper.HandleSuccess(_logger, $"Reservation with ID {id} has been successfully deleted.");
             }
-            catch (KeyNotFoundException)
+            catch (KeyNotFoundException ex)
             {
-                return ResponseHelper.HandleNotFound(_logger, id);
+                return ResponseHelper.HandleNotFound(_logger, ex.Message);
             }
             catch (Exception ex)
             {

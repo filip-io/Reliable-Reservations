@@ -19,7 +19,10 @@ namespace Reliable_Reservations.Models
         public required bool IsClosed { get; set; } // Whether the restaurant is closed that day
 
         public virtual ICollection<SpecialOpeningHours> SpecialOpeningHours { get; set; } = new List<SpecialOpeningHours>(); // Initialize to avoid null reference
-        public virtual ICollection<TimeSlot> TimeSlots { get; set; }
+
+        
+        // Relationship with TimeSlots
+        public virtual ICollection<TimeSlot> TimeSlots { get; set; } = new List<TimeSlot>();
     }
 
     public class SpecialOpeningHours
@@ -38,6 +41,7 @@ namespace Reliable_Reservations.Models
 
         [Required]
         public required int OpeningHoursId { get; set; } // Foreign key to OpeningHours
+
         public OpeningHours OpeningHours { get; set; } // Navigation property to OpeningHours
     }
 }

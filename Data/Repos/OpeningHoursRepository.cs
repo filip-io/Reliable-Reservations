@@ -17,7 +17,6 @@ namespace Reliable_Reservations.Data.Repos
         {
             return await _context.OpeningHours
                 .Include(o => o.SpecialOpeningHours)
-                .Include(o => o.TimeSlots)
                 .ToListAsync();
         }
 
@@ -31,7 +30,6 @@ namespace Reliable_Reservations.Data.Repos
         {
             return await _context.OpeningHours
                 .Include(o => o.SpecialOpeningHours)
-                .Include(o => o.TimeSlots)
                 .FirstOrDefaultAsync(o => o.OpeningHoursId == id);
         }
 

@@ -1,4 +1,5 @@
-﻿using Reliable_Reservations.Data.Repos.IRepos;
+﻿using AutoMapper;
+using Reliable_Reservations.Data.Repos.IRepos;
 using Reliable_Reservations.Models;
 using Reliable_Reservations.Models.DTOs;
 using Reliable_Reservations.Services.IServices;
@@ -8,17 +9,17 @@ namespace Reliable_Reservations.Services
     public class CustomerService : ICustomerService
     {
         private readonly ICustomerRepository _customerRepository;
+        private readonly IMapper _mapper;
 
-        public CustomerService(ICustomerRepository customerRepository)
+        public CustomerService(ICustomerRepository customerRepository, IMapper mapper)
         {
             _customerRepository = customerRepository;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<CustomerDto>> GetAllCustomersAsync()
         {
             var customers = await _customerRepository.GetAllAsync();
-
-
 
             List<CustomerDto> customerDtos = customers
                 .Select(c => new CustomerDto()
@@ -40,29 +41,15 @@ namespace Reliable_Reservations.Services
 
             if (customer == null)
             {
-                return null;
+                throw new KeyNotFoundException($"Customer with ID {id} not found.");
             }
 
-            return new CustomerDto
-            {
-                CustomerId = customer.CustomerId,
-                FirstName = customer.FirstName,
-                LastName = customer.LastName,
-                PhoneNumber = customer.PhoneNumber,
-                Email = customer.Email
-            };
+            return _mapper.Map<CustomerDto>(customer);
         }
 
         public async Task<CustomerDto> CreateCustomerAsync(CustomerCreateDto dto)
         {
-            Customer newCustomer = new()
-            {
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
-                PhoneNumber = dto.PhoneNumber,
-                Email = dto.Email
-            };
-
+            var newCustomer = _mapper.Map<Customer>(dto);
             await _customerRepository.AddAsync(newCustomer);
 
             CustomerDto customerDto = new()
@@ -86,28 +73,25 @@ namespace Reliable_Reservations.Services
                 throw new KeyNotFoundException($"Customer with ID {customerDto.CustomerId} not found.");
             }
 
-            customer.FirstName = customerDto.FirstName;
-            customer.LastName = customerDto.LastName;
-            customer.PhoneNumber = customerDto.PhoneNumber;
-            customer.Email = customerDto.Email;
+            _mapper.Map(customerDto, customer);
 
             await _customerRepository.UpdateAsync(customer);
 
-            var updatedCustomer = new CustomerDto
-            {
-                CustomerId = customer.CustomerId,
-                FirstName = customer.FirstName,
-                LastName = customer.LastName,
-                PhoneNumber = customer.PhoneNumber,
-                Email = customer.Email
-            };
+            var updatedCustomerDto = _mapper.Map<CustomerDto>(customer);
 
-            return updatedCustomer;
+            return updatedCustomerDto;
         }
 
         public async Task DeleteCustomerAsync(int id)
         {
-            await _customerRepository.DeleteAsync(id);
+            var customer = await _customerRepository.GetByIdAsync(id);
+
+            if (customer == null)
+            {
+                throw new KeyNotFoundException($"Customer with ID {id} not found.");
+            }
+
+            await _customerRepository.DeleteAsync(customer);
         }
     }
 }

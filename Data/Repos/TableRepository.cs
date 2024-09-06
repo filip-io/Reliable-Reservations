@@ -46,14 +46,10 @@ namespace Reliable_Reservations.Data.Repos
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(Table table)
         {
-            var table = await _context.Tables.FindAsync(id);
-            if (table != null)
-            {
                 _context.Tables.Remove(table);
                 await _context.SaveChangesAsync();
-            }
         }
     }
 }

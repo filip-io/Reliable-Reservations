@@ -48,18 +48,10 @@ namespace Reliable_Reservations.Data.Repos
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(Customer customer)
         {
-            var customer = await _context.Customers.FindAsync(id);
-            if (customer != null)
-            {
-                _context.Customers.Remove(customer);
-                await _context.SaveChangesAsync();
-            }
-            else
-            {
-                throw new KeyNotFoundException($"Customer with ID {id} not found.");
-            }
+            _context.Customers.Remove(customer);
+            await _context.SaveChangesAsync();
         }
     }
 }

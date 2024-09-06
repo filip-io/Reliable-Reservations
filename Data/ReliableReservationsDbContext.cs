@@ -350,9 +350,10 @@ namespace Reliable_Reservations.Data
                 .IsRequired();
 
             modelBuilder.Entity<OpeningHours>()
-                .HasMany(o => o.TimeSlots)
-                .WithOne(t => t.OpeningHours)
-                .HasForeignKey(t => t.OpeningHoursId);
+                .HasMany(o => o.SpecialOpeningHours)
+                .WithOne(s => s.OpeningHours)
+                .HasForeignKey(s => s.OpeningHoursId);
+
 
             // Seed data for OpeningHours
             modelBuilder.Entity<OpeningHours>().HasData
@@ -426,22 +427,15 @@ namespace Reliable_Reservations.Data
 
             modelBuilder.Entity<SpecialOpeningHours>()
                 .Property(s => s.OpenTime)
-                .IsRequired(false)
                 .HasColumnType("time(0)");
 
             modelBuilder.Entity<SpecialOpeningHours>()
                 .Property(s => s.CloseTime)
-                .IsRequired(false)
                 .HasColumnType("time(0)");
 
             modelBuilder.Entity<SpecialOpeningHours>()
                 .Property(s => s.IsClosed)
                 .IsRequired();
-
-            modelBuilder.Entity<SpecialOpeningHours>()
-                .HasOne(s => s.OpeningHours)
-                .WithMany(o => o.SpecialOpeningHours)
-                .HasForeignKey(s => s.OpeningHoursId);
 
 
             // Reservation
@@ -456,7 +450,8 @@ namespace Reliable_Reservations.Data
             modelBuilder.Entity<Reservation>()
                 .HasOne(r => r.TimeSlot)
                 .WithMany(t => t.Reservations)
-                .HasForeignKey(r => r.TimeSlotId);
+                .HasForeignKey(r => r.TimeSlotId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Reservation>()
                 .Property(r => r.ReservationDate)
@@ -512,6 +507,119 @@ namespace Reliable_Reservations.Data
                 .IsUnique();
 
 
+            // Seed data for Tables
+            modelBuilder.Entity<Table>().HasData
+            (
+                new Table
+                {
+                    TableId = 1,
+                    TableNumber = 1,
+                    SeatingCapacity = 4,
+                    Location = "Window"
+                },
+                new Table
+                {
+                    TableId = 2,
+                    TableNumber = 2,
+                    SeatingCapacity = 2,
+                    Location = "Patio"
+                },
+                new Table
+                {
+                    TableId = 3,
+                    TableNumber = 3,
+                    SeatingCapacity = 6,
+                    Location = "Center"
+                },
+                new Table
+                {
+                    TableId = 4,
+                    TableNumber = 4,
+                    SeatingCapacity = 4,
+                    Location = "Corner"
+                },
+                new Table
+                {
+                    TableId = 5,
+                    TableNumber = 5,
+                    SeatingCapacity = 4,
+                    Location = "Center"
+                },
+                new Table
+                {
+                    TableId = 6,
+                    TableNumber = 6,
+                    SeatingCapacity = 2,
+                    Location = "Window"
+                },
+                new Table
+                {
+                    TableId = 7,
+                    TableNumber = 7,
+                    SeatingCapacity = 8,
+                    Location = "Private Room"
+                },
+                new Table
+                {
+                    TableId = 8,
+                    TableNumber = 8,
+                    SeatingCapacity = 6,
+                    Location = "Patio"
+                },
+                new Table
+                {
+                    TableId = 9,
+                    TableNumber = 9,
+                    SeatingCapacity = 4,
+                    Location = "Corner"
+                },
+                new Table
+                {
+                    TableId = 10,
+                    TableNumber = 10,
+                    SeatingCapacity = 4,
+                    Location = "Window"
+                },
+                new Table
+                {
+                    TableId = 11,
+                    TableNumber = 11,
+                    SeatingCapacity = 2,
+                    Location = "Bar"
+                },
+                new Table
+                {
+                    TableId = 12,
+                    TableNumber = 12,
+                    SeatingCapacity = 6,
+                    Location = "Center"
+                },
+                new Table
+                {
+                    TableId = 13,
+                    TableNumber = 13,
+                    SeatingCapacity = 8,
+                    Location = "Private Room"
+                },
+                new Table
+                {
+                    TableId = 14,
+                    TableNumber = 14,
+                    SeatingCapacity = 2,
+                    Location = "Patio"
+                },
+                new Table
+                {
+                    TableId = 15,
+                    TableNumber = 15,
+                    SeatingCapacity = 4,
+                    Location = "Window"
+                }
+            );
+
+
+
+
             // TimeSlot
             modelBuilder.Entity<TimeSlot>()
                 .HasKey(t => t.TimeSlotId);
@@ -526,7 +634,6 @@ namespace Reliable_Reservations.Data
                 .IsRequired()
                 .HasColumnType("datetime2(0)");
 
-
             modelBuilder.Entity<TimeSlot>()
                 .Property(t => t.SlotDuration)
                 .IsRequired();
@@ -534,12 +641,14 @@ namespace Reliable_Reservations.Data
             modelBuilder.Entity<TimeSlot>()
                 .HasOne(t => t.OpeningHours)
                 .WithMany(o => o.TimeSlots)
-                .HasForeignKey(t => t.OpeningHoursId);
+                .HasForeignKey(t => t.FK_OpeningHoursId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<TimeSlot>()
                 .HasMany(t => t.Reservations)
                 .WithOne(r => r.TimeSlot)
-                .HasForeignKey(r => r.TimeSlotId);
+                .HasForeignKey(r => r.TimeSlotId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -28,19 +28,16 @@ namespace Reliable_Reservations.Services
 
         public async Task<MenuItemDto?> GetMenuItemById(int id)
         {
-            try
-            {
-                var menuItem = await _menuRepository.GetMenuItemById(id);
+            var menuItem = await _menuRepository.GetMenuItemById(id);
 
-                var menuItemDto = _mapper.Map<MenuItemDto>(menuItem);
-
-                return menuItemDto;
-            }
-            catch (Exception ex)
+            if (menuItem == null)
             {
-                _logger.LogError(ex, "An unexpected error occurred while retrieving the menu item.");
-                throw new ApplicationException("An unexpected error occurred while retrieving the menu item.", ex);
+                throw new KeyNotFoundException($"MenuItem with ID {id} not found.");
             }
+
+            var menuItemDto = _mapper.Map<MenuItemDto>(menuItem);
+
+            return menuItemDto;
         }
 
         public async Task<MenuItemDto> CreateMenuItem(MenuItemCreateDto menuItemDto)
@@ -68,7 +65,14 @@ namespace Reliable_Reservations.Services
 
         public async Task DeleteMenuItem(int id)
         {
-            await _menuRepository.DeleteMenuItem(id);
+            var menuItem = await _menuRepository.GetMenuItemById(id);
+
+            if (menuItem == null)
+            {
+                throw new KeyNotFoundException($"MenuItem with ID {id} not found.");
+            }
+            
+            await _menuRepository.DeleteMenuItem(menuItem);
         }
     }
 }

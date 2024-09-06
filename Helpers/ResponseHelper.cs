@@ -2,18 +2,20 @@
 
 public static class ResponseHelper
 {
-    public static ActionResult HandleException(ILogger logger, Exception ex)
+    public static ActionResult HandleSuccess(ILogger logger, string message)
     {
-        string message = "An unexpected error occurred.";
-        logger.LogError(ex, message);
-        return new ObjectResult(message) { StatusCode = 500 };
+        logger.LogInformation(message);
+        return new OkObjectResult(new { message });
     }
 
-    public static ActionResult HandleNotFound(ILogger logger, int id)
+    public static ActionResult HandleException(ILogger logger, Exception ex)
     {
-        string message = $"No entity with ID {id} exists.";
-        logger.LogWarning(message);
-        return new NotFoundObjectResult(message);
+        logger.LogError(ex, "An unexpected error occurred.");
+
+        return new ObjectResult(new { error = "An unexpected error occurred." })
+        {
+            StatusCode = 500
+        };
     }
 
     public static ActionResult HandleBadRequest(ILogger logger, string message)
@@ -22,15 +24,17 @@ public static class ResponseHelper
         return new BadRequestObjectResult(new { error = message });
     }
 
-    public static ActionResult HandleSuccess(ILogger logger, string message)
+    public static ActionResult HandleNotFound(ILogger logger, string message)
     {
-        logger.LogInformation(message);
-        return new OkObjectResult(message);
+        logger.LogWarning(message);
+        return new NotFoundObjectResult(new { error = message });
     }
+
+
 
     public static ActionResult HandleConflict(ILogger logger, string message)
     {
         logger.LogWarning(message);
-        return new ConflictObjectResult(message);
+        return new ConflictObjectResult(new { error = message });
     }
 }
