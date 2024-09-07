@@ -42,6 +42,14 @@ namespace Reliable_Reservations.Data.Repos
                 .FirstOrDefaultAsync();
         }
 
+
+        public async Task<TimeSlot?> GetTimeSlotByTimesAsync(DateTime startTime, DateTime endTime)
+        {
+            return await _context.TimeSlots
+                .FirstOrDefaultAsync(ts => ts.StartTime == startTime && ts.EndTime == endTime);
+        }
+
+
         public async Task AddTimeSlot(TimeSlot timeSlot)
         {
             _context.TimeSlots.Add(timeSlot);

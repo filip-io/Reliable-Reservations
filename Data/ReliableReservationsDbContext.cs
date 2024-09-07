@@ -641,7 +641,7 @@ namespace Reliable_Reservations.Data
             modelBuilder.Entity<TimeSlot>()
                 .HasOne(t => t.OpeningHours)
                 .WithMany(o => o.TimeSlots)
-                .HasForeignKey(t => t.FK_OpeningHoursId)
+                .HasForeignKey(t => t.OpeningHoursId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<TimeSlot>()

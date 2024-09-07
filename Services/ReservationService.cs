@@ -18,6 +18,8 @@ namespace Reliable_Reservations.Services
         private readonly IMapper _mapper;
         private readonly ILogger<ReservationService> _logger;
 
+        public int SeatingDuration { get; } = 120;
+
         public ReservationService(
             IReservationRepository reservationRepository,
             ITableService tableService,
@@ -71,7 +73,7 @@ namespace Reliable_Reservations.Services
             }
 
             // Validate the reservation time against opening hours
-            await ValidateReservationTimeAsync(reservationCreateDto.ReservationDate, reservationCreateDto.SeatingDuration);
+            await ValidateReservationTimeAsync(reservationCreateDto.ReservationDate);
 
             // Check if the selected tables are valid
             var selectedTables = await _tableRepository.GetTablesByNumbersAsync(reservationCreateDto.TableNumbers);
@@ -87,37 +89,24 @@ namespace Reliable_Reservations.Services
                 throw new InvalidOperationException($"The selected tables cannot accommodate {reservationCreateDto.NumberOfGuests} guests. The total seating capacity is {totalSeatingCapacity}.");
             }
 
-            // Check if the selected tables are available
-            var startTime = reservationCreateDto.ReservationDate;
-            var endTime = startTime.AddMinutes(reservationCreateDto.SeatingDuration);
-            var isAvailable = await AreTablesAvailableAsync(selectedTables, startTime, endTime);
+            // Check if the selected tables are available for the given TimeSlotId
+            var matchingTimeSlot = await _timeSlotService.GetExistingTimeSlotAsync(reservationCreateDto.ReservationDate, reservationCreateDto.ReservationDate.AddMinutes(SeatingDuration));
+            if (matchingTimeSlot == null)
+            {
+                throw new InvalidOperationException("No matching time slot found for the selected time.");
+            }
+
+            var isAvailable = await AreTablesAvailableAsync(selectedTables, matchingTimeSlot.TimeSlotId);
             if (!isAvailable)
             {
                 throw new InvalidOperationException("One or more tables are not available for the selected time slot.");
             }
 
-            // Create the time slot using TimeSlotCreateDto
-            TimeSlotDto timeSlotDto;
-            try
-            {
-                var timeSlotCreateDto = new TimeSlotCreateDto
-                {
-                    StartTime = startTime,
-                    EndTime = endTime
-                };
-
-                timeSlotDto = await _timeSlotService.CreateTimeSlotAsync(timeSlotCreateDto);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException("Failed to create time slot: " + ex.Message);
-            }
-
-            // Create the reservation
+            // Create the reservation with the existing TimeSlotId
             var reservation = new Reservation
             {
                 CustomerId = reservationCreateDto.CustomerId,
-                TimeSlotId = timeSlotDto.TimeSlotId, // Use the TimeSlotId from the created TimeSlot
+                TimeSlotId = matchingTimeSlot.TimeSlotId, // Use the existing TimeSlotId
                 ReservationDate = reservationCreateDto.ReservationDate,
                 NumberOfGuests = reservationCreateDto.NumberOfGuests,
                 SpecialRequests = reservationCreateDto.SpecialRequests,
@@ -130,7 +119,13 @@ namespace Reliable_Reservations.Services
             return _mapper.Map<ReservationDetailsViewModel>(reservation);
         }
 
-        private async Task ValidateReservationTimeAsync(DateTime reservationDate, int seatingDuration)
+        public async Task<bool> AreTablesAvailableAsync(List<Table> tables, int timeSlotId)
+        {
+            // Use the updated method to check if any table already has the given TimeSlotId
+            return !await _tableRepository.TableHasTimeSlotAsync(tables, timeSlotId);
+        }
+
+        private async Task ValidateReservationTimeAsync(DateTime reservationDate)
         {
             var dayOfWeek = reservationDate.DayOfWeek;
             var openingHours = await _openingHoursRepository.GetOpeningHoursByDateAsync(reservationDate);
@@ -162,28 +157,13 @@ namespace Reliable_Reservations.Services
             }
 
             var reservationStart = TimeOnly.FromDateTime(reservationDate);
-            var reservationEnd = reservationStart.AddMinutes(seatingDuration);
+            var reservationEnd = reservationStart.AddMinutes(SeatingDuration);
 
             // Validate if the reservation is within opening hours
             if (reservationStart < openTime || reservationEnd > closeTime)
             {
                 throw new InvalidOperationException("The reservation time is outside the restaurant's opening hours.");
             }
-        }
-
-        public async Task<bool> AreTablesAvailableAsync(List<Table> tables, DateTime startTime, DateTime endTime)
-        {
-            // Get all reservations for these tables within the time range
-            var reservations = await _reservationRepository.GetReservationsForTablesAsync(tables, startTime, endTime);
-
-            // Check for overlaps
-            return !reservations.Any(r => IsOverlap(r.TimeSlot.StartTime, r.TimeSlot.EndTime, startTime, endTime));
-        }
-
-        private bool IsOverlap(DateTime existingStartTime, DateTime existingEndTime, DateTime newStartTime, DateTime newEndTime)
-        {
-            // Check if there is an overlap
-            return existingStartTime < newEndTime && existingEndTime > newStartTime;
         }
 
         public async Task<ReservationDetailsViewModel> UpdateReservationAsync(ReservationUpdateDto reservationUpdateDto)
@@ -195,13 +175,6 @@ namespace Reliable_Reservations.Services
                 throw new KeyNotFoundException("Reservation does not exist.");
             }
 
-            // Fetch the existing TimeSlot
-            var existingTimeSlot = await _timeSlotService.GetTimeSlotByIdAsync(existingReservation.TimeSlotId);
-            if (existingTimeSlot == null)
-            {
-                throw new KeyNotFoundException("TimeSlot does not exist.");
-            }
-
             // Check if the customer exists
             if (!await _customerRepository.CustomerExists(reservationUpdateDto.CustomerId))
             {
@@ -209,7 +182,7 @@ namespace Reliable_Reservations.Services
             }
 
             // Validate the new reservation time
-            await ValidateReservationTimeAsync(reservationUpdateDto.ReservationDate, reservationUpdateDto.SeatingDuration);
+            await ValidateReservationTimeAsync(reservationUpdateDto.ReservationDate);
 
             // Fetch the selected tables
             var selectedTableNumbers = reservationUpdateDto.TableNumbers;
@@ -226,62 +199,49 @@ namespace Reliable_Reservations.Services
                 throw new InvalidOperationException($"The selected tables cannot accommodate {reservationUpdateDto.NumberOfGuests} guests. The total seating capacity is {selectedTablesSeatingCapacity}.");
             }
 
-            // Check if the selected tables are available
+            // Fetch matching TimeSlot
             var startTime = reservationUpdateDto.ReservationDate;
-            var endTime = startTime.AddMinutes(reservationUpdateDto.SeatingDuration);
-            var isAvailable = await AreTablesAvailableAsync(selectedTables, startTime, endTime);
+            var endTime = startTime.AddMinutes(SeatingDuration);
+            var newTimeSlot = await _timeSlotService.GetExistingTimeSlotAsync(startTime, endTime);
+
+            if (newTimeSlot == null)
+            {
+                throw new InvalidOperationException("No matching time slot found for the selected time.");
+            }
+
+            // Check if the selected tables are available for the new TimeSlotId
+            var isAvailable = await AreTablesAvailableAsync(selectedTables, newTimeSlot.TimeSlotId);
             if (!isAvailable)
             {
                 throw new InvalidOperationException("One or more tables are not available for the selected time slot.");
             }
 
-            // Update the TimeSlot
-            var timeSlotUpdateDto = new TimeSlotUpdateDto
-            {
-                StartTime = startTime,
-                EndTime = endTime,
-                SlotDuration = reservationUpdateDto.SeatingDuration
-            };
 
-            try
-            {
-                await _timeSlotService.UpdateTimeSlotAsync(existingReservation.TimeSlotId, timeSlotUpdateDto);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException("Failed to update time slot: " + ex.Message);
-            }
+            // Update reservation details with the new TimeSlotId
+            existingReservation.TimeSlotId = newTimeSlot.TimeSlotId;
+            existingReservation.CustomerId = reservationUpdateDto.CustomerId;
+            existingReservation.ReservationDate = reservationUpdateDto.ReservationDate;
+            existingReservation.NumberOfGuests = reservationUpdateDto.NumberOfGuests;
+            existingReservation.SpecialRequests = reservationUpdateDto.SpecialRequests;
 
-            // Determine which tables need to be removed from the reservation
-            var currentTableNumbers = existingReservation.Tables.Select(t => t.TableNumber).ToList();
-            var newTableNumbers = reservationUpdateDto.TableNumbers;
-
-            var tablesToRemove = existingReservation.Tables
-                .Where(t => !newTableNumbers.Contains(t.TableNumber))
-                .ToList();
-
-            // Remove tables that are no longer selected
-            foreach (var table in tablesToRemove)
+            // Remove old tables and add new tables
+            if (existingReservation.Tables != null)
             {
-                existingReservation.Tables.Remove(table);
-            }
-
-            // Add new tables if any
-            foreach (var table in selectedTables)
-            {
-                if (!existingReservation.Tables.Any(t => t.TableNumber == table.TableNumber))
+                existingReservation.Tables.Clear(); // Remove existing tables
+                foreach (var table in selectedTables)
                 {
                     existingReservation.Tables.Add(table);
                 }
             }
+            else
+            {
+                throw new InvalidOperationException("The Tables property is null.");
+            }
 
-            // Update reservation details
-            _mapper.Map(reservationUpdateDto, existingReservation);
             await _reservationRepository.UpdateReservation(existingReservation);
 
             return _mapper.Map<ReservationDetailsViewModel>(existingReservation);
         }
-
 
         public async Task DeleteReservationAsync(int id)
         {

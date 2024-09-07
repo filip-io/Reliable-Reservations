@@ -23,9 +23,6 @@ namespace Reliable_Reservations.Models.DTOs
         [Required]
         public required List<int> TableNumbers { get; set; } = new List<int>();
 
-        [Required]
-        public int SeatingDuration { get; set; }
-
         public string? SpecialRequests { get; set; }
     }
 }

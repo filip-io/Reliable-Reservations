@@ -34,6 +34,12 @@ namespace Reliable_Reservations.Data.Repos
                 .ToListAsync();
         }
 
+        public async Task<bool> TableHasTimeSlotAsync(List<Table> tables, int timeSlotId)
+        {
+            return await _context.Tables
+                .AnyAsync(t => tables.Contains(t) && t.TimeSlots.Any(ts => ts.TimeSlotId == timeSlotId));
+        }
+
         public async Task AddAsync(Table table)
         {
             _context.Tables.Add(table);

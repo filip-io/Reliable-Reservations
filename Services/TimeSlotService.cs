@@ -28,6 +28,14 @@ namespace Reliable_Reservations.Services
             return _mapper.Map<IEnumerable<TimeSlotDto>>(timeSlots);
         }
 
+
+        public async Task<TimeSlot?> GetExistingTimeSlotAsync(DateTime startTime, DateTime endTime)
+        {
+            // Fetch a time slot that matches the given start and end times
+            return await _timeSlotRepository.GetTimeSlotByTimesAsync(startTime, endTime);
+        }
+
+
         public async Task<TimeSlotDto> GetTimeSlotByIdAsync(int id)
         {
             var timeSlot = await _timeSlotRepository.GetTimeSlotById(id);
@@ -130,7 +138,7 @@ namespace Reliable_Reservations.Services
                         StartTime = startDateTime,
                         EndTime = endDateTime,
                         SlotDuration = slotDuration,
-                        FK_OpeningHoursId = openingHours.OpeningHoursId
+                        OpeningHoursId = openingHours.OpeningHoursId
                     };
                     timeSlots.Add(timeSlot);
                 }
@@ -172,12 +180,11 @@ namespace Reliable_Reservations.Services
                 throw new Exception($"No OpeningHours found for the day: {dayOfWeek}");
             }
 
-            timeSlot.FK_OpeningHoursId = matchingOpeningHours.OpeningHoursId;
+            timeSlot.OpeningHoursId = matchingOpeningHours.OpeningHoursId;
 
             await _timeSlotRepository.AddTimeSlot(timeSlot);
             return _mapper.Map<TimeSlotDto>(timeSlot);
         }
-
 
 
         public async Task UpdateTimeSlotAsync(int id, TimeSlotUpdateDto timeSlotUpdateDto)
