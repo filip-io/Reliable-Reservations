@@ -42,6 +42,6 @@ namespace Reliable_Reservations.Models
         [Required]
         public required int OpeningHoursId { get; set; } // Foreign key to OpeningHours
 
-        public OpeningHours OpeningHours { get; set; } // Navigation property to OpeningHours
+        public OpeningHours? OpeningHours { get; set; } // Navigation property to OpeningHours
     }
 }

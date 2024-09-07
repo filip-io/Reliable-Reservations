@@ -32,12 +32,12 @@ namespace Reliable_Reservations.Models
         // Relationship with Customer
         [Required]
         public int CustomerId { get; set; } // Foreign Key to Customer
-        public virtual Customer Customer { get; set; } // Navigation property to Customer
+        public virtual Customer? Customer { get; set; } // Navigation property to Customer
 
 
         // Relationship with TimeSlot
         [Required]
         public int TimeSlotId { get; set; } // Foreign Key to TimeSlot
-        public virtual TimeSlot TimeSlot { get; set; } // Navigation property to TimeSlot
+        public virtual TimeSlot? TimeSlot { get; set; } // Navigation property to TimeSlot
     }
 }

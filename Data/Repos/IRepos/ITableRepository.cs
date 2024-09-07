@@ -1,4 +1,6 @@
-﻿namespace Reliable_Reservations.Data.Repos.IRepos
+﻿using Reliable_Reservations.Models;
+
+namespace Reliable_Reservations.Data.Repos.IRepos
 {
     public interface ITableRepository
     {

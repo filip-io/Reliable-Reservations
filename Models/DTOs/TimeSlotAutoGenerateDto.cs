@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Reliable_Reservations.Models.DTOs
 {
@@ -10,8 +11,7 @@ namespace Reliable_Reservations.Models.DTOs
         [Required(ErrorMessage = "End date is required.")]
         public DateTime EndDate { get; set; }
 
-        [Required(ErrorMessage = "Slot duration is required.")]
-        [Range(60, 120, ErrorMessage = "Slot duration must be between 60 and 120 minutes.")]
-        public int SlotDuration { get; set; }
+        [JsonIgnore]
+        public int SlotDuration { get; set; } = 90;
     }
 }

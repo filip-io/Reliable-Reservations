@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Reliable_Reservations.Data.Repos.IRepos;
+using Reliable_Reservations.Models;
 
 namespace Reliable_Reservations.Data.Repos
 {
@@ -17,7 +18,7 @@ namespace Reliable_Reservations.Data.Repos
             return await _context.Tables.ToListAsync();
         }
 
-        public async Task<Table?> GetByIdAsync(int id)
+        public async Task<Table> GetByIdAsync(int id)
         {
             return await _context.Tables.FindAsync(id);
         }

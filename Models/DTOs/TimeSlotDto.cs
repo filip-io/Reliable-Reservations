@@ -14,6 +14,6 @@ namespace Reliable_Reservations.Models.DTOs
         public required DateTime EndTime { get; set; }
 
         [Required]
-        public required int SlotDuration { get; set; }
+        public required int TableId { get; set; }
     }
 }

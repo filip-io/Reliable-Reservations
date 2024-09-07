@@ -18,8 +18,6 @@ namespace Reliable_Reservations.Services
         private readonly IMapper _mapper;
         private readonly ILogger<ReservationService> _logger;
 
-        public int SeatingDuration { get; } = 120;
-
         public ReservationService(
             IReservationRepository reservationRepository,
             ITableService tableService,
@@ -60,53 +58,53 @@ namespace Reliable_Reservations.Services
 
         public async Task<ReservationDetailsViewModel> CreateReservationAsync(ReservationCreateDto reservationCreateDto)
         {
-            // Check if the reservation is in the past
             if (reservationCreateDto.ReservationDate < DateTime.Now)
             {
                 throw new ArgumentException("Reservations cannot be made for past dates and times.");
             }
 
-            // Check if the customer exists
             if (!await _customerRepository.CustomerExists(reservationCreateDto.CustomerId))
             {
                 throw new ArgumentException("Customer does not exist.");
             }
 
-            // Validate the reservation time against opening hours
             await ValidateReservationTimeAsync(reservationCreateDto.ReservationDate);
 
-            // Check if the selected tables are valid
+            // Fetch the selected tables
             var selectedTables = await _tableRepository.GetTablesByNumbersAsync(reservationCreateDto.TableNumbers);
             if (selectedTables.Count != reservationCreateDto.TableNumbers.Count)
             {
                 throw new ArgumentException("One or more table numbers are invalid.");
             }
 
-            // Check if the seating capacity is sufficient
             int totalSeatingCapacity = selectedTables.Sum(table => table.SeatingCapacity);
             if (totalSeatingCapacity < reservationCreateDto.NumberOfGuests)
             {
                 throw new InvalidOperationException($"The selected tables cannot accommodate {reservationCreateDto.NumberOfGuests} guests. The total seating capacity is {totalSeatingCapacity}.");
             }
 
-            // Check if the selected tables are available for the given TimeSlotId
-            var matchingTimeSlot = await _timeSlotService.GetExistingTimeSlotAsync(reservationCreateDto.ReservationDate, reservationCreateDto.ReservationDate.AddMinutes(SeatingDuration));
+            // Retrieve all time slots associated with the selected tables
+            var timeSlots = await _timeSlotService.GetTimeSlotsByTablesAsync(selectedTables.Select(t => t.TableId).ToList());
+
+            var matchingTimeSlot = timeSlots
+                .FirstOrDefault(ts => ts.StartTime <= reservationCreateDto.ReservationDate && ts.EndTime >= reservationCreateDto.ReservationDate.AddMinutes(90)); // Assuming 90 minutes duration
+
             if (matchingTimeSlot == null)
             {
                 throw new InvalidOperationException("No matching time slot found for the selected time.");
             }
 
+            // Check if the selected tables are available for the time slot
             var isAvailable = await AreTablesAvailableAsync(selectedTables, matchingTimeSlot.TimeSlotId);
             if (!isAvailable)
             {
                 throw new InvalidOperationException("One or more tables are not available for the selected time slot.");
             }
 
-            // Create the reservation with the existing TimeSlotId
             var reservation = new Reservation
             {
                 CustomerId = reservationCreateDto.CustomerId,
-                TimeSlotId = matchingTimeSlot.TimeSlotId, // Use the existing TimeSlotId
+                TimeSlotId = matchingTimeSlot.TimeSlotId,
                 ReservationDate = reservationCreateDto.ReservationDate,
                 NumberOfGuests = reservationCreateDto.NumberOfGuests,
                 SpecialRequests = reservationCreateDto.SpecialRequests,
@@ -119,11 +117,13 @@ namespace Reliable_Reservations.Services
             return _mapper.Map<ReservationDetailsViewModel>(reservation);
         }
 
+
         public async Task<bool> AreTablesAvailableAsync(List<Table> tables, int timeSlotId)
         {
-            // Use the updated method to check if any table already has the given TimeSlotId
-            return !await _tableRepository.TableHasTimeSlotAsync(tables, timeSlotId);
+            // Check if any table is already reserved for the given TimeSlotId
+            return !await _reservationRepository.AreTablesReservedAsync(tables.Select(t => t.TableId).ToList(), timeSlotId);
         }
+
 
         private async Task ValidateReservationTimeAsync(DateTime reservationDate)
         {
@@ -145,9 +145,7 @@ namespace Reliable_Reservations.Services
                 {
                     throw new InvalidOperationException("The restaurant is closed on the selected date due to special hours.");
                 }
-                // Use special opening time if set, otherwise fall back to regular opening time
                 openTime = specialOpeningHours.OpenTime ?? openingHours.OpenTime;
-                // Use special closing time if set, otherwise fall back to regular closing time
                 closeTime = specialOpeningHours.CloseTime ?? openingHours.CloseTime;
             }
             else
@@ -157,7 +155,7 @@ namespace Reliable_Reservations.Services
             }
 
             var reservationStart = TimeOnly.FromDateTime(reservationDate);
-            var reservationEnd = reservationStart.AddMinutes(SeatingDuration);
+            var reservationEnd = reservationStart.AddMinutes(90); // Assuming 90 minutes duration
 
             // Validate if the reservation is within opening hours
             if (reservationStart < openTime || reservationEnd > closeTime)
@@ -166,22 +164,20 @@ namespace Reliable_Reservations.Services
             }
         }
 
+
         public async Task<ReservationDetailsViewModel> UpdateReservationAsync(ReservationUpdateDto reservationUpdateDto)
         {
-            // Fetch the existing reservation
             var existingReservation = await _reservationRepository.GetReservationById(reservationUpdateDto.ReservationId);
             if (existingReservation == null)
             {
                 throw new KeyNotFoundException("Reservation does not exist.");
             }
 
-            // Check if the customer exists
             if (!await _customerRepository.CustomerExists(reservationUpdateDto.CustomerId))
             {
                 throw new KeyNotFoundException($"Customer with ID {reservationUpdateDto.CustomerId} does not exist.");
             }
 
-            // Validate the new reservation time
             await ValidateReservationTimeAsync(reservationUpdateDto.ReservationDate);
 
             // Fetch the selected tables
@@ -192,17 +188,17 @@ namespace Reliable_Reservations.Services
                 throw new ArgumentException("One or more table numbers are invalid.");
             }
 
-            // Check if the seating capacity is sufficient
             int selectedTablesSeatingCapacity = selectedTables.Sum(t => t.SeatingCapacity);
             if (selectedTablesSeatingCapacity < reservationUpdateDto.NumberOfGuests)
             {
                 throw new InvalidOperationException($"The selected tables cannot accommodate {reservationUpdateDto.NumberOfGuests} guests. The total seating capacity is {selectedTablesSeatingCapacity}.");
             }
 
-            // Fetch matching TimeSlot
-            var startTime = reservationUpdateDto.ReservationDate;
-            var endTime = startTime.AddMinutes(SeatingDuration);
-            var newTimeSlot = await _timeSlotService.GetExistingTimeSlotAsync(startTime, endTime);
+            // Retrieve all time slots associated with the selected tables
+            var timeSlots = await _timeSlotService.GetTimeSlotsByTablesAsync(selectedTables.Select(t => t.TableId).ToList());
+
+            var newTimeSlot = timeSlots
+                .FirstOrDefault(ts => ts.StartTime <= reservationUpdateDto.ReservationDate && ts.EndTime >= reservationUpdateDto.ReservationDate.AddMinutes(90)); // Assuming 90 minutes duration
 
             if (newTimeSlot == null)
             {
@@ -216,32 +212,31 @@ namespace Reliable_Reservations.Services
                 throw new InvalidOperationException("One or more tables are not available for the selected time slot.");
             }
 
-
-            // Update reservation details with the new TimeSlotId
             existingReservation.TimeSlotId = newTimeSlot.TimeSlotId;
             existingReservation.CustomerId = reservationUpdateDto.CustomerId;
             existingReservation.ReservationDate = reservationUpdateDto.ReservationDate;
             existingReservation.NumberOfGuests = reservationUpdateDto.NumberOfGuests;
             existingReservation.SpecialRequests = reservationUpdateDto.SpecialRequests;
 
-            // Remove old tables and add new tables
-            if (existingReservation.Tables != null)
+            if (existingReservation.Tables == null)
             {
-                existingReservation.Tables.Clear(); // Remove existing tables
+                throw new InvalidOperationException("The Tables property is null.");
+            }
+            else
+            {
+                existingReservation.Tables.Clear(); // Remove existing tables from the reservation
                 foreach (var table in selectedTables)
                 {
                     existingReservation.Tables.Add(table);
                 }
-            }
-            else
-            {
-                throw new InvalidOperationException("The Tables property is null.");
             }
 
             await _reservationRepository.UpdateReservation(existingReservation);
 
             return _mapper.Map<ReservationDetailsViewModel>(existingReservation);
         }
+
+
 
         public async Task DeleteReservationAsync(int id)
         {

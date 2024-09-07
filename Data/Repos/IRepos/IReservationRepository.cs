@@ -7,6 +7,7 @@ namespace Reliable_Reservations.Data.Repos.IRepos
         Task<IEnumerable<Reservation>> GetAllReservations();
         Task<Reservation?> GetReservationById(int reservationId);
         Task<IEnumerable<Reservation>> GetReservationsForTablesAsync(List<Table> tables, DateTime startTime, DateTime endTime);
+        Task<bool> AreTablesReservedAsync(List<int> tableIds, int timeSlotId);
         Task<Reservation> AddReservation(Reservation reservation);
         Task<Reservation> UpdateReservation(Reservation reservation);
         Task DeleteReservation(Reservation reservationToDelete);

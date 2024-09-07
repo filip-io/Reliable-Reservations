@@ -41,6 +41,15 @@ namespace Reliable_Reservations.Data.Repos
                 .ToListAsync();
         }
 
+
+        public async Task<bool> AreTablesReservedAsync(List<int> tableIds, int timeSlotId)
+        {
+            return await _context.Reservations
+                .Where(r => r.TimeSlotId == timeSlotId)
+                .AnyAsync(r => r.Tables.Any(t => tableIds.Contains(t.TableId)));
+        }
+
+
         public async Task<Reservation> AddReservation(Reservation reservation)
         {
             _context.Reservations.Add(reservation);

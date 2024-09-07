@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Reliable_Reservations.Data.Repos.IRepos;
+using Reliable_Reservations.Models;
 using Reliable_Reservations.Models.DTOs;
 using Reliable_Reservations.Services.IServices;
 
@@ -74,11 +75,5 @@ namespace Reliable_Reservations.Services
 
             await _tableRepository.DeleteAsync(table);
         }
-
-
-
-
-
-
     }
 }

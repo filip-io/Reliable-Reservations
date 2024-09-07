@@ -43,10 +43,11 @@ namespace Reliable_Reservations.Data.Repos
         }
 
 
-        public async Task<TimeSlot?> GetTimeSlotByTimesAsync(DateTime startTime, DateTime endTime)
+        public async Task<IEnumerable<TimeSlot>> GetTimeSlotsByTableIdsAsync(IEnumerable<int> tableIds)
         {
             return await _context.TimeSlots
-                .FirstOrDefaultAsync(ts => ts.StartTime == startTime && ts.EndTime == endTime);
+                .Where(ts => tableIds.Contains(ts.TableId))
+                .ToListAsync();
         }
 
 
