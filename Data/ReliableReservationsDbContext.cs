@@ -79,6 +79,300 @@ namespace Reliable_Reservations.Data
                 .HasColumnType("datetime2(0)");
 
 
+            // OpeningHours
+            modelBuilder.Entity<OpeningHours>()
+                .HasKey(o => o.OpeningHoursId);
+
+            modelBuilder.Entity<OpeningHours>()
+                .Property(o => o.DayOfWeek)
+                .IsRequired();
+
+            modelBuilder.Entity<OpeningHours>()
+                .Property(o => o.OpenTime)
+                .IsRequired()
+                .HasColumnType("time(0)");
+
+            modelBuilder.Entity<OpeningHours>()
+                .Property(o => o.CloseTime)
+                .IsRequired()
+                .HasColumnType("time(0)");
+
+            modelBuilder.Entity<OpeningHours>()
+                .Property(o => o.IsClosed)
+                .IsRequired();
+
+            modelBuilder.Entity<OpeningHours>()
+                .HasMany(o => o.SpecialOpeningHours)
+                .WithOne(s => s.OpeningHours)
+                .HasForeignKey(s => s.OpeningHoursId);
+
+
+
+            // SpecialOpeningHours
+            modelBuilder.Entity<SpecialOpeningHours>()
+                .HasKey(s => s.SpecialOpeningHoursId);
+
+            modelBuilder.Entity<SpecialOpeningHours>()
+                .Property(s => s.Date)
+                .IsRequired();
+
+            modelBuilder.Entity<SpecialOpeningHours>()
+                .Property(s => s.OpenTime)
+                .HasColumnType("time(0)");
+
+            modelBuilder.Entity<SpecialOpeningHours>()
+                .Property(s => s.CloseTime)
+                .HasColumnType("time(0)");
+
+            modelBuilder.Entity<SpecialOpeningHours>()
+                .Property(s => s.IsClosed)
+                .IsRequired();
+
+
+
+            // Reservation
+            modelBuilder.Entity<Reservation>()
+                .HasKey(r => r.ReservationId);
+
+            modelBuilder.Entity<Reservation>()
+                .HasOne(r => r.Customer)
+                .WithMany(c => c.Reservations)
+                .HasForeignKey(r => r.CustomerId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Reservation>()
+                .HasOne(r => r.TimeSlot)
+                .WithOne(ts => ts.Reservation)
+                .HasForeignKey<Reservation>(r => r.TimeSlotId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Reservation>()
+                .Property(r => r.ReservationDate)
+                .IsRequired()
+                .HasColumnType("datetime2(0)");
+
+            modelBuilder.Entity<Reservation>()
+                .Property(r => r.NumberOfGuests)
+                .IsRequired()
+                .HasDefaultValue(1);
+
+            modelBuilder.Entity<Reservation>()
+                .Property(r => r.SpecialRequests)
+                .HasMaxLength(300);
+
+            modelBuilder.Entity<Reservation>()
+                .HasMany(r => r.Tables)
+                .WithMany(t => t.Reservations)
+                .UsingEntity<Dictionary<string, object>>(
+                    "ReservationTables",
+                    j => j
+                        .HasOne<Table>()
+                        .WithMany()
+                        .HasForeignKey("TableId")
+                        .OnDelete(DeleteBehavior.Cascade),
+                    j => j
+                        .HasOne<Reservation>()
+                        .WithMany()
+                        .HasForeignKey("ReservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                );
+
+
+            // Table
+            modelBuilder.Entity<Table>()
+                .HasKey(t => t.TableId);
+
+            modelBuilder.Entity<Table>()
+                .Property(t => t.TableNumber)
+                .IsRequired();
+
+            modelBuilder.Entity<Table>()
+                .Property(t => t.SeatingCapacity)
+                .IsRequired();
+
+            modelBuilder.Entity<Table>()
+                .Property(t => t.Location)
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<Table>()
+                .HasIndex(t => t.TableNumber)
+                .IsUnique();
+
+
+
+            // TimeSlot
+            modelBuilder.Entity<TimeSlot>()
+                .HasKey(ts => ts.TimeSlotId);
+
+            modelBuilder.Entity<TimeSlot>()
+                .Property(ts => ts.StartTime)
+                .IsRequired()
+                .HasColumnType("datetime2(0)");
+
+            modelBuilder.Entity<TimeSlot>()
+                .Property(ts => ts.EndTime)
+                .IsRequired()
+                .HasColumnType("datetime2(0)");
+
+            modelBuilder.Entity<TimeSlot>()
+                .HasOne(ts => ts.OpeningHours)
+                .WithMany(o => o.TimeSlots)
+                .HasForeignKey(ts => ts.OpeningHoursId);
+
+            modelBuilder.Entity<TimeSlot>()
+                .HasOne(ts => ts.Table)
+                .WithMany(t => t.TimeSlots)
+                .HasForeignKey(ts => ts.TableId);
+
+            modelBuilder.Entity<TimeSlot>()
+                .HasOne(ts => ts.Reservation)
+                .WithOne(r => r.TimeSlot)
+                .HasForeignKey<Reservation>(r => r.TimeSlotId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+
+
+            // Seed data for OpeningHours
+            modelBuilder.Entity<OpeningHours>().HasData
+                (
+                    new OpeningHours
+                    {
+                        OpeningHoursId = 1,
+                        DayOfWeek = DayOfWeek.Sunday,
+                        OpenTime = new TimeOnly(10, 0),
+                        CloseTime = new TimeOnly(23, 0),
+                        IsClosed = false
+                    },
+                    new OpeningHours
+                    {
+                        OpeningHoursId = 2,
+                        DayOfWeek = DayOfWeek.Monday,
+                        OpenTime = new TimeOnly(10, 0),
+                        CloseTime = new TimeOnly(23, 0),
+                        IsClosed = true
+                    },
+                    new OpeningHours
+                    {
+                        OpeningHoursId = 3,
+                        DayOfWeek = DayOfWeek.Tuesday,
+                        OpenTime = new TimeOnly(10, 0),
+                        CloseTime = new TimeOnly(23, 0),
+                        IsClosed = true
+                    },
+                    new OpeningHours
+                    {
+                        OpeningHoursId = 4,
+                        DayOfWeek = DayOfWeek.Wednesday,
+                        OpenTime = new TimeOnly(10, 0),
+                        CloseTime = new TimeOnly(23, 0),
+                        IsClosed = false
+                    },
+                    new OpeningHours
+                    {
+                        OpeningHoursId = 5,
+                        DayOfWeek = DayOfWeek.Thursday,
+                        OpenTime = new TimeOnly(10, 0),
+                        CloseTime = new TimeOnly(23, 0),
+                        IsClosed = false
+                    },
+                    new OpeningHours
+                    {
+                        OpeningHoursId = 6,
+                        DayOfWeek = DayOfWeek.Friday,
+                        OpenTime = new TimeOnly(10, 0),
+                        CloseTime = new TimeOnly(23, 0),
+                        IsClosed = false
+                    },
+                    new OpeningHours
+                    {
+                        OpeningHoursId = 7,
+                        DayOfWeek = DayOfWeek.Saturday,
+                        OpenTime = new TimeOnly(10, 0),
+                        CloseTime = new TimeOnly(23, 0),
+                        IsClosed = false
+                    }
+                );
+
+
+
+            // Seed data for Tables
+            modelBuilder.Entity<Table>().HasData
+            (
+                new Table
+                {
+                    TableId = 1,
+                    TableNumber = 1,
+                    SeatingCapacity = 4,
+                    Location = "Window"
+                },
+                new Table
+                {
+                    TableId = 2,
+                    TableNumber = 2,
+                    SeatingCapacity = 2,
+                    Location = "Patio"
+                },
+                new Table
+                {
+                    TableId = 3,
+                    TableNumber = 3,
+                    SeatingCapacity = 6,
+                    Location = "Center"
+                },
+                new Table
+                {
+                    TableId = 4,
+                    TableNumber = 4,
+                    SeatingCapacity = 4,
+                    Location = "Corner"
+                },
+                new Table
+                {
+                    TableId = 5,
+                    TableNumber = 5,
+                    SeatingCapacity = 4,
+                    Location = "Center"
+                },
+                new Table
+                {
+                    TableId = 6,
+                    TableNumber = 6,
+                    SeatingCapacity = 2,
+                    Location = "Window"
+                },
+                new Table
+                {
+                    TableId = 7,
+                    TableNumber = 7,
+                    SeatingCapacity = 8,
+                    Location = "Private Room"
+                },
+                new Table
+                {
+                    TableId = 8,
+                    TableNumber = 8,
+                    SeatingCapacity = 6,
+                    Location = "Patio"
+                },
+                new Table
+                {
+                    TableId = 9,
+                    TableNumber = 9,
+                    SeatingCapacity = 4,
+                    Location = "Corner"
+                },
+                new Table
+                {
+                    TableId = 10,
+                    TableNumber = 10,
+                    SeatingCapacity = 4,
+                    Location = "Window"
+                }
+            );
+
+
+
             // Seed data for MenuItem
             modelBuilder.Entity<MenuItem>().HasData
                 (
@@ -324,329 +618,6 @@ namespace Reliable_Reservations.Data
                         LastUpdated = DateTime.UtcNow
                     }
                 );
-
-
-
-            // OpeningHours
-            modelBuilder.Entity<OpeningHours>()
-                .HasKey(o => o.OpeningHoursId);
-
-            modelBuilder.Entity<OpeningHours>()
-                .Property(o => o.DayOfWeek)
-                .IsRequired();
-
-            modelBuilder.Entity<OpeningHours>()
-                .Property(o => o.OpenTime)
-                .IsRequired()
-                .HasColumnType("time(0)");
-
-            modelBuilder.Entity<OpeningHours>()
-                .Property(o => o.CloseTime)
-                .IsRequired()
-                .HasColumnType("time(0)");
-
-            modelBuilder.Entity<OpeningHours>()
-                .Property(o => o.IsClosed)
-                .IsRequired();
-
-            modelBuilder.Entity<OpeningHours>()
-                .HasMany(o => o.SpecialOpeningHours)
-                .WithOne(s => s.OpeningHours)
-                .HasForeignKey(s => s.OpeningHoursId);
-
-
-            // Seed data for OpeningHours
-            modelBuilder.Entity<OpeningHours>().HasData
-                (
-                    new OpeningHours
-                    {
-                        OpeningHoursId = 1,
-                        DayOfWeek = DayOfWeek.Sunday,
-                        OpenTime = new TimeOnly(10, 0),
-                        CloseTime = new TimeOnly(23, 0),
-                        IsClosed = false
-                    },
-                    new OpeningHours
-                    {
-                        OpeningHoursId = 2,
-                        DayOfWeek = DayOfWeek.Monday,
-                        OpenTime = new TimeOnly(10, 0),
-                        CloseTime = new TimeOnly(23, 0),
-                        IsClosed = true
-                    },
-                    new OpeningHours
-                    {
-                        OpeningHoursId = 3,
-                        DayOfWeek = DayOfWeek.Tuesday,
-                        OpenTime = new TimeOnly(10, 0),
-                        CloseTime = new TimeOnly(23, 0),
-                        IsClosed = true
-                    },
-                    new OpeningHours
-                    {
-                        OpeningHoursId = 4,
-                        DayOfWeek = DayOfWeek.Wednesday,
-                        OpenTime = new TimeOnly(10, 0),
-                        CloseTime = new TimeOnly(23, 0),
-                        IsClosed = false
-                    },
-                    new OpeningHours
-                    {
-                        OpeningHoursId = 5,
-                        DayOfWeek = DayOfWeek.Thursday,
-                        OpenTime = new TimeOnly(10, 0),
-                        CloseTime = new TimeOnly(23, 0),
-                        IsClosed = false
-                    },
-                    new OpeningHours
-                    {
-                        OpeningHoursId = 6,
-                        DayOfWeek = DayOfWeek.Friday,
-                        OpenTime = new TimeOnly(10, 0),
-                        CloseTime = new TimeOnly(23, 0),
-                        IsClosed = false
-                    },
-                    new OpeningHours
-                    {
-                        OpeningHoursId = 7,
-                        DayOfWeek = DayOfWeek.Saturday,
-                        OpenTime = new TimeOnly(10, 0),
-                        CloseTime = new TimeOnly(23, 0),
-                        IsClosed = false
-                    }
-                );
-
-
-            // SpecialOpeningHours
-            modelBuilder.Entity<SpecialOpeningHours>()
-                .HasKey(s => s.SpecialOpeningHoursId);
-
-            modelBuilder.Entity<SpecialOpeningHours>()
-                .Property(s => s.Date)
-                .IsRequired();
-
-            modelBuilder.Entity<SpecialOpeningHours>()
-                .Property(s => s.OpenTime)
-                .HasColumnType("time(0)");
-
-            modelBuilder.Entity<SpecialOpeningHours>()
-                .Property(s => s.CloseTime)
-                .HasColumnType("time(0)");
-
-            modelBuilder.Entity<SpecialOpeningHours>()
-                .Property(s => s.IsClosed)
-                .IsRequired();
-
-
-            // Reservation
-            modelBuilder.Entity<Reservation>()
-                .HasKey(r => r.ReservationId);
-
-            modelBuilder.Entity<Reservation>()
-                .HasOne(r => r.Customer)
-                .WithMany(c => c.Reservations)
-                .HasForeignKey(r => r.CustomerId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Reservation>()
-                .HasOne(r => r.TimeSlot)
-                .WithOne(ts => ts.Reservation)
-                .HasForeignKey<Reservation>(r => r.TimeSlotId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Reservation>()
-                .Property(r => r.ReservationDate)
-                .IsRequired()
-                .HasColumnType("datetime2");
-
-            modelBuilder.Entity<Reservation>()
-                .Property(r => r.NumberOfGuests)
-                .IsRequired()
-                .HasDefaultValue(1);
-
-            modelBuilder.Entity<Reservation>()
-                .Property(r => r.SpecialRequests)
-                .HasMaxLength(300);
-
-            modelBuilder.Entity<Reservation>()
-                .HasMany(r => r.Tables)
-                .WithMany(t => t.Reservations)
-                .UsingEntity<Dictionary<string, object>>(
-                    "ReservationTables",
-                    j => j
-                        .HasOne<Table>()
-                        .WithMany()
-                        .HasForeignKey("TableId")
-                        .OnDelete(DeleteBehavior.Cascade),
-                    j => j
-                        .HasOne<Reservation>()
-                        .WithMany()
-                        .HasForeignKey("ReservationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                );
-
-
-            // Table
-            modelBuilder.Entity<Table>()
-                .HasKey(t => t.TableId);
-
-            modelBuilder.Entity<Table>()
-                .Property(t => t.TableNumber)
-                .IsRequired();
-
-            modelBuilder.Entity<Table>()
-                .Property(t => t.SeatingCapacity)
-                .IsRequired();
-
-            modelBuilder.Entity<Table>()
-                .Property(t => t.Location)
-                .HasMaxLength(50);
-
-            modelBuilder.Entity<Table>()
-                .HasIndex(t => t.TableNumber)
-                .IsUnique();
-
-
-            // Seed data for Tables
-            modelBuilder.Entity<Table>().HasData
-            (
-                new Table
-                {
-                    TableId = 1,
-                    TableNumber = 1,
-                    SeatingCapacity = 4,
-                    Location = "Window"
-                },
-                new Table
-                {
-                    TableId = 2,
-                    TableNumber = 2,
-                    SeatingCapacity = 2,
-                    Location = "Patio"
-                },
-                new Table
-                {
-                    TableId = 3,
-                    TableNumber = 3,
-                    SeatingCapacity = 6,
-                    Location = "Center"
-                },
-                new Table
-                {
-                    TableId = 4,
-                    TableNumber = 4,
-                    SeatingCapacity = 4,
-                    Location = "Corner"
-                },
-                new Table
-                {
-                    TableId = 5,
-                    TableNumber = 5,
-                    SeatingCapacity = 4,
-                    Location = "Center"
-                },
-                new Table
-                {
-                    TableId = 6,
-                    TableNumber = 6,
-                    SeatingCapacity = 2,
-                    Location = "Window"
-                },
-                new Table
-                {
-                    TableId = 7,
-                    TableNumber = 7,
-                    SeatingCapacity = 8,
-                    Location = "Private Room"
-                },
-                new Table
-                {
-                    TableId = 8,
-                    TableNumber = 8,
-                    SeatingCapacity = 6,
-                    Location = "Patio"
-                },
-                new Table
-                {
-                    TableId = 9,
-                    TableNumber = 9,
-                    SeatingCapacity = 4,
-                    Location = "Corner"
-                },
-                new Table
-                {
-                    TableId = 10,
-                    TableNumber = 10,
-                    SeatingCapacity = 4,
-                    Location = "Window"
-                },
-                new Table
-                {
-                    TableId = 11,
-                    TableNumber = 11,
-                    SeatingCapacity = 2,
-                    Location = "Bar"
-                },
-                new Table
-                {
-                    TableId = 12,
-                    TableNumber = 12,
-                    SeatingCapacity = 6,
-                    Location = "Center"
-                },
-                new Table
-                {
-                    TableId = 13,
-                    TableNumber = 13,
-                    SeatingCapacity = 8,
-                    Location = "Private Room"
-                },
-                new Table
-                {
-                    TableId = 14,
-                    TableNumber = 14,
-                    SeatingCapacity = 2,
-                    Location = "Patio"
-                },
-                new Table
-                {
-                    TableId = 15,
-                    TableNumber = 15,
-                    SeatingCapacity = 4,
-                    Location = "Window"
-                }
-            );
-
-
-
-            // TimeSlot
-            modelBuilder.Entity<TimeSlot>()
-                .HasKey(ts => ts.TimeSlotId);
-
-            modelBuilder.Entity<TimeSlot>()
-                .Property(ts => ts.StartTime)
-                .IsRequired();
-
-            modelBuilder.Entity<TimeSlot>()
-                .Property(ts => ts.EndTime)
-                .IsRequired();
-
-            modelBuilder.Entity<TimeSlot>()
-                .HasOne(ts => ts.OpeningHours)
-                .WithMany(o => o.TimeSlots)
-                .HasForeignKey(ts => ts.OpeningHoursId);
-
-            modelBuilder.Entity<TimeSlot>()
-                .HasOne(ts => ts.Table)
-                .WithMany(t => t.TimeSlots)
-                .HasForeignKey(ts => ts.TableId);
-
-            modelBuilder.Entity<TimeSlot>()
-                .HasOne(ts => ts.Reservation)
-                .WithOne(r => r.TimeSlot)
-                .HasForeignKey<Reservation>(r => r.TimeSlotId)
-                .OnDelete(DeleteBehavior.Restrict);
-
         }
     }
 }

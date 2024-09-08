@@ -5,6 +5,7 @@ namespace Reliable_Reservations.Data.Repos.IRepos
     public interface ITimeSlotRepository
     {
         Task<IEnumerable<TimeSlot>> GetAllTimeSlots();
+        Task<IEnumerable<TimeSlot>> GetTimeSlotsForDateRangeAsync(DateTime startDate, DateTime endDate);
         Task<TimeSlot?> GetTimeSlotById(int id);
         Task<bool> TimeSlotExists(int id);
         Task<TimeSlot> GetTimeSlotByDate(DateTime reservationDate);

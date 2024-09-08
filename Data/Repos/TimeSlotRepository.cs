@@ -18,6 +18,16 @@ namespace Reliable_Reservations.Data.Repos
             return await _context.TimeSlots.ToListAsync();
         }
 
+        public async Task<IEnumerable<TimeSlot>> GetTimeSlotsForDateRangeAsync(DateTime startDate, DateTime endDate)
+        {
+            return await _context.TimeSlots
+                .AsNoTracking()
+                .Where(ts => ts.StartTime >= startDate && ts.StartTime <= endDate)
+                .OrderBy(ts => ts.StartTime)
+                .ToListAsync();
+        }
+
+
         public async Task<TimeSlot?> GetTimeSlotById(int id)
         {
             return await _context.TimeSlots.FindAsync(id);

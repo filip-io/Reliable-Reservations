@@ -46,6 +46,20 @@ namespace Reliable_Reservations.Services
             return _mapper.Map<TimeSlotDto>(timeSlot);
         }
 
+
+        public async Task<IEnumerable<TimeSlotDto>> GetTimeSlotsForWeekAsync(DateTime chosenDate)
+        {
+            // Calculate the start and end of the week (assuming the week starts on Monday)
+            var startOfWeek = chosenDate.Date.AddDays(-(int)chosenDate.DayOfWeek + (int)DayOfWeek.Monday);
+            var endOfWeek = startOfWeek.AddDays(7).AddSeconds(-1); // End of the week is Sunday 23:59:59
+
+            var timeSlots = await _timeSlotRepository.GetTimeSlotsForDateRangeAsync(startOfWeek, endOfWeek);
+            return _mapper.Map<IEnumerable<TimeSlotDto>>(timeSlots);
+        }
+
+
+
+
         public async Task<IEnumerable<TimeSlotDto>> GetTimeSlotsByTablesAsync(IEnumerable<int> tableIds)
         {
             var timeSlots = await _timeSlotRepository.GetTimeSlotsByTableIdsAsync(tableIds);
@@ -113,6 +127,10 @@ namespace Reliable_Reservations.Services
             {
                 await _timeSlotRepository.AddMultipleTimeSlots(newTimeSlots);
             }
+            else
+            {
+                throw new InvalidOperationException("Timeslots already created for the chosen period.");
+            }
 
             return newTimeSlots.Select(ts => new TimeSlotDto
             {
@@ -160,7 +178,7 @@ namespace Reliable_Reservations.Services
                     timeSlots.Add(timeSlot);
                 }
 
-                currentTime = currentTime.AddMinutes(slotDuration);
+                currentTime = currentTime.AddMinutes(15);
 
                 // Check if we've wrapped around to the next day
                 if (currentTime < openTime)

@@ -4,6 +4,7 @@ using Reliable_Reservations.Models;
 using Reliable_Reservations.Models.DTOs;
 using Reliable_Reservations.Models.ViewModels;
 using Reliable_Reservations.Services.IServices;
+using Reliable_Reservations.Helpers;
 
 namespace Reliable_Reservations.Services
 {
@@ -86,8 +87,13 @@ namespace Reliable_Reservations.Services
             // Retrieve all time slots associated with the selected tables
             var timeSlots = await _timeSlotService.GetTimeSlotsByTablesAsync(selectedTables.Select(t => t.TableId).ToList());
 
+
+            // Remove any fractions of time from the booking
+            var reservationDate = Truncate.TruncateToMinutes(reservationCreateDto.ReservationDate);
+
             var matchingTimeSlot = timeSlots
-                .FirstOrDefault(ts => ts.StartTime <= reservationCreateDto.ReservationDate && ts.EndTime >= reservationCreateDto.ReservationDate.AddMinutes(90)); // Assuming 90 minutes duration
+                .FirstOrDefault(ts => ts.StartTime <= reservationDate && ts.EndTime >= reservationDate.AddMinutes(90));
+
 
             if (matchingTimeSlot == null)
             {

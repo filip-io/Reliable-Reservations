@@ -18,16 +18,39 @@ namespace Reliable_Reservations.Controllers
             _logger = logger;
         }
 
-        [HttpGet("all")]
-        public async Task<ActionResult<IEnumerable<TimeSlotDto>>> GetAllTimeSlots()
+        //[HttpGet("all")]
+        //public async Task<ActionResult<IEnumerable<TimeSlotDto>>> GetAllTimeSlots()
+        //{
+        //    try
+        //    {
+        //        var timeSlots = await _timeSlotService.GetAllTimeSlotsAsync();
+
+        //        if (timeSlots.IsNullOrEmpty())
+        //        {
+        //            return Ok("No timeslots in database.");
+        //        }
+        //        else
+        //        {
+        //            return Ok(timeSlots);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return ResponseHelper.HandleException(_logger, ex);
+        //    }
+        //}
+
+
+        [HttpGet("weekly/{date}")]
+        public async Task<ActionResult<IEnumerable<TimeSlotDto>>> GetWeeklyTimeSlots(DateTime date)
         {
             try
             {
-                var timeSlots = await _timeSlotService.GetAllTimeSlotsAsync();
+                var timeSlots = await _timeSlotService.GetTimeSlotsForWeekAsync(date);
 
                 if (timeSlots.IsNullOrEmpty())
                 {
-                    return Ok("No timeslots in database.");
+                    return Ok("No timeslots for the chosen date in database.");
                 }
                 else
                 {
@@ -39,6 +62,8 @@ namespace Reliable_Reservations.Controllers
                 return ResponseHelper.HandleException(_logger, ex);
             }
         }
+
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<TimeSlotDto>> GetTimeSlotById(int id)
