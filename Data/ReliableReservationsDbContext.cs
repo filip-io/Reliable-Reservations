@@ -445,24 +445,33 @@ namespace Reliable_Reservations.Data
             modelBuilder.Entity<Reservation>()
                 .HasOne(r => r.Customer)
                 .WithMany(c => c.Reservations)
-                .HasForeignKey(r => r.CustomerId);
+                .HasForeignKey(r => r.CustomerId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Reservation>()
                 .HasOne(r => r.TimeSlot)
-                .WithMany(t => t.Reservations)
-                .HasForeignKey(r => r.TimeSlotId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .WithOne(ts => ts.Reservation)
+                .HasForeignKey<Reservation>(r => r.TimeSlotId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Reservation>()
                 .Property(r => r.ReservationDate)
                 .IsRequired()
-                .HasColumnType("datetime2(0)");
+                .HasColumnType("datetime2");
+
+            modelBuilder.Entity<Reservation>()
+                .Property(r => r.NumberOfGuests)
+                .IsRequired()
+                .HasDefaultValue(1);
+
+            modelBuilder.Entity<Reservation>()
+                .Property(r => r.SpecialRequests)
+                .HasMaxLength(300);
 
             modelBuilder.Entity<Reservation>()
                 .HasMany(r => r.Tables)
                 .WithMany(t => t.Reservations)
-                .UsingEntity<Dictionary<string, object>>
-                (
+                .UsingEntity<Dictionary<string, object>>(
                     "ReservationTables",
                     j => j
                         .HasOne<Table>()
@@ -475,15 +484,6 @@ namespace Reliable_Reservations.Data
                         .HasForeignKey("ReservationId")
                         .OnDelete(DeleteBehavior.Cascade)
                 );
-
-            modelBuilder.Entity<Reservation>()
-                .Property(r => r.NumberOfGuests)
-                .IsRequired()
-                .HasDefaultValue(1);
-
-            modelBuilder.Entity<Reservation>()
-                .Property(r => r.SpecialRequests)
-                .HasMaxLength(300);
 
 
             // Table
@@ -619,36 +619,34 @@ namespace Reliable_Reservations.Data
 
 
 
-
             // TimeSlot
             modelBuilder.Entity<TimeSlot>()
-                .HasKey(t => t.TimeSlotId);
+                .HasKey(ts => ts.TimeSlotId);
 
             modelBuilder.Entity<TimeSlot>()
-                .Property(t => t.StartTime)
-                .IsRequired()
-                .HasColumnType("datetime2(0)");
-
-            modelBuilder.Entity<TimeSlot>()
-                .Property(t => t.EndTime)
-                .IsRequired()
-                .HasColumnType("datetime2(0)");
-
-            modelBuilder.Entity<TimeSlot>()
-                .Property(t => t.SlotDuration)
+                .Property(ts => ts.StartTime)
                 .IsRequired();
 
             modelBuilder.Entity<TimeSlot>()
-                .HasOne(t => t.OpeningHours)
-                .WithMany(o => o.TimeSlots)
-                .HasForeignKey(t => t.OpeningHoursId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .Property(ts => ts.EndTime)
+                .IsRequired();
 
             modelBuilder.Entity<TimeSlot>()
-                .HasMany(t => t.Reservations)
+                .HasOne(ts => ts.OpeningHours)
+                .WithMany(o => o.TimeSlots)
+                .HasForeignKey(ts => ts.OpeningHoursId);
+
+            modelBuilder.Entity<TimeSlot>()
+                .HasOne(ts => ts.Table)
+                .WithMany(t => t.TimeSlots)
+                .HasForeignKey(ts => ts.TableId);
+
+            modelBuilder.Entity<TimeSlot>()
+                .HasOne(ts => ts.Reservation)
                 .WithOne(r => r.TimeSlot)
-                .HasForeignKey(r => r.TimeSlotId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey<Reservation>(r => r.TimeSlotId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

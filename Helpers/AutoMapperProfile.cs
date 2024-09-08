@@ -41,7 +41,6 @@ public class AutoMapperProfile : Profile
             // Mapping from Reservation entity to ReservationDetailsViewModel
             CreateMap<Reservation, ReservationDetailsViewModel>()
                 .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer)) // Map Customer to CustomerViewModel
-                .ForMember(dest => dest.SlotDuration, opt => opt.MapFrom(src => src.TimeSlot.SlotDuration))
                 .ForMember(dest => dest.NumberOfGuests, opt => opt.MapFrom(src => src.NumberOfGuests))
                 .ForMember(dest => dest.Tables, opt => opt.MapFrom(src => src.Tables));
 
