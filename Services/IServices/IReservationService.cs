@@ -1,4 +1,4 @@
-﻿using Reliable_Reservations.Models.DTOs;
+﻿using Reliable_Reservations.Models.DTOs.Reservation;
 using Reliable_Reservations.Models.ViewModels;
 
 namespace Reliable_Reservations.Services

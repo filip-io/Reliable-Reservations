@@ -1,12 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Reliable_Reservations.Models.DTOs
+namespace Reliable_Reservations.Models.DTOs.Customer
 {
-    public class CustomerDto
+    public class CustomerCreateDto
     {
-        [Required]
-        public required int CustomerId { get; set; }
-
         [Required]
         public required string FirstName { get; set; }
 

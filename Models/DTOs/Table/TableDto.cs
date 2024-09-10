@@ -1,9 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Reliable_Reservations.Models.DTOs
+namespace Reliable_Reservations.Models.DTOs.Table
 {
-    public class TableCreateDto
+    public class TableDto
     {
+        [Required]
+        public required int TableId { get; set; }
+
         [Required]
         public required int TableNumber { get; set; }
 

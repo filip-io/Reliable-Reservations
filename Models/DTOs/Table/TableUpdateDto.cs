@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Reliable_Reservations.Models.DTOs
+namespace Reliable_Reservations.Models.DTOs.Table
 {
     public class TableUpdateDto
     {

@@ -1,4 +1,4 @@
-﻿namespace Reliable_Reservations.Models.DTOs
+﻿namespace Reliable_Reservations.Models.DTOs.TimeSlot
 {
     public class TimeSlotUpdateDto
     {

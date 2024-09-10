@@ -43,6 +43,10 @@ namespace Reliable_Reservations.Data
                 .IsRequired()
                 .HasMaxLength(100);
 
+            modelBuilder.Entity<Customer>()
+                .HasIndex(c => c.Email)
+                .IsUnique();
+
 
             // MenuItem
             modelBuilder.Entity<MenuItem>()

@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Reliable_Reservations.Data.Repos.IRepos;
 using Reliable_Reservations.Models;
-using Reliable_Reservations.Models.DTOs;
 using Reliable_Reservations.Models.ViewModels;
 using Reliable_Reservations.Services.IServices;
 using Reliable_Reservations.Helpers;
+using Reliable_Reservations.Models.DTOs.Reservation;
 
 namespace Reliable_Reservations.Services
 {

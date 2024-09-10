@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Reliable_Reservations.Models.DTOs;
+using Reliable_Reservations.Models.DTOs.Reservation;
 using Reliable_Reservations.Models.ViewModels;
 using Reliable_Reservations.Services;
 

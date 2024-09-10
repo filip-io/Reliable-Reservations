@@ -1,17 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Reliable_Reservations.Models.DTOs.Table;
 
-namespace Reliable_Reservations.Models.DTOs
+namespace Reliable_Reservations.Models.DTOs.Reservation
 {
-    public class ReservationUpdateDto
+    public class ReservationDto
     {
-
-        [Required] 
+        [Required]
         public int ReservationId { get; set; }
-
 
         [Required]
         public int CustomerId { get; set; }
-
 
         [Required]
         public DateTime ReservationDate { get; set; }
@@ -20,9 +18,8 @@ namespace Reliable_Reservations.Models.DTOs
         [Range(1, 15, ErrorMessage = "Number of guests must be between 1 and 15.")]
         public int NumberOfGuests { get; set; }
 
-        [Required]
-        public required List<int> TableNumbers { get; set; } = new List<int>();
-
         public string? SpecialRequests { get; set; }
+
+        public List<TableDto> Tables { get; set; } = new List<TableDto>(); // Including a list of TableDto for tables
     }
 }

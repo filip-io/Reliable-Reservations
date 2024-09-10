@@ -1,6 +1,11 @@
 ﻿using AutoMapper;
 using Reliable_Reservations.Models;
-using Reliable_Reservations.Models.DTOs;
+using Reliable_Reservations.Models.DTOs.Customer;
+using Reliable_Reservations.Models.DTOs.MenuItem;
+using Reliable_Reservations.Models.DTOs.OpeningHours;
+using Reliable_Reservations.Models.DTOs.Reservation;
+using Reliable_Reservations.Models.DTOs.Table;
+using Reliable_Reservations.Models.DTOs.TimeSlot;
 using Reliable_Reservations.Models.ViewModels;
 
 public class AutoMapperProfile : Profile

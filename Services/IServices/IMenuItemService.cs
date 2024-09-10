@@ -1,4 +1,4 @@
-﻿using Reliable_Reservations.Models.DTOs;
+﻿using Reliable_Reservations.Models.DTOs.MenuItem;
 
 namespace Reliable_Reservations.Services.IServices
 {

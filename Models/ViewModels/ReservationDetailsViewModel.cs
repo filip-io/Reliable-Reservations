@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using Reliable_Reservations.Models.DTOs;
+using Reliable_Reservations.Models.DTOs.Table;
 
 namespace Reliable_Reservations.Models.ViewModels
 {
