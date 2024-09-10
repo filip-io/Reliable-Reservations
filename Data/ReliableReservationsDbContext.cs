@@ -17,8 +17,12 @@ namespace Reliable_Reservations.Data
 
 
         // Config of entities with Fluent API
+
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             // Customer
             modelBuilder.Entity<Customer>()
                 .HasKey(c => c.CustomerId);

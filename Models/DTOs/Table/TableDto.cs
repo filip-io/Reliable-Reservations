@@ -5,15 +5,15 @@ namespace Reliable_Reservations.Models.DTOs.Table
     public class TableDto
     {
         [Required]
-        public required int TableId { get; set; }
+        public int TableId { get; set; }
 
         [Required]
-        public required int TableNumber { get; set; }
+        public int TableNumber { get; set; }
 
         [Required]
-        public required int SeatingCapacity { get; set; }
+        public int SeatingCapacity { get; set; }
 
         [Required]
-        public required string Location { get; set; }
+        public string Location { get; set; }
     }
 }

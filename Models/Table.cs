@@ -5,8 +5,8 @@ namespace Reliable_Reservations.Models
     public class Table
     {
         public int TableId { get; set; }
-        public int TableNumber { get; set; }
-        public int SeatingCapacity { get; set; }
+        public required int TableNumber { get; set; }
+        public required int SeatingCapacity { get; set; }
         public string Location { get; set; } = string.Empty;
 
 

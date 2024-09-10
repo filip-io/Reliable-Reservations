@@ -5,24 +5,24 @@ namespace Reliable_Reservations.Models.DTOs.MenuItem
     public class MenuItemDto
     {
         [Required]
-        public required int MenuItemId { get; set; }
+        public int MenuItemId { get; set; }
 
         [Required]
-        public required string Name { get; set; }
+        public string Name { get; set; }
 
         [Required]
-        public required string Description { get; set; }
+        public string Description { get; set; }
 
         [Required]
-        public required decimal Price { get; set; }
+        public decimal Price { get; set; }
 
         [Required]
-        public required Category Category { get; set; }
+        public Category Category { get; set; }
 
         [Required]
-        public required bool AvailabilityStatus { get; set; }
+        public bool AvailabilityStatus { get; set; }
 
         [Required]
-        public required DateTime LastUpdated { get; set; }
+        public DateTime LastUpdated { get; set; }
     }
 }

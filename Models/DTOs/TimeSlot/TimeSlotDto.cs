@@ -5,15 +5,15 @@ namespace Reliable_Reservations.Models.DTOs.TimeSlot
     public class TimeSlotDto
     {
         [Required]
-        public required int TimeSlotId { get; set; }
+        public int TimeSlotId { get; set; }
 
         [Required]
-        public required DateTime StartTime { get; set; }
+        public DateTime StartTime { get; set; }
 
         [Required]
-        public required DateTime EndTime { get; set; }
+        public DateTime EndTime { get; set; }
 
         [Required]
-        public required int TableId { get; set; }
+        public int TableId { get; set; }
     }
 }

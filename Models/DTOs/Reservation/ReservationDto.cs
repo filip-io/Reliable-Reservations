@@ -20,6 +20,6 @@ namespace Reliable_Reservations.Models.DTOs.Reservation
 
         public string? SpecialRequests { get; set; }
 
-        public List<TableDto> Tables { get; set; } = new List<TableDto>(); // Including a list of TableDto for tables
+        public List<TableDto> Tables { get; set; } = new List<TableDto>();
     }
 }

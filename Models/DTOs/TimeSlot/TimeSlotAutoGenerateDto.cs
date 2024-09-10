@@ -12,6 +12,6 @@ namespace Reliable_Reservations.Models.DTOs.TimeSlot
         public DateTime EndDate { get; set; }
 
         [JsonIgnore]
-        public int SlotDuration { get; set; } = 90;
+        public int SlotDuration { get; set; } = 90; // If changed, don't forget to update TimeSlotUpdateDto!
     }
 }
