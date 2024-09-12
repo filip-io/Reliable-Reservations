@@ -1,3 +1,4 @@
+using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using Reliable_Reservations.Data;
 using Reliable_Reservations.Data.Repos;
@@ -14,7 +15,7 @@ namespace Reliable_Reservations
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            DotNetEnv.Env.Load();
+            Env.Load();
             var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 
             // Configure logging

@@ -101,7 +101,7 @@ namespace Reliable_Reservations.Controllers
                 return ResponseHelper.HandleException(_logger, ex);
             }
         }
-
+            
         [HttpDelete("{id}")]
         public async Task<ActionResult<CustomerDto>> DeleteCustomer(int id)
         {

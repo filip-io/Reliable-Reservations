@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Reliable_Reservations.Models.DTOs.Reservation;
-using Reliable_Reservations.Models.ViewModels;
 using Reliable_Reservations.Services;
 
 namespace Reliable_Reservations.Controllers
@@ -20,7 +19,7 @@ namespace Reliable_Reservations.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<IEnumerable<ReservationDetailsViewModel>>> GetAllReservations()
+        public async Task<ActionResult<IEnumerable<ReservationDetailsDto>>> GetAllReservations()
         {
             try
             {
@@ -40,7 +39,7 @@ namespace Reliable_Reservations.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ReservationDetailsViewModel>> GetReservationById(int id)
+        public async Task<ActionResult<ReservationDetailsDto>> GetReservationById(int id)
         {
             try
             {
@@ -58,7 +57,7 @@ namespace Reliable_Reservations.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<ActionResult<ReservationDetailsViewModel>> CreateReservation(ReservationCreateDto reservationCreateDto)
+        public async Task<ActionResult<ReservationDetailsDto>> CreateReservation(ReservationCreateDto reservationCreateDto)
         {
             try
             {
@@ -76,7 +75,7 @@ namespace Reliable_Reservations.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ReservationDetailsViewModel>> UpdateReservation(int id, ReservationUpdateDto reservationUpdateDto)
+        public async Task<ActionResult<ReservationDetailsDto>> UpdateReservation(int id, ReservationUpdateDto reservationUpdateDto)
         {
             if (id != reservationUpdateDto.ReservationId)
             {

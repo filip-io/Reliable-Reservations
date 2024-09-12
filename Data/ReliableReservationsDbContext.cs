@@ -17,7 +17,6 @@ namespace Reliable_Reservations.Data
 
 
         // Config of entities with Fluent API
-
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

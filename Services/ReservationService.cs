@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Reliable_Reservations.Data.Repos.IRepos;
 using Reliable_Reservations.Models;
-using Reliable_Reservations.Models.ViewModels;
 using Reliable_Reservations.Services.IServices;
 using Reliable_Reservations.Helpers;
 using Reliable_Reservations.Models.DTOs.Reservation;
@@ -39,13 +38,13 @@ namespace Reliable_Reservations.Services
             _logger = logger;
         }
 
-        public async Task<IEnumerable<ReservationDetailsViewModel>> GetAllReservationsAsync()
+        public async Task<IEnumerable<ReservationDetailsDto>> GetAllReservationsAsync()
         {
             var reservations = await _reservationRepository.GetAllReservations();
-            return _mapper.Map<IEnumerable<ReservationDetailsViewModel>>(reservations);
+            return _mapper.Map<IEnumerable<ReservationDetailsDto>>(reservations);
         }
 
-        public async Task<ReservationDetailsViewModel?> GetReservationByIdAsync(int id)
+        public async Task<ReservationDetailsDto?> GetReservationByIdAsync(int id)
         {
             var reservation = await _reservationRepository.GetReservationById(id);
 
@@ -54,10 +53,10 @@ namespace Reliable_Reservations.Services
                 throw new KeyNotFoundException($"Reservation with ID {id} not found.");
             }
 
-            return _mapper.Map<ReservationDetailsViewModel?>(reservation);
+            return _mapper.Map<ReservationDetailsDto?>(reservation);
         }
 
-        public async Task<ReservationDetailsViewModel> CreateReservationAsync(ReservationCreateDto reservationCreateDto)
+        public async Task<ReservationDetailsDto> CreateReservationAsync(ReservationCreateDto reservationCreateDto)
         {
             if (reservationCreateDto.ReservationDate < DateTime.Now)
             {
@@ -120,7 +119,7 @@ namespace Reliable_Reservations.Services
 
             await _reservationRepository.AddReservation(reservation);
 
-            return _mapper.Map<ReservationDetailsViewModel>(reservation);
+            return _mapper.Map<ReservationDetailsDto>(reservation);
         }
 
 
@@ -171,7 +170,7 @@ namespace Reliable_Reservations.Services
         }
 
 
-        public async Task<ReservationDetailsViewModel> UpdateReservationAsync(ReservationUpdateDto reservationUpdateDto)
+        public async Task<ReservationDetailsDto> UpdateReservationAsync(ReservationUpdateDto reservationUpdateDto)
         {
             var existingReservation = await _reservationRepository.GetReservationById(reservationUpdateDto.ReservationId);
             if (existingReservation == null)
@@ -239,7 +238,7 @@ namespace Reliable_Reservations.Services
 
             await _reservationRepository.UpdateReservation(existingReservation);
 
-            return _mapper.Map<ReservationDetailsViewModel>(existingReservation);
+            return _mapper.Map<ReservationDetailsDto>(existingReservation);
         }
 
 
