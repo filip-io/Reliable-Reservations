@@ -27,7 +27,7 @@ namespace Reliable_Reservations.Controllers
 
                 if (reservations.IsNullOrEmpty())
                 {
-                    return Ok("No reservations in the database.");
+                    return NotFound("No reservations in the database.");
                 }
 
                 return Ok(reservations);

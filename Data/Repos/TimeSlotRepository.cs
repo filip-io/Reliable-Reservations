@@ -18,6 +18,25 @@ namespace Reliable_Reservations.Data.Repos
             return await _context.TimeSlots.ToListAsync();
         }
 
+
+
+        public async Task<IEnumerable<TimeSlot>> GetTimeSlotsByDateAsync(DateTime date)
+        {
+            // Start of the day for the provided date
+            var startOfDay = date.Date;
+
+            // End of the day for the provided date
+            var endOfDay = startOfDay.AddDays(1).AddTicks(-1);
+
+            // Fetch time slots where the StartTime is before the end of the day and EndTime is after the start of the day
+            return await _context.TimeSlots
+                .AsNoTracking()
+                .Where(ts => ts.StartTime <= endOfDay && ts.EndTime >= startOfDay)
+                .ToListAsync();
+        }
+
+
+
         public async Task<IEnumerable<TimeSlot>> GetTimeSlotsForDateRangeAsync(DateTime startDate, DateTime endDate)
         {
             return await _context.TimeSlots
@@ -25,17 +44,6 @@ namespace Reliable_Reservations.Data.Repos
                 .Where(ts => ts.StartTime >= startDate && ts.StartTime <= endDate)
                 .OrderBy(ts => ts.StartTime)
                 .ToListAsync();
-        }
-
-
-        public async Task<TimeSlot?> GetTimeSlotById(int id)
-        {
-            return await _context.TimeSlots.FindAsync(id);
-        }
-
-        public async Task<bool> TimeSlotExists(int id)
-        {
-            return await _context.TimeSlots.AnyAsync(ts => ts.TimeSlotId == id);
         }
 
         public async Task<TimeSlot?> GetTimeSlotByDate(DateTime reservationDate)
@@ -50,6 +58,17 @@ namespace Reliable_Reservations.Data.Repos
                 ts.StartTime.TimeOfDay <= timeOnly &&
                 ts.EndTime.TimeOfDay >= timeOnly)
                 .FirstOrDefaultAsync();
+        }
+
+
+        public async Task<TimeSlot?> GetTimeSlotById(int id)
+        {
+            return await _context.TimeSlots.FindAsync(id);
+        }
+
+        public async Task<bool> TimeSlotExists(int id)
+        {
+            return await _context.TimeSlots.AnyAsync(ts => ts.TimeSlotId == id);
         }
 
 

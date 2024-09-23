@@ -74,7 +74,7 @@ namespace Reliable_Reservations.Services
             var selectedTables = await _tableRepository.GetTablesByNumbersAsync(reservationCreateDto.TableNumbers);
             if (selectedTables.Count != reservationCreateDto.TableNumbers.Count)
             {
-                throw new ArgumentException("One or more table numbers are invalid.");
+                throw new ArgumentException("One or more table numbers does not exist.");
             }
 
             int totalSeatingCapacity = selectedTables.Sum(table => table.SeatingCapacity);
@@ -113,7 +113,7 @@ namespace Reliable_Reservations.Services
                 ReservationDate = reservationCreateDto.ReservationDate,
                 NumberOfGuests = reservationCreateDto.NumberOfGuests,
                 SpecialRequests = reservationCreateDto.SpecialRequests,
-                Status = ReservationStatus.Pending,
+                Status = ReservationStatus.Confirmed,
                 Tables = selectedTables
             };
 

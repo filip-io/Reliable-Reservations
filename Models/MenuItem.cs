@@ -39,7 +39,10 @@ namespace Reliable_Reservations.Models
         
         public required bool AvailabilityStatus { get; set; }
 
-        
+
+        public required bool IsPopular { get; set; }
+
+
         public required DateTime LastUpdated { get; set; }
     }
 }

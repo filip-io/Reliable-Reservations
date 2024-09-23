@@ -40,6 +40,7 @@ namespace Reliable_Reservations.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Category = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     AvailabilityStatus = table.Column<bool>(type: "bit", nullable: false),
+                    IsPopular = table.Column<bool>(type: "bit", nullable: false),
                     LastUpdated = table.Column<DateTime>(type: "datetime2(0)", nullable: false)
                 },
                 constraints: table =>
@@ -186,31 +187,31 @@ namespace Reliable_Reservations.Migrations
 
             migrationBuilder.InsertData(
                 table: "MenuItems",
-                columns: new[] { "MenuItemId", "AvailabilityStatus", "Category", "Description", "LastUpdated", "Name", "Price" },
+                columns: new[] { "MenuItemId", "AvailabilityStatus", "Category", "Description", "IsPopular", "LastUpdated", "Name", "Price" },
                 values: new object[,]
                 {
-                    { 1, true, "Appetizer", "Grilled bread topped with diced tomatoes, garlic, and basil.", new DateTime(2024, 9, 8, 19, 13, 31, 602, DateTimeKind.Utc).AddTicks(2917), "Bruschetta", 6.99m },
-                    { 2, true, "Appetizer", "Mushrooms stuffed with garlic, herbs, and cream cheese.", new DateTime(2024, 9, 8, 19, 13, 31, 602, DateTimeKind.Utc).AddTicks(2919), "Stuffed Mushrooms", 7.99m },
-                    { 3, true, "Starter", "Toasted bread slices with garlic butter.", new DateTime(2024, 9, 8, 19, 13, 31, 602, DateTimeKind.Utc).AddTicks(2921), "Garlic Bread", 4.99m },
-                    { 4, true, "Starter", "Creamy tomato soup with fresh basil.", new DateTime(2024, 9, 8, 19, 13, 31, 602, DateTimeKind.Utc).AddTicks(2922), "Tomato Basil Soup", 5.99m },
-                    { 5, true, "MainCourse", "Grilled salmon fillet served with lemon butter sauce.", new DateTime(2024, 9, 8, 19, 13, 31, 602, DateTimeKind.Utc).AddTicks(2923), "Grilled Salmon", 15.99m },
-                    { 6, true, "MainCourse", "Juicy grilled beef steak with a side of vegetables.", new DateTime(2024, 9, 8, 19, 13, 31, 602, DateTimeKind.Utc).AddTicks(2924), "Beef Steak", 19.99m },
-                    { 7, true, "Dessert", "Warm chocolate cake with a gooey molten center.", new DateTime(2024, 9, 8, 19, 13, 31, 602, DateTimeKind.Utc).AddTicks(2926), "Chocolate Lava Cake", 6.99m },
-                    { 8, true, "Dessert", "Classic Italian dessert with layers of mascarpone and espresso-soaked ladyfingers.", new DateTime(2024, 9, 8, 19, 13, 31, 602, DateTimeKind.Utc).AddTicks(2927), "Tiramisu", 5.99m },
-                    { 9, true, "Beverage", "Strong and rich espresso coffee.", new DateTime(2024, 9, 8, 19, 13, 31, 602, DateTimeKind.Utc).AddTicks(2928), "Espresso", 2.99m },
-                    { 10, true, "Beverage", "Refreshing homemade lemonade.", new DateTime(2024, 9, 8, 19, 13, 31, 602, DateTimeKind.Utc).AddTicks(2929), "Lemonade", 3.99m },
-                    { 11, true, "SideDish", "Crispy golden fries with a side of ketchup.", new DateTime(2024, 9, 8, 19, 13, 31, 602, DateTimeKind.Utc).AddTicks(2931), "French Fries", 3.99m },
-                    { 12, true, "SideDish", "Creamy mashed potatoes with butter and herbs.", new DateTime(2024, 9, 8, 19, 13, 31, 602, DateTimeKind.Utc).AddTicks(2932), "Mashed Potatoes", 4.99m },
-                    { 13, true, "Soup", "Hearty Italian soup with vegetables and pasta.", new DateTime(2024, 9, 8, 19, 13, 31, 602, DateTimeKind.Utc).AddTicks(2933), "Minestrone Soup", 5.99m },
-                    { 14, true, "Soup", "Classic chicken soup with noodles and vegetables.", new DateTime(2024, 9, 8, 19, 13, 31, 602, DateTimeKind.Utc).AddTicks(2934), "Chicken Noodle Soup", 5.99m },
-                    { 15, true, "Salad", "Salad with tomatoes, cucumbers, olives, and feta cheese.", new DateTime(2024, 9, 8, 19, 13, 31, 602, DateTimeKind.Utc).AddTicks(2935), "Greek Salad", 6.99m },
-                    { 16, true, "Salad", "Fresh tomatoes, mozzarella, and basil with balsamic glaze.", new DateTime(2024, 9, 8, 19, 13, 31, 602, DateTimeKind.Utc).AddTicks(2936), "Caprese Salad", 7.99m },
-                    { 17, true, "Special", "Succulent lobster tail served with drawn butter.", new DateTime(2024, 9, 8, 19, 13, 31, 602, DateTimeKind.Utc).AddTicks(2938), "Lobster Tail", 29.99m },
-                    { 18, true, "Special", "Creamy risotto with truffle oil and parmesan.", new DateTime(2024, 9, 8, 19, 13, 31, 602, DateTimeKind.Utc).AddTicks(2939), "Truffle Risotto", 24.99m },
-                    { 19, true, "Kids", "Crispy chicken nuggets served with fries.", new DateTime(2024, 9, 8, 19, 13, 31, 602, DateTimeKind.Utc).AddTicks(2940), "Chicken Nuggets", 5.99m },
-                    { 20, true, "Kids", "Creamy macaroni and cheese.", new DateTime(2024, 9, 8, 19, 13, 31, 602, DateTimeKind.Utc).AddTicks(2941), "Mac and Cheese", 4.99m },
-                    { 21, true, "Vegetarian", "Mixed vegetables stir-fried with soy sauce and served over rice.", new DateTime(2024, 9, 8, 19, 13, 31, 602, DateTimeKind.Utc).AddTicks(2942), "Vegetable Stir-Fry", 9.99m },
-                    { 22, true, "Vegetarian", "Lasagna layered with spinach, ricotta, and marinara sauce.", new DateTime(2024, 9, 8, 19, 13, 31, 602, DateTimeKind.Utc).AddTicks(2943), "Vegetarian Lasagna", 11.99m }
+                    { 1, true, "Appetizer", "Grilled bread topped with diced tomatoes, garlic, and basil.", true, new DateTime(2024, 9, 13, 16, 12, 20, 670, DateTimeKind.Utc).AddTicks(3327), "Bruschetta", 6.99m },
+                    { 2, true, "Appetizer", "Mushrooms stuffed with garlic, herbs, and cream cheese.", false, new DateTime(2024, 9, 13, 16, 12, 20, 670, DateTimeKind.Utc).AddTicks(3329), "Stuffed Mushrooms", 7.99m },
+                    { 3, true, "Starter", "Toasted bread slices with garlic butter.", false, new DateTime(2024, 9, 13, 16, 12, 20, 670, DateTimeKind.Utc).AddTicks(3330), "Garlic Bread", 4.99m },
+                    { 4, true, "Starter", "Creamy tomato soup with fresh basil.", false, new DateTime(2024, 9, 13, 16, 12, 20, 670, DateTimeKind.Utc).AddTicks(3332), "Tomato Basil Soup", 5.99m },
+                    { 5, true, "MainCourse", "Grilled salmon fillet served with lemon butter sauce.", true, new DateTime(2024, 9, 13, 16, 12, 20, 670, DateTimeKind.Utc).AddTicks(3333), "Grilled Salmon", 15.99m },
+                    { 6, true, "MainCourse", "Juicy grilled beef steak with a side of vegetables.", false, new DateTime(2024, 9, 13, 16, 12, 20, 670, DateTimeKind.Utc).AddTicks(3334), "Beef Steak", 19.99m },
+                    { 7, true, "Dessert", "Warm chocolate cake with a gooey molten center.", true, new DateTime(2024, 9, 13, 16, 12, 20, 670, DateTimeKind.Utc).AddTicks(3335), "Chocolate Lava Cake", 6.99m },
+                    { 8, true, "Dessert", "Classic Italian dessert with layers of mascarpone and espresso-soaked ladyfingers.", false, new DateTime(2024, 9, 13, 16, 12, 20, 670, DateTimeKind.Utc).AddTicks(3337), "Tiramisu", 5.99m },
+                    { 9, true, "Beverage", "Strong and rich espresso coffee.", false, new DateTime(2024, 9, 13, 16, 12, 20, 670, DateTimeKind.Utc).AddTicks(3338), "Espresso", 2.99m },
+                    { 10, true, "Beverage", "Refreshing homemade lemonade.", false, new DateTime(2024, 9, 13, 16, 12, 20, 670, DateTimeKind.Utc).AddTicks(3339), "Lemonade", 3.99m },
+                    { 11, true, "SideDish", "Crispy golden fries with a side of ketchup.", false, new DateTime(2024, 9, 13, 16, 12, 20, 670, DateTimeKind.Utc).AddTicks(3341), "French Fries", 3.99m },
+                    { 12, true, "SideDish", "Creamy mashed potatoes with butter and herbs.", false, new DateTime(2024, 9, 13, 16, 12, 20, 670, DateTimeKind.Utc).AddTicks(3342), "Mashed Potatoes", 4.99m },
+                    { 13, true, "Soup", "Hearty Italian soup with vegetables and pasta.", false, new DateTime(2024, 9, 13, 16, 12, 20, 670, DateTimeKind.Utc).AddTicks(3343), "Minestrone Soup", 5.99m },
+                    { 14, true, "Soup", "Classic chicken soup with noodles and vegetables.", false, new DateTime(2024, 9, 13, 16, 12, 20, 670, DateTimeKind.Utc).AddTicks(3345), "Chicken Noodle Soup", 5.99m },
+                    { 15, true, "Salad", "Salad with tomatoes, cucumbers, olives, and feta cheese.", false, new DateTime(2024, 9, 13, 16, 12, 20, 670, DateTimeKind.Utc).AddTicks(3346), "Greek Salad", 6.99m },
+                    { 16, true, "Salad", "Fresh tomatoes, mozzarella, and basil with balsamic glaze.", false, new DateTime(2024, 9, 13, 16, 12, 20, 670, DateTimeKind.Utc).AddTicks(3347), "Caprese Salad", 7.99m },
+                    { 17, true, "Special", "Succulent lobster tail served with drawn butter.", false, new DateTime(2024, 9, 13, 16, 12, 20, 670, DateTimeKind.Utc).AddTicks(3348), "Lobster Tail", 29.99m },
+                    { 18, true, "Special", "Creamy risotto with truffle oil and parmesan.", false, new DateTime(2024, 9, 13, 16, 12, 20, 670, DateTimeKind.Utc).AddTicks(3349), "Truffle Risotto", 24.99m },
+                    { 19, true, "Kids", "Crispy chicken nuggets served with fries.", false, new DateTime(2024, 9, 13, 16, 12, 20, 670, DateTimeKind.Utc).AddTicks(3350), "Chicken Nuggets", 5.99m },
+                    { 20, true, "Kids", "Creamy macaroni and cheese.", false, new DateTime(2024, 9, 13, 16, 12, 20, 670, DateTimeKind.Utc).AddTicks(3351), "Mac and Cheese", 4.99m },
+                    { 21, true, "Vegetarian", "Mixed vegetables stir-fried with soy sauce and served over rice.", false, new DateTime(2024, 9, 13, 16, 12, 20, 670, DateTimeKind.Utc).AddTicks(3352), "Vegetable Stir-Fry", 9.99m },
+                    { 22, true, "Vegetarian", "Lasagna layered with spinach, ricotta, and marinara sauce.", false, new DateTime(2024, 9, 13, 16, 12, 20, 670, DateTimeKind.Utc).AddTicks(3354), "Vegetarian Lasagna", 11.99m }
                 });
 
             migrationBuilder.InsertData(
@@ -243,6 +244,12 @@ namespace Reliable_Reservations.Migrations
                     { 9, "Corner", 4, 9 },
                     { 10, "Window", 4, 10 }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Customers_Email",
+                table: "Customers",
+                column: "Email",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reservations_CustomerId",

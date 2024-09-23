@@ -21,7 +21,7 @@ namespace Reliable_Reservations.Models
 
         public string? SpecialRequests { get; set; } = null;
 
-        public required ReservationStatus Status { get; set; } = ReservationStatus.Pending;
+        public required ReservationStatus Status { get; set; } = ReservationStatus.Confirmed;
 
         public virtual ICollection<Table> Tables { get; set; } = new List<Table>(); // Initialize to avoid null reference
 

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Reliable_Reservations.Models.DTOs.MenuItem
 {
@@ -23,6 +24,9 @@ namespace Reliable_Reservations.Models.DTOs.MenuItem
         public bool AvailabilityStatus { get; set; }
 
         [Required]
-        public DateTime LastUpdated { get; set; }
+        public bool IsPopular { get; set; }
+
+        [JsonIgnore]
+        public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
     }
 }

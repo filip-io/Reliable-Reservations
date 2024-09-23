@@ -17,6 +17,6 @@ namespace Reliable_Reservations.Models.DTOs.Reservation
         [Required]
         public List<int> TableNumbers { get; set; } = new List<int>();
 
-        public string? SpecialRequests { get; set; }
+        public string? SpecialRequests { get; set; } = "None";
     }
 }

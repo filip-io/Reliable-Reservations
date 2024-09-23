@@ -47,6 +47,14 @@ namespace Reliable_Reservations.Services
         }
 
 
+        public async Task<IEnumerable<TimeSlotDto>> GetTimeSlotsByDateAsync(DateTime date)
+        {
+            var timeSlots = await _timeSlotRepository.GetTimeSlotsByDateAsync(date);
+            return _mapper.Map<IEnumerable<TimeSlotDto>>(timeSlots);
+        }
+
+
+
         public async Task<IEnumerable<TimeSlotDto>> GetTimeSlotsForWeekAsync(DateTime chosenDate)
         {
             // Calculate the start and end of the week (assuming the week starts on Monday)

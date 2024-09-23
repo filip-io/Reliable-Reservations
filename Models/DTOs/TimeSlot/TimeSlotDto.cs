@@ -15,5 +15,8 @@ namespace Reliable_Reservations.Models.DTOs.TimeSlot
 
         [Required]
         public int TableId { get; set; }
+
+        [Required]
+        public int? ReservationId { get; set; }
     }
 }
