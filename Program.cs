@@ -1,10 +1,13 @@
 using DotNetEnv;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Reliable_Reservations.Data;
 using Reliable_Reservations.Data.Repos;
 using Reliable_Reservations.Data.Repos.IRepos;
 using Reliable_Reservations.Services;
 using Reliable_Reservations.Services.IServices;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace Reliable_Reservations
@@ -57,6 +60,23 @@ namespace Reliable_Reservations
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 });
 
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                        ValidAudience = builder.Configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                    };
+                });
+
+            builder.Services.AddAuthorization();
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
@@ -64,6 +84,8 @@ namespace Reliable_Reservations
             builder.Services.AddAutoMapper(typeof(Program));
 
             var app = builder.Build();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

@@ -6,17 +6,22 @@ using Reliable_Reservations.Models.DTOs.OpeningHours;
 using Reliable_Reservations.Models.DTOs.Reservation;
 using Reliable_Reservations.Models.DTOs.Table;
 using Reliable_Reservations.Models.DTOs.TimeSlot;
+using Reliable_Reservations.Models.DTOs.User;
 
 public class AutoMapperProfile : Profile
 {
     public AutoMapperProfile()
     {
+        // User Mappings
+
+        CreateMap<User, UserDto>().ReverseMap();
+        CreateMap<User, UserCreateDto>().ReverseMap();
+
 
         // Customer mappings
 
         CreateMap<Customer, CustomerDto>().ReverseMap();
         CreateMap<Customer, CustomerCreateDto>().ReverseMap();     
-
 
 
         // Reservation mappings

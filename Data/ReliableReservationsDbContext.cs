@@ -7,6 +7,7 @@ namespace Reliable_Reservations.Data
     {
         public ReliableReservationsDbContext(DbContextOptions<ReliableReservationsDbContext> options) : base(options) { }
 
+        public DbSet<User> Users { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<MenuItem> MenuItems { get; set; }
         public DbSet<OpeningHours> OpeningHours { get; set; }
@@ -21,6 +22,37 @@ namespace Reliable_Reservations.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // User
+
+            modelBuilder.Entity<User>()
+                .HasKey(u => u.UserId);
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.FirstName)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.LastName)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.Email)
+                .IsRequired();
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+
+            // Seed data for User
+
+            //modelBuilder.Entity<User>().HasData
+            //    (
+            //        new User
+            //    )
+
 
             // Customer
             modelBuilder.Entity<Customer>()
