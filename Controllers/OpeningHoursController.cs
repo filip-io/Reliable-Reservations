@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Reliable_Reservations.Models.DTOs.OpeningHours;
 using Reliable_Reservations.Services.IServices;
 
@@ -54,6 +55,7 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("create")]
         public async Task<ActionResult<OpeningHoursDto>> CreateOpeningHours([FromBody] OpeningHoursCreateDto openingHoursCreateDto)
         {
@@ -69,6 +71,7 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult<OpeningHoursDto>> UpdateOpeningHours(int id, [FromBody] OpeningHoursDto openingHoursDto)
         {
@@ -92,6 +95,7 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteOpeningHours(int id)
         {

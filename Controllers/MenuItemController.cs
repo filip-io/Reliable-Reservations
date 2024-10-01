@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Reliable_Reservations.Models;
 using Reliable_Reservations.Models.DTOs.MenuItem;
 using Reliable_Reservations.Services.IServices;
@@ -18,6 +19,7 @@ namespace Reliable_Reservations.Controllers
             _menuService = menuService;
             _logger = logger;
         }
+
 
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<MenuItemDto>>> GetAllMenuItemsAsync()
@@ -41,6 +43,7 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
+
         [HttpGet("{id}")]
         public async Task<ActionResult<MenuItemDto>> GetMenuItemById(int id)
         {
@@ -59,6 +62,7 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("create")]
         public async Task<ActionResult<MenuItemDto>> CreateMenuItemAsync([FromBody] MenuItemCreateDto menuItemCreateDto)
         {
@@ -74,6 +78,7 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult<MenuItemDto>> UpdateMenuItemAsync(int id, MenuItemDto menuItemDto)
         {
@@ -88,6 +93,7 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult<MenuItemDto>> DeleteMenuItemAsync(int id)
         {

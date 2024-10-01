@@ -30,6 +30,10 @@ namespace Reliable_Reservations
             builder.Services.AddDbContext<ReliableReservationsDbContext>(
                 options => options.UseSqlServer(connectionString));
 
+            // User
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+
             // Customer
             builder.Services.AddScoped<ICustomerService, CustomerService>();
             builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
@@ -60,6 +64,16 @@ namespace Reliable_Reservations
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 });
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("LocalReact", policy =>
+                {
+                    policy.WithOrigins("http://localhost:5173")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -84,6 +98,9 @@ namespace Reliable_Reservations
             builder.Services.AddAutoMapper(typeof(Program));
 
             var app = builder.Build();
+
+            app.UseCors("LocalReact");
+
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -95,9 +112,6 @@ namespace Reliable_Reservations
             }
 
             app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
 
             app.MapControllers();
 

@@ -32,24 +32,24 @@ namespace Reliable_Reservations.Services
         }
 
 
-        public async Task<UserDto?> GetUserByEmailAsync(string email)
+        public async Task<User?> GetUserByEmailAsync(string email)
         {
-            var existingUser = _userRepository.GetUserByEmailAsync(email);
+            var existingUser = await _userRepository.GetUserByEmailAsync(email);
 
-            if (existingUser == null)
-            {
-                throw new KeyNotFoundException($"User with {email} not found.");
-            }
+            //if (existingUser == null)
+            //{
+            //    throw new KeyNotFoundException($"User with {email} not found.");
+            //}
 
-            return _mapper?.Map<UserDto>(existingUser);
+            return _mapper.Map<User>(existingUser);
         }
 
 
         public async Task<UserDto?> CreateUserAsync(UserCreateDto userCreateDto)
         {
-            var userExists = _userRepository.UserExistsAsync(userCreateDto.Email);
+            var userExists = await _userRepository.UserExistsAsync(userCreateDto.Email);
 
-            if (userExists != null)
+            if (userExists)
             {
                 throw new Exception("Email is already in use");
             }

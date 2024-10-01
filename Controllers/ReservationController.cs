@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Reliable_Reservations.Models.DTOs.Reservation;
 using Reliable_Reservations.Services;
@@ -18,6 +19,7 @@ namespace Reliable_Reservations.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<ReservationDetailsDto>>> GetAllReservations()
         {
@@ -56,6 +58,7 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
+
         [HttpPost("create")]
         public async Task<ActionResult<ReservationDetailsDto>> CreateReservation(ReservationCreateDto reservationCreateDto)
         {
@@ -73,6 +76,7 @@ namespace Reliable_Reservations.Controllers
                 return ResponseHelper.HandleException(_logger, ex);
             }
         }
+
 
         [HttpPut("{id}")]
         public async Task<ActionResult<ReservationDetailsDto>> UpdateReservation(int id, ReservationUpdateDto reservationUpdateDto)
@@ -95,6 +99,7 @@ namespace Reliable_Reservations.Controllers
                 return ResponseHelper.HandleException(_logger, ex);
             }
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReservation(int id)
