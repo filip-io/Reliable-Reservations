@@ -40,6 +40,7 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<ReservationDetailsDto>> GetReservationById(int id)
         {
@@ -47,6 +48,25 @@ namespace Reliable_Reservations.Controllers
             {
                 var reservation = await _reservationService.GetReservationByIdAsync(id);
                 return Ok(reservation);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return ResponseHelper.HandleNotFound(_logger, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return ResponseHelper.HandleException(_logger, ex);
+            }
+        }
+
+
+        [HttpGet("date/{date}")]
+        public async Task<ActionResult<ReservationDetailsDto>> GetReservationsByDate(DateTime date)
+        {
+            try
+            {
+                var reservations = await _reservationService.GetReservationsByDate(date);
+                return Ok(reservations);
             }
             catch (KeyNotFoundException ex)
             {

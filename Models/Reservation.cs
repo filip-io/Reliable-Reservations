@@ -23,16 +23,17 @@ namespace Reliable_Reservations.Models
 
         public required ReservationStatus Status { get; set; } = ReservationStatus.Confirmed;
 
-        public virtual ICollection<Table> Tables { get; set; } = new List<Table>(); // Initialize to avoid null reference
-
 
         // Relationship with Customer
         public int CustomerId { get; set; } // Foreign Key to Customer
         public virtual Customer? Customer { get; set; } // Navigation property to Customer
 
 
+        // Relationship with Tables to have access to reserved tables
+        public virtual ICollection<Table> Tables { get; set; } = new List<Table>(); // Initialize to avoid null reference
+
+
         // Relationship with TimeSlot
-        public int TimeSlotId { get; set; } // Foreign Key to TimeSlot
-        public virtual TimeSlot? TimeSlot { get; set; } // Navigation property to TimeSlot
+        public virtual ICollection<TimeSlot> TimeSlots { get; set; } = new List<TimeSlot>(); // Initialize to avoid null reference
     }
 }

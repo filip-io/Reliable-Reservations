@@ -66,6 +66,15 @@ namespace Reliable_Reservations.Data.Repos
             return await _context.TimeSlots.FindAsync(id);
         }
 
+
+        public async Task<IEnumerable<TimeSlot>> GetTimeSlotsByIds(List<int> timeSlotIds)
+        {
+            return await _context.TimeSlots
+                .Where(ts => timeSlotIds.Contains(ts.TimeSlotId))
+                .ToListAsync();
+        }
+
+
         public async Task<bool> TimeSlotExists(int id)
         {
             return await _context.TimeSlots.AnyAsync(ts => ts.TimeSlotId == id);

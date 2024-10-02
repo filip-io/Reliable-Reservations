@@ -47,6 +47,14 @@ namespace Reliable_Reservations.Services
         }
 
 
+        public async Task<IEnumerable<TimeSlotDto>> GetTimeSlotsByIds(List<int> ids)
+        {
+            var timeSlots = await _timeSlotRepository.GetTimeSlotsByIds(ids);
+            return _mapper.Map<IEnumerable<TimeSlotDto>>(timeSlots);
+        }
+
+
+
         public async Task<IEnumerable<TimeSlotDto>> GetTimeSlotsByDateAsync(DateTime date)
         {
             var timeSlots = await _timeSlotRepository.GetTimeSlotsByDateAsync(date);
@@ -197,20 +205,31 @@ namespace Reliable_Reservations.Services
 
             return timeSlots;
         }
-
         public async Task<TimeSlotDto> CreateTimeSlotAsync(TimeSlotCreateDto timeSlotCreateDto)
         {
             var timeSlot = _mapper.Map<TimeSlot>(timeSlotCreateDto);
             DayOfWeek dayOfWeek = timeSlot.StartTime.DayOfWeek;
+
+            // Check if the time slot falls within valid opening hours
             var openingHours = await _openingHoursRepository.GetAllAsync();
             var matchingOpeningHours = openingHours.FirstOrDefault(o => o.DayOfWeek == dayOfWeek);
-
             if (matchingOpeningHours == null)
             {
                 throw new Exception($"No OpeningHours found for the day: {dayOfWeek}");
             }
 
             timeSlot.OpeningHoursId = matchingOpeningHours.OpeningHoursId;
+
+            // Check for overlapping timeslots
+            var existingTimeSlots = await _timeSlotRepository.GetTimeSlotsByTableIdsAsync(new List<int> { timeSlot.TableId });
+            bool hasConflict = existingTimeSlots.Any(ts =>
+                (ts.StartTime < timeSlot.EndTime && ts.EndTime > timeSlot.StartTime));
+
+            if (hasConflict)
+            {
+                throw new InvalidOperationException("The requested timeslot conflicts with an existing timeslot.");
+            }
+
             await _timeSlotRepository.AddTimeSlot(timeSlot);
 
             return _mapper.Map<TimeSlotDto>(timeSlot);

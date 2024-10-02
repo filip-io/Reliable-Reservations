@@ -5,6 +5,7 @@ namespace Reliable_Reservations.Services
     public interface IReservationService
     {
         Task<IEnumerable<ReservationDetailsDto>> GetAllReservationsAsync();
+        Task<IEnumerable<ReservationDetailsDto>> GetReservationsByDate(DateTime date);
         Task<ReservationDetailsDto?> GetReservationByIdAsync(int reservationId);
         Task<ReservationDetailsDto> CreateReservationAsync(ReservationCreateDto reservationCreateDto);
         Task<ReservationDetailsDto> UpdateReservationAsync(ReservationUpdateDto reservationUpdateDto);

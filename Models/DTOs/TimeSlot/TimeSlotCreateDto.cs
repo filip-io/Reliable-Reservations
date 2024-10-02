@@ -9,5 +9,8 @@ namespace Reliable_Reservations.Models.DTOs.TimeSlot
 
         [Required]
         public DateTime EndTime { get; set; }
+
+        [Required]
+        public int TableId { get; set; }
     }
 }

@@ -180,12 +180,6 @@ namespace Reliable_Reservations.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Reservation>()
-                .HasOne(r => r.TimeSlot)
-                .WithOne(ts => ts.Reservation)
-                .HasForeignKey<Reservation>(r => r.TimeSlotId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Reservation>()
                 .Property(r => r.ReservationDate)
                 .IsRequired()
                 .HasColumnType("datetime2(0)");
@@ -199,6 +193,7 @@ namespace Reliable_Reservations.Data
                 .Property(r => r.SpecialRequests)
                 .HasMaxLength(300);
 
+            // Many-to-many relationship between Reservation and Table
             modelBuilder.Entity<Reservation>()
                 .HasMany(r => r.Tables)
                 .WithMany(t => t.Reservations)
@@ -215,6 +210,14 @@ namespace Reliable_Reservations.Data
                         .HasForeignKey("ReservationId")
                         .OnDelete(DeleteBehavior.Cascade)
                 );
+
+            // One-to-many relationship between Reservation and TimeSlot
+            modelBuilder.Entity<Reservation>()
+                .HasMany(r => r.TimeSlots)
+                .WithOne(ts => ts.Reservation)
+                .HasForeignKey(ts => ts.ReservationId)
+                .OnDelete(DeleteBehavior.Restrict);
+
 
 
             // Table
@@ -265,10 +268,9 @@ namespace Reliable_Reservations.Data
 
             modelBuilder.Entity<TimeSlot>()
                 .HasOne(ts => ts.Reservation)
-                .WithOne(r => r.TimeSlot)
-                .HasForeignKey<Reservation>(r => r.TimeSlotId)
+                .WithMany(r => r.TimeSlots)
+                .HasForeignKey(ts => ts.ReservationId)
                 .OnDelete(DeleteBehavior.Restrict);
-
 
 
 
@@ -357,56 +359,21 @@ namespace Reliable_Reservations.Data
                     TableId = 3,
                     TableNumber = 3,
                     SeatingCapacity = 6,
-                    Location = "Center"
+                    Location = "Corner"
                 },
                 new Table
                 {
                     TableId = 4,
                     TableNumber = 4,
                     SeatingCapacity = 4,
-                    Location = "Corner"
+                    Location = "Outside"
                 },
                 new Table
                 {
                     TableId = 5,
                     TableNumber = 5,
                     SeatingCapacity = 4,
-                    Location = "Center"
-                },
-                new Table
-                {
-                    TableId = 6,
-                    TableNumber = 6,
-                    SeatingCapacity = 2,
-                    Location = "Window"
-                },
-                new Table
-                {
-                    TableId = 7,
-                    TableNumber = 7,
-                    SeatingCapacity = 8,
-                    Location = "Private Room"
-                },
-                new Table
-                {
-                    TableId = 8,
-                    TableNumber = 8,
-                    SeatingCapacity = 6,
-                    Location = "Patio"
-                },
-                new Table
-                {
-                    TableId = 9,
-                    TableNumber = 9,
-                    SeatingCapacity = 4,
-                    Location = "Corner"
-                },
-                new Table
-                {
-                    TableId = 10,
-                    TableNumber = 10,
-                    SeatingCapacity = 4,
-                    Location = "Window"
+                    Location = "Outside"
                 }
             );
 

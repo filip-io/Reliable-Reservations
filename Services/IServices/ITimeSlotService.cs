@@ -6,6 +6,7 @@ namespace Reliable_Reservations.Services.IServices
     public interface ITimeSlotService
     {
         Task<TimeSlotDto> GetTimeSlotByIdAsync(int id);
+        Task<IEnumerable<TimeSlotDto>> GetTimeSlotsByIds(List<int> ids);
         Task<IEnumerable<TimeSlotDto>> GetAllTimeSlotsAsync();
         Task<IEnumerable<TimeSlotDto>> GetTimeSlotsByDateAsync(DateTime date);
         Task<IEnumerable<TimeSlotDto>> GetTimeSlotsForWeekAsync(DateTime chosenDate);

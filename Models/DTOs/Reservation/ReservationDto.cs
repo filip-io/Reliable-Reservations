@@ -15,7 +15,7 @@ namespace Reliable_Reservations.Models.DTOs.Reservation
         public DateTime ReservationDate { get; set; }
 
         [Required]
-        [Range(1, 15, ErrorMessage = "Number of guests must be between 1 and 15.")]
+        [Range(1, 8, ErrorMessage = "Number of guests must be between 1 and 8.")]
         public int NumberOfGuests { get; set; }
 
         public string? SpecialRequests { get; set; }

@@ -112,6 +112,25 @@ namespace Reliable_Reservations.Controllers
         }
 
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<TimeSlotDto>>> GetTimeSlotByIds(List<int> ids)
+        {
+            try
+            {
+                var timeSlots = await _timeSlotService.GetTimeSlotsByIds(ids);
+                return Ok(timeSlots);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return ResponseHelper.HandleNotFound(_logger, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return ResponseHelper.HandleException(_logger, ex);
+            }
+        }
+
+
         [HttpPost("create")]
         public async Task<ActionResult<TimeSlotDto>> CreateTimeSlot(TimeSlotCreateDto timeSlotCreateDto)
         {

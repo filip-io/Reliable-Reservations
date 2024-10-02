@@ -16,7 +16,7 @@ namespace Reliable_Reservations.Data.Repos
         public async Task<IEnumerable<Reservation>> GetAllReservations()
         {
             return await _context.Reservations
-                                 .Include(r => r.TimeSlot)
+                                 .Include(r => r.TimeSlots)
                                  .Include(r => r.Tables)
                                  .Include(r => r.Customer)
                                  .ToListAsync();
@@ -25,28 +25,45 @@ namespace Reliable_Reservations.Data.Repos
         public async Task<Reservation?> GetReservationById(int reservationId)
         {
             return await _context.Reservations
-                                 .Include(r => r.TimeSlot)
+                                 .Include(r => r.TimeSlots)
                                  .Include(r => r.Tables)
                                  .Include(r => r.Customer)
                                  .FirstOrDefaultAsync(r => r.ReservationId == reservationId);
         }
 
+
+        public async Task<IEnumerable<Reservation>> GetReservationsByDate(DateTime date)
+        {
+            // Define the start and end of the day
+            var startOfDay = date.Date; // This gives you the time at 00:00:00
+            var endOfDay = date.Date.AddDays(1).AddTicks(-1); // This gives you 23:59:59.9999999
+
+            return await _context.Reservations
+                   .Include(r => r.Tables)
+                   .Include(r => r.TimeSlots)
+                   .Where(r => r.ReservationDate >= startOfDay && r.ReservationDate <= endOfDay)
+                   .ToListAsync();
+        }
+
+
         public async Task<IEnumerable<Reservation>> GetReservationsForTablesAsync(List<Table> tables, DateTime startTime, DateTime endTime)
         {
             return await _context.Reservations
-                .Include(r => r.TimeSlot)
+                .Include(r => r.TimeSlots)
                 .Where(r => r.Tables.Any(t => tables.Contains(t)) &&
-                            r.TimeSlot.StartTime < endTime &&
-                            r.TimeSlot.EndTime > startTime)
+                            (r.TimeSlots.Any(ts => ts.StartTime < endTime && ts.EndTime > startTime))) // Ensure overlapping time slots
                 .ToListAsync();
         }
 
 
-        public async Task<bool> AreTablesReservedAsync(List<int> tableIds, int timeSlotId)
+
+        public async Task<bool> AreTablesReservedAsync(List<int> tableIds, DateTime startTime, DateTime endTime)
         {
             return await _context.Reservations
-                .Where(r => r.TimeSlotId == timeSlotId)
-                .AnyAsync(r => r.Tables.Any(t => tableIds.Contains(t.TableId)));
+                .Include(r => r.TimeSlots)
+                .Where(r => r.TimeSlots.Any(ts => ts.StartTime < endTime && ts.EndTime > startTime) && // Check for overlapping time slots
+                            r.Tables.Any(t => tableIds.Contains(t.TableId))) // Check if the tables are reserved
+                .AnyAsync();
         }
 
 
@@ -56,7 +73,7 @@ namespace Reliable_Reservations.Data.Repos
             await _context.SaveChangesAsync();
 
             var addedReservation = await _context.Reservations
-                .Include(r => r.TimeSlot)
+                .Include(r => r.TimeSlots)
                 .Include(r => r.Tables)
                 .Include(r => r.Customer)
                 .FirstOrDefaultAsync(r => r.ReservationId == reservation.ReservationId);

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Reliable_Reservations.Models.DTOs.Customer;
 using Reliable_Reservations.Models.DTOs.Table;
+using Reliable_Reservations.Models.DTOs.TimeSlot;
 
 namespace Reliable_Reservations.Models.DTOs.Reservation
 {
@@ -22,5 +23,7 @@ namespace Reliable_Reservations.Models.DTOs.Reservation
         public ReservationStatus Status { get; set; }
 
         public List<TableDto> Tables { get; set; } = new List<TableDto>(); // List of detailed tables for the reservation
+
+        public List<TimeSlotDto> TimeSlots { get; set; } = new List<TimeSlotDto>();
     }
 }

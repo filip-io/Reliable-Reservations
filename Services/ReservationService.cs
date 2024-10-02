@@ -4,6 +4,9 @@ using Reliable_Reservations.Models;
 using Reliable_Reservations.Services.IServices;
 using Reliable_Reservations.Helpers;
 using Reliable_Reservations.Models.DTOs.Reservation;
+using Reliable_Reservations.Models.DTOs.TimeSlot;
+using Microsoft.EntityFrameworkCore;
+using Reliable_Reservations.Data.Repos;
 
 namespace Reliable_Reservations.Services
 {
@@ -13,6 +16,7 @@ namespace Reliable_Reservations.Services
         private readonly ITableService _tableService;
         private readonly ITableRepository _tableRepository;
         private readonly ITimeSlotService _timeSlotService;
+        private readonly ITimeSlotRepository _timeSlotRepository; 
         private readonly ICustomerRepository _customerRepository;
         private readonly IOpeningHoursRepository _openingHoursRepository;
         private readonly IMapper _mapper;
@@ -23,6 +27,7 @@ namespace Reliable_Reservations.Services
             ITableService tableService,
             ITableRepository tableRepository,
             ITimeSlotService timeSlotService,
+            ITimeSlotRepository timeSlotRepository,
             ICustomerRepository customerRepository,
             IOpeningHoursRepository openingHoursRepository,
             IMapper mapper,
@@ -32,6 +37,7 @@ namespace Reliable_Reservations.Services
             _tableService = tableService;
             _tableRepository = tableRepository;
             _timeSlotService = timeSlotService;
+            _timeSlotRepository = timeSlotRepository;
             _customerRepository = customerRepository;
             _openingHoursRepository = openingHoursRepository;
             _mapper = mapper;
@@ -55,6 +61,13 @@ namespace Reliable_Reservations.Services
 
             return _mapper.Map<ReservationDetailsDto?>(reservation);
         }
+
+
+        public async Task<IEnumerable<ReservationDetailsDto>> GetReservationsByDate(DateTime date)
+        {
+            return _mapper.Map<IEnumerable<ReservationDetailsDto>>(await _reservationRepository.GetReservationsByDate(date));
+        }
+
 
         public async Task<ReservationDetailsDto> CreateReservationAsync(ReservationCreateDto reservationCreateDto)
         {
@@ -83,38 +96,46 @@ namespace Reliable_Reservations.Services
                 throw new InvalidOperationException($"The selected tables cannot accommodate {reservationCreateDto.NumberOfGuests} guests. The total seating capacity is {totalSeatingCapacity}.");
             }
 
-            // Retrieve all time slots associated with the selected tables
-            var timeSlots = await _timeSlotService.GetTimeSlotsByTablesAsync(selectedTables.Select(t => t.TableId).ToList());
+            // Truncate the reservation date to minutes
+            var reservationStart = Truncate.TruncateToMinutes(reservationCreateDto.ReservationDate);
+            var reservationEnd = reservationStart.AddMinutes(90);
 
 
-            // Remove any fractions of time from the booking
-            var reservationDate = Truncate.TruncateToMinutes(reservationCreateDto.ReservationDate);
-
-            var matchingTimeSlot = timeSlots
-                .FirstOrDefault(ts => ts.StartTime <= reservationDate && ts.EndTime >= reservationDate.AddMinutes(90));
-
-
-            if (matchingTimeSlot == null)
-            {
-                throw new InvalidOperationException("No matching time slot found for the selected time.");
-            }
-
-            // Check if the selected tables are available for the time slot
-            var isAvailable = await AreTablesAvailableAsync(selectedTables, matchingTimeSlot.TimeSlotId);
+            // Check if the selected tables are available
+            var isAvailable = await AreTablesAvailableAsync(selectedTables, reservationStart, reservationEnd);
             if (!isAvailable)
             {
-                throw new InvalidOperationException("One or more tables are not available for the selected time slot.");
+                throw new InvalidOperationException("One or more tables are not available for the selected time.");
             }
+
+            // Create a time slot for each selected table
+            var newTimeSlotsIds = new List<int>();
+
+            foreach (var table in selectedTables)
+            {
+                var timeSlotCreateDto = new TimeSlotCreateDto
+                {
+                    StartTime = reservationStart,
+                    EndTime = reservationEnd,
+                    TableId = table.TableId,
+                };
+
+                var createdTimeSlot = await _timeSlotService.CreateTimeSlotAsync(timeSlotCreateDto);
+                newTimeSlotsIds.Add(createdTimeSlot.TimeSlotId);
+            }
+
+            // Fetch all time slots based on the IDs
+            var newTimeSlots = await _timeSlotRepository.GetTimeSlotsByIds(newTimeSlotsIds);
 
             var reservation = new Reservation
             {
                 CustomerId = reservationCreateDto.CustomerId,
-                TimeSlotId = matchingTimeSlot.TimeSlotId,
                 ReservationDate = reservationCreateDto.ReservationDate,
                 NumberOfGuests = reservationCreateDto.NumberOfGuests,
                 SpecialRequests = reservationCreateDto.SpecialRequests,
                 Status = ReservationStatus.Confirmed,
-                Tables = selectedTables
+                Tables = selectedTables,
+                TimeSlots = newTimeSlots.ToList() // Add the fetched time slots to the reservation
             };
 
             await _reservationRepository.AddReservation(reservation);
@@ -123,10 +144,11 @@ namespace Reliable_Reservations.Services
         }
 
 
-        public async Task<bool> AreTablesAvailableAsync(List<Table> tables, int timeSlotId)
+
+        public async Task<bool> AreTablesAvailableAsync(List<Table> tables, DateTime reservationStart, DateTime reservationEnd)
         {
             // Check if any table is already reserved for the given TimeSlotId
-            return !await _reservationRepository.AreTablesReservedAsync(tables.Select(t => t.TableId).ToList(), timeSlotId);
+            return !await _reservationRepository.AreTablesReservedAsync(tables.Select(t => t.TableId).ToList(), reservationStart, reservationEnd);
         }
 
 
@@ -199,25 +221,47 @@ namespace Reliable_Reservations.Services
                 throw new InvalidOperationException($"The selected tables cannot accommodate {reservationUpdateDto.NumberOfGuests} guests. The total seating capacity is {selectedTablesSeatingCapacity}.");
             }
 
-            // Retrieve all time slots associated with the selected tables
-            var timeSlots = await _timeSlotService.GetTimeSlotsByTablesAsync(selectedTables.Select(t => t.TableId).ToList());
+            // Truncate the reservation date to minutes
+            var reservationStart = Truncate.TruncateToMinutes(reservationUpdateDto.ReservationDate);
+            var reservationEnd = reservationStart.AddMinutes(90);
 
-            var newTimeSlot = timeSlots
-                .FirstOrDefault(ts => ts.StartTime <= reservationUpdateDto.ReservationDate && ts.EndTime >= reservationUpdateDto.ReservationDate.AddMinutes(90)); // Assuming 90 minutes duration
-
-            if (newTimeSlot == null)
-            {
-                throw new InvalidOperationException("No matching time slot found for the selected time.");
-            }
-
-            // Check if the selected tables are available for the new TimeSlotId
-            var isAvailable = await AreTablesAvailableAsync(selectedTables, newTimeSlot.TimeSlotId);
+            // Check if the selected tables are available
+            var isAvailable = await AreTablesAvailableAsync(selectedTables, reservationStart, reservationEnd);
             if (!isAvailable)
             {
-                throw new InvalidOperationException("One or more tables are not available for the selected time slot.");
+                throw new InvalidOperationException("One or more tables are not available for the selected time.");
             }
 
-            existingReservation.TimeSlotId = newTimeSlot.TimeSlotId;
+            // Clear existing timeslots and delete them from the database
+            if (existingReservation.TimeSlots.Any())
+            {
+                foreach (var timeslot in existingReservation.TimeSlots.ToList())
+                {
+                    await _timeSlotRepository.DeleteTimeSlot(timeslot);
+                }
+                existingReservation.TimeSlots.Clear();
+            }
+
+            // Create a time slot for each selected table
+            var newTimeSlotsIds = new List<int>();
+
+            foreach (var table in selectedTables)
+            {
+                var timeSlotCreateDto = new TimeSlotCreateDto
+                {
+                    StartTime = reservationStart,
+                    EndTime = reservationEnd,
+                    TableId = table.TableId
+                };
+
+                var createdTimeSlot = await _timeSlotService.CreateTimeSlotAsync(timeSlotCreateDto);
+                newTimeSlotsIds.Add(createdTimeSlot.TimeSlotId);
+            }
+
+            // Fetch all time slots based on the IDs
+            var newTimeSlots = await _timeSlotRepository.GetTimeSlotsByIds(newTimeSlotsIds);
+
+            existingReservation.TimeSlots = newTimeSlots.ToList();
             existingReservation.CustomerId = reservationUpdateDto.CustomerId;
             existingReservation.ReservationDate = reservationUpdateDto.ReservationDate;
             existingReservation.NumberOfGuests = reservationUpdateDto.NumberOfGuests;
@@ -236,7 +280,7 @@ namespace Reliable_Reservations.Services
                 }
             }
 
-            await _reservationRepository.UpdateReservation(existingReservation);
+            await _reservationRepository.UpdateReservation(existingReservation);           
 
             return _mapper.Map<ReservationDetailsDto>(existingReservation);
         }
