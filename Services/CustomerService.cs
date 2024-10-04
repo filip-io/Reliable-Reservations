@@ -47,6 +47,18 @@ namespace Reliable_Reservations.Services
             return _mapper.Map<CustomerDto>(customer);
         }
 
+        public async Task<CustomerDto?> GetCustomerByEmailAsync(string email)
+        {
+            var customer = await _customerRepository.GetByEmailAsync(email);
+
+            if (customer == null)
+            {
+                throw new KeyNotFoundException($"Customer with email {email} not found.");
+            }
+
+            return _mapper.Map<CustomerDto?>(customer);
+        }
+
         public async Task<CustomerDto> CreateCustomerAsync(CustomerCreateDto dto)
         {
             var newCustomer = _mapper.Map<Customer>(dto);

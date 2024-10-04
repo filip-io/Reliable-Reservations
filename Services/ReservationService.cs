@@ -76,7 +76,7 @@ namespace Reliable_Reservations.Services
                 throw new ArgumentException("Reservations cannot be made for past dates and times.");
             }
 
-            if (!await _customerRepository.CustomerExists(reservationCreateDto.CustomerId))
+            if (!await _customerRepository.CustomerExistsAsync(reservationCreateDto.CustomerId))
             {
                 throw new ArgumentException("Customer does not exist.");
             }
@@ -200,7 +200,7 @@ namespace Reliable_Reservations.Services
                 throw new KeyNotFoundException("Reservation does not exist.");
             }
 
-            if (!await _customerRepository.CustomerExists(reservationUpdateDto.CustomerId))
+            if (!await _customerRepository.CustomerExistsAsync(reservationUpdateDto.CustomerId))
             {
                 throw new KeyNotFoundException($"Customer with ID {reservationUpdateDto.CustomerId} does not exist.");
             }

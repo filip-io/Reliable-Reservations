@@ -23,7 +23,14 @@ namespace Reliable_Reservations.Data.Repos
             return await _context.Customers.FindAsync(id);
         }
 
-        public async Task<bool> CustomerExists(int customerId)
+        public async Task<Customer?> GetByEmailAsync(string email)
+        {
+            return await _context.Customers
+                .Where(c => c.Email == email)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> CustomerExistsAsync(int customerId)
         {
             return await _context.Customers.AnyAsync(c => c.CustomerId == customerId);
         }

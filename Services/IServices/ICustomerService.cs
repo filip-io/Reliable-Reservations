@@ -6,6 +6,7 @@ namespace Reliable_Reservations.Services.IServices
     {
         Task<IEnumerable<CustomerDto>> GetAllCustomersAsync();
         Task<CustomerDto?> GetCustomerByIdAsync(int id);
+        Task<CustomerDto?> GetCustomerByEmailAsync(string email);
         Task<CustomerDto> CreateCustomerAsync(CustomerCreateDto customerCreateDto);
         Task<CustomerDto> UpdateCustomerAsync(CustomerDto customerDto);
         Task DeleteCustomerAsync(int id);

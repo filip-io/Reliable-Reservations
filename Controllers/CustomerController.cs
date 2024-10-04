@@ -60,7 +60,27 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
-        [Authorize]
+
+        [HttpGet("email/{email}")]
+        public async Task<ActionResult<CustomerDto>> GetCustomerByMail(string email)
+        {
+            try
+            {
+                var customer = await _customerService.GetCustomerByEmailAsync(email);
+                return Ok(customer);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return ResponseHelper.HandleNotFound(_logger, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return ResponseHelper.HandleException(_logger, ex);
+            }
+        }
+
+
+
         [HttpPost("create")]
         public async Task<ActionResult<CustomerDto>> CreateCustomer(CustomerCreateDto customerCreateDto)
         {
