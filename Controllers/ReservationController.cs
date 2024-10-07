@@ -79,6 +79,21 @@ namespace Reliable_Reservations.Controllers
         }
 
 
+        [HttpGet("existing")]
+        public async Task<ActionResult<IEnumerable<ReservationExistDto>>> GetExistingReservationsAsync(DateTime date)
+        {
+            try
+            {
+                var availability = await _reservationService.GetExistingReservationsAsync(date);
+                return Ok(availability);
+            }
+            catch (Exception ex)
+            {
+                return ResponseHelper.HandleException(_logger, ex);
+            }
+        }
+
+
         [HttpPost("create")]
         public async Task<ActionResult<ReservationDetailsDto>> CreateReservation(ReservationCreateDto reservationCreateDto)
         {

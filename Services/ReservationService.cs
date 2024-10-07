@@ -7,6 +7,7 @@ using Reliable_Reservations.Models.DTOs.Reservation;
 using Reliable_Reservations.Models.DTOs.TimeSlot;
 using Microsoft.EntityFrameworkCore;
 using Reliable_Reservations.Data.Repos;
+using Reliable_Reservations.Models.DTOs.Table;
 
 namespace Reliable_Reservations.Services
 {
@@ -66,6 +67,19 @@ namespace Reliable_Reservations.Services
         public async Task<IEnumerable<ReservationDetailsDto>> GetReservationsByDate(DateTime date)
         {
             return _mapper.Map<IEnumerable<ReservationDetailsDto>>(await _reservationRepository.GetReservationsByDate(date));
+        }
+
+
+        public async Task<IEnumerable<ReservationExistDto>> GetExistingReservationsAsync(DateTime date)
+        {
+            var existingReservations = await _reservationRepository.GetReservationsByDate(date);
+
+            return existingReservations.Select(r => new ReservationExistDto
+            {
+                StartTime = r.ReservationDate,
+                EndTime = r.ReservationDate.AddMinutes(90),
+                TableNumbers = r.Tables.Select(t => t.TableNumber).ToList()
+            }).ToList();
         }
 
 

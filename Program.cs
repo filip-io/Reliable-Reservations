@@ -1,6 +1,7 @@
 using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Reliable_Reservations.Data;
 using Reliable_Reservations.Data.Repos;
@@ -28,7 +29,8 @@ namespace Reliable_Reservations
 
             // Add services to the container.
             builder.Services.AddDbContext<ReliableReservationsDbContext>(
-                options => options.UseSqlServer(connectionString));
+                options => options.UseSqlServer(connectionString).EnableSensitiveDataLogging()
+            );
 
             // User
             builder.Services.AddScoped<IUserService, UserService>();
