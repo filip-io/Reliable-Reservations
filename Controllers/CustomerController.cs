@@ -101,6 +101,7 @@ namespace Reliable_Reservations.Controllers
             }
         }
 
+
         [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult<CustomerDto>> UpdateCustomer(int id, CustomerDto customerDto)

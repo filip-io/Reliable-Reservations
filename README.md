@@ -43,6 +43,9 @@ The database is built using a code-first approach with Entity Framework Core, al
 
 Developed with ASP.NET Core 8 and Entity Framework Core 8, it provides a powerful and flexible foundation for handling restaurant data and processes.
 
+ Combine with my [Reliable Reservations Web Portal](https://github.com/filip-io/Reliable-Reservations-MVC) and [Reliable Reservation API system](https://github.com/filip-io/Reliable-Reservations)
+ for a complete restaurant management and customer engagement solution.
+
 &nbsp;
 
 ## ✨ Features

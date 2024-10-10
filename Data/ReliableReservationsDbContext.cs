@@ -46,13 +46,6 @@ namespace Reliable_Reservations.Data
                 .HasIndex(u => u.Email)
                 .IsUnique();
 
-            // Seed data for User
-
-            //modelBuilder.Entity<User>().HasData
-            //    (
-            //        new User
-            //    )
-
 
             // Customer
             modelBuilder.Entity<Customer>()
