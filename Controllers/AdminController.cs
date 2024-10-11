@@ -20,16 +20,18 @@ namespace Reliable_Reservations.Controllers
             _configuration = configuration; 
         }
 
-        [HttpPost("create")] // Add GetCustomerById controller and then CreatedAtAction to return the created user
-        public async Task <IActionResult> Register(AdminCreateDto adminCreateDto)
+        [HttpPost("create")]
+        public async Task <IActionResult> CreateAdminAsync(AdminCreateDto adminCreateDto)
         {
-            var newAdmin = await _adminService.CreateAdminAsync(adminCreateDto);
+            await _adminService.CreateAdminAsync(adminCreateDto);
 
-            return Ok();
+            string message = $"New admin with name {adminCreateDto.FirstName} {adminCreateDto.LastName} has been successfully created.";
+
+            return StatusCode(201, new { message });
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult> Login(AdminLoginDto adminLoginDto)
+        public async Task<ActionResult> LoginAdminAsync(AdminLoginDto adminLoginDto)
         {
             var admin = await _adminService.GetAdminByEmailAsync(adminLoginDto.Email);
 
