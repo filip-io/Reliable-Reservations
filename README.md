@@ -192,6 +192,8 @@ API documentation is automatically generated using Swashbuckle. Once the applica
   }
   ```
 
+&nbsp;
+
 ## CustomerController
 
 ### 1. **Get All Customers**
