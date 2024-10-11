@@ -1,6 +1,6 @@
-﻿namespace Reliable_Reservations.Models.DTOs.User
+﻿namespace Reliable_Reservations.Models.DTOs.Admin
 {
-    public class UserDto
+    public class AdminDto
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Reliable_Reservations.Models.DTOs.Reservation;
-using Reliable_Reservations.Services;
+using Reliable_Reservations.Services.IServices;
 
 namespace Reliable_Reservations.Controllers
 {

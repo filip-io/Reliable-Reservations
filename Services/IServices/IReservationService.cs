@@ -1,6 +1,6 @@
 ﻿using Reliable_Reservations.Models.DTOs.Reservation;
 
-namespace Reliable_Reservations.Services
+namespace Reliable_Reservations.Services.IServices
 {
     public interface IReservationService
     {

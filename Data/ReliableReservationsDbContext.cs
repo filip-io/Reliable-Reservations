@@ -7,7 +7,7 @@ namespace Reliable_Reservations.Data
     {
         public ReliableReservationsDbContext(DbContextOptions<ReliableReservationsDbContext> options) : base(options) { }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<Admin> Admins { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<MenuItem> MenuItems { get; set; }
         public DbSet<OpeningHours> OpeningHours { get; set; }
@@ -23,26 +23,26 @@ namespace Reliable_Reservations.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // User
+            // Admin
 
-            modelBuilder.Entity<User>()
-                .HasKey(u => u.UserId);
+            modelBuilder.Entity<Admin>()
+                .HasKey(u => u.AdminId);
 
-            modelBuilder.Entity<User>()
+            modelBuilder.Entity<Admin>()
                 .Property(u => u.FirstName)
                 .IsRequired()
                 .HasMaxLength(50);
 
-            modelBuilder.Entity<User>()
+            modelBuilder.Entity<Admin>()
                 .Property(u => u.LastName)
                 .IsRequired()
                 .HasMaxLength(50);
 
-            modelBuilder.Entity<User>()
+            modelBuilder.Entity<Admin>()
                 .Property(u => u.Email)
                 .IsRequired();
 
-            modelBuilder.Entity<User>()
+            modelBuilder.Entity<Admin>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
 

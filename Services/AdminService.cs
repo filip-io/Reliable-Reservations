@@ -2,52 +2,52 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Reliable_Reservations.Data.Repos.IRepos;
 using Reliable_Reservations.Models;
+using Reliable_Reservations.Models.DTOs.Admin;
 using Reliable_Reservations.Models.DTOs.MenuItem;
-using Reliable_Reservations.Models.DTOs.User;
 using Reliable_Reservations.Services.IServices;
 
 namespace Reliable_Reservations.Services
 {
-    public class UserService : IUserService
+    public class AdminService : IAdminService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IAdminRepository _adminRepository;
         private readonly IMapper _mapper;
 
-        public UserService(IUserRepository userRepository, IMapper mapper)
+        public AdminService(IAdminRepository adminRepository, IMapper mapper)
         {
-            _userRepository = userRepository;
+            _adminRepository = adminRepository;
             _mapper = mapper;
         }
 
-        public async Task<UserDto> GetUserByIdAsync(int id)
+        public async Task<AdminDto> GetAdminByIdAsync(int id)
         {
-            var user = await _userRepository.GetUserByIdAsync(id);
+            var user = await _adminRepository.GetAdminByIdAsync(id);
 
             if (user == null)
             {
                 throw new KeyNotFoundException($"User with ID: {id} not found.");
             }
 
-            return _mapper.Map<UserDto>(user);
+            return _mapper.Map<AdminDto>(user);
         }
 
 
-        public async Task<User?> GetUserByEmailAsync(string email)
+        public async Task<Admin?> GetAdminByEmailAsync(string email)
         {
-            var existingUser = await _userRepository.GetUserByEmailAsync(email);
+            var existingUser = await _adminRepository.GetAdminByEmailAsync(email);
 
             //if (existingUser == null)
             //{
             //    throw new KeyNotFoundException($"User with {email} not found.");
             //}
 
-            return _mapper.Map<User>(existingUser);
+            return _mapper.Map<Admin>(existingUser);
         }
 
 
-        public async Task<UserDto?> CreateUserAsync(UserCreateDto userCreateDto)
+        public async Task<AdminDto?> CreateAdminAsync(AdminCreateDto userCreateDto)
         {
-            var userExists = await _userRepository.UserExistsAsync(userCreateDto.Email);
+            var userExists = await _adminRepository.AdminExistsAsync(userCreateDto.Email);
 
             if (userExists)
             {
@@ -56,7 +56,7 @@ namespace Reliable_Reservations.Services
 
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(userCreateDto.Password);
 
-            var newUser = new User
+            var newUser = new Admin
             {
                 FirstName = userCreateDto.FirstName,
                 LastName = userCreateDto.LastName,
@@ -64,9 +64,9 @@ namespace Reliable_Reservations.Services
                 PasswordHash = passwordHash
             };
 
-            await _userRepository.AddUserAsync(newUser);
+            await _adminRepository.AddAdminAsync(newUser);
 
-            return _mapper.Map<UserDto>(newUser);
+            return _mapper.Map<AdminDto>(newUser);
         }
     }
 }

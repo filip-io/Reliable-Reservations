@@ -8,7 +8,7 @@ namespace Reliable_Reservations.Helpers
 {
     public static class JwtTokenGenerator
     {
-        public static string GenerateJwtToken(User user, IConfiguration configuration)
+        public static string GenerateJwtToken(Admin user, IConfiguration configuration)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 

@@ -33,8 +33,8 @@ namespace Reliable_Reservations
             );
 
             // User
-            builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IAdminService, AdminService>();
+            builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 
             // Customer
             builder.Services.AddScoped<ICustomerService, CustomerService>();
