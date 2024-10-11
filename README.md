@@ -62,7 +62,7 @@ Developed with ASP.NET Core 8 and Entity Framework Core 8, it provides a powerfu
 
 Illustration of the relationships between the entities in the system.
 
-![ER Diagram](/Media/erdiagram.webp "ER Diagram")
+![ER Diagram](/Media/erdiagram.jpg "ER Diagram")
 
 &nbsp;
 
