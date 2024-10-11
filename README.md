@@ -26,6 +26,7 @@
 - [📚 API Documentation](#-api-documentation)
 - [🦾 Technologies and Packages](#-technologies-and-packages)
 - [🌐 Endpoints](#-endpoints)
+  - [AdminController](#admincontroller)
   - [CustomerController](#customercontroller)
   - [MenuItemController](#menuitemcontroller)
   - [OpeningHoursController](#openinghourscontroller)
@@ -50,6 +51,7 @@ Developed with ASP.NET Core 8 and Entity Framework Core 8, it provides a powerfu
 
 ## ✨ Features
 
+- 👤 Admin Management
 - 👥 Customer Management
 - 🪑 Table Management
 - 🕒 Opening Hours Management
@@ -106,6 +108,8 @@ Illustration of the relationships between the entities in the system.
 
 The API is organized into several controllers, each managing a specific aspect of the restaurant system:
 
+- **AdminController**: 
+    - Manages admin users with authentication
 - **CustomerController**: 
     - Manages customer data
 - **MenuItemController**: 
@@ -134,6 +138,7 @@ API documentation is automatically generated using Swashbuckle. Once the applica
 
 ## 🌐 Endpoints
 
+- [AdminController](#admincontroller)
 - [CustomerController](#customercontroller)
 - [MenuItemController](#menuitemcontroller)
 - [OpeningHoursController](#openinghourscontroller)
@@ -141,6 +146,51 @@ API documentation is automatically generated using Swashbuckle. Once the applica
 - [TableController](#tablecontroller)
 
 &nbsp;
+
+## AdminController
+
+### 1. **Create Admin**
+- **Endpoint**: `POST /api/Admin/create`
+- **Description**: Register a new admin user.
+- **Request Body**: `AdminCreateDto` object
+- **Responses**:
+  - `201 Created`: Returns a confirmation message when the admin is successfully created.
+- **Example Request**:
+  ```json
+  {
+    "firstName": "Dennis",
+    "lastName": "Nedry",
+    "email": "dennis@nedry.com",
+    "password": "magicword123"
+  }
+  ```
+- **Example Response**:
+  ```json
+  {
+    "message": "New admin with name Dennis Nedry has been successfully created."
+  }
+  ```
+
+### 2. **Admin Login**
+- **Endpoint**: `POST /api/Admin/login`
+- **Description**: Authenticate an admin user and receive a JWT token.
+- **Request Body**: `AdminLoginDto` object
+- **Responses**:
+  - `200 OK`: Returns a JWT token upon successful authentication.
+  - `401 Unauthorized`: When the email or password is invalid.
+- **Example Request**:
+  ```json
+  {
+    "email": "dennis@nedry.com",
+    "password": "magicword123"
+  }
+  ```
+- **Example Response**:
+  ```json
+  {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
+  ```
 
 ## CustomerController
 
