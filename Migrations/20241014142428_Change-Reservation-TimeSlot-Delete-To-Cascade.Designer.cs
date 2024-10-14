@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Reliable_Reservations.Data;
 
@@ -11,9 +12,11 @@ using Reliable_Reservations.Data;
 namespace Reliable_Reservations.Migrations
 {
     [DbContext(typeof(ReliableReservationsDbContext))]
-    partial class ReliableReservationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241014142428_Change-Reservation-TimeSlot-Delete-To-Cascade")]
+    partial class ChangeReservationTimeSlotDeleteToCascade
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,7 +142,7 @@ namespace Reliable_Reservations.Migrations
                             Category = "Appetizer",
                             Description = "Grilled bread topped with diced tomatoes, garlic, and basil.",
                             IsPopular = true,
-                            LastUpdated = new DateTime(2024, 10, 14, 14, 35, 36, 590, DateTimeKind.Utc).AddTicks(3786),
+                            LastUpdated = new DateTime(2024, 10, 14, 14, 24, 28, 650, DateTimeKind.Utc).AddTicks(591),
                             Name = "Bruschetta",
                             Price = 6.99m
                         },
@@ -150,7 +153,7 @@ namespace Reliable_Reservations.Migrations
                             Category = "Appetizer",
                             Description = "Mushrooms stuffed with garlic, herbs, and cream cheese.",
                             IsPopular = false,
-                            LastUpdated = new DateTime(2024, 10, 14, 14, 35, 36, 590, DateTimeKind.Utc).AddTicks(3788),
+                            LastUpdated = new DateTime(2024, 10, 14, 14, 24, 28, 650, DateTimeKind.Utc).AddTicks(593),
                             Name = "Stuffed Mushrooms",
                             Price = 7.99m
                         },
@@ -161,7 +164,7 @@ namespace Reliable_Reservations.Migrations
                             Category = "Starter",
                             Description = "Toasted bread slices with garlic butter.",
                             IsPopular = false,
-                            LastUpdated = new DateTime(2024, 10, 14, 14, 35, 36, 590, DateTimeKind.Utc).AddTicks(3790),
+                            LastUpdated = new DateTime(2024, 10, 14, 14, 24, 28, 650, DateTimeKind.Utc).AddTicks(595),
                             Name = "Garlic Bread",
                             Price = 4.99m
                         },
@@ -172,7 +175,7 @@ namespace Reliable_Reservations.Migrations
                             Category = "Starter",
                             Description = "Creamy tomato soup with fresh basil.",
                             IsPopular = false,
-                            LastUpdated = new DateTime(2024, 10, 14, 14, 35, 36, 590, DateTimeKind.Utc).AddTicks(3791),
+                            LastUpdated = new DateTime(2024, 10, 14, 14, 24, 28, 650, DateTimeKind.Utc).AddTicks(596),
                             Name = "Tomato Basil Soup",
                             Price = 5.99m
                         },
@@ -183,7 +186,7 @@ namespace Reliable_Reservations.Migrations
                             Category = "MainCourse",
                             Description = "Grilled salmon fillet served with lemon butter sauce.",
                             IsPopular = true,
-                            LastUpdated = new DateTime(2024, 10, 14, 14, 35, 36, 590, DateTimeKind.Utc).AddTicks(3793),
+                            LastUpdated = new DateTime(2024, 10, 14, 14, 24, 28, 650, DateTimeKind.Utc).AddTicks(597),
                             Name = "Grilled Salmon",
                             Price = 15.99m
                         },
@@ -194,7 +197,7 @@ namespace Reliable_Reservations.Migrations
                             Category = "MainCourse",
                             Description = "Juicy grilled beef steak with a side of vegetables.",
                             IsPopular = false,
-                            LastUpdated = new DateTime(2024, 10, 14, 14, 35, 36, 590, DateTimeKind.Utc).AddTicks(3794),
+                            LastUpdated = new DateTime(2024, 10, 14, 14, 24, 28, 650, DateTimeKind.Utc).AddTicks(598),
                             Name = "Beef Steak",
                             Price = 19.99m
                         },
@@ -205,7 +208,7 @@ namespace Reliable_Reservations.Migrations
                             Category = "Dessert",
                             Description = "Warm chocolate cake with a gooey molten center.",
                             IsPopular = true,
-                            LastUpdated = new DateTime(2024, 10, 14, 14, 35, 36, 590, DateTimeKind.Utc).AddTicks(3795),
+                            LastUpdated = new DateTime(2024, 10, 14, 14, 24, 28, 650, DateTimeKind.Utc).AddTicks(600),
                             Name = "Chocolate Lava Cake",
                             Price = 6.99m
                         },
@@ -216,7 +219,7 @@ namespace Reliable_Reservations.Migrations
                             Category = "Dessert",
                             Description = "Classic Italian dessert with layers of mascarpone and espresso-soaked ladyfingers.",
                             IsPopular = false,
-                            LastUpdated = new DateTime(2024, 10, 14, 14, 35, 36, 590, DateTimeKind.Utc).AddTicks(3796),
+                            LastUpdated = new DateTime(2024, 10, 14, 14, 24, 28, 650, DateTimeKind.Utc).AddTicks(601),
                             Name = "Tiramisu",
                             Price = 5.99m
                         },
@@ -227,7 +230,7 @@ namespace Reliable_Reservations.Migrations
                             Category = "Beverage",
                             Description = "Strong and rich espresso coffee.",
                             IsPopular = false,
-                            LastUpdated = new DateTime(2024, 10, 14, 14, 35, 36, 590, DateTimeKind.Utc).AddTicks(3798),
+                            LastUpdated = new DateTime(2024, 10, 14, 14, 24, 28, 650, DateTimeKind.Utc).AddTicks(602),
                             Name = "Espresso",
                             Price = 2.99m
                         },
@@ -238,7 +241,7 @@ namespace Reliable_Reservations.Migrations
                             Category = "Beverage",
                             Description = "Refreshing homemade lemonade.",
                             IsPopular = false,
-                            LastUpdated = new DateTime(2024, 10, 14, 14, 35, 36, 590, DateTimeKind.Utc).AddTicks(3799),
+                            LastUpdated = new DateTime(2024, 10, 14, 14, 24, 28, 650, DateTimeKind.Utc).AddTicks(603),
                             Name = "Lemonade",
                             Price = 3.99m
                         },
@@ -249,7 +252,7 @@ namespace Reliable_Reservations.Migrations
                             Category = "SideDish",
                             Description = "Crispy golden fries with a side of ketchup.",
                             IsPopular = false,
-                            LastUpdated = new DateTime(2024, 10, 14, 14, 35, 36, 590, DateTimeKind.Utc).AddTicks(3800),
+                            LastUpdated = new DateTime(2024, 10, 14, 14, 24, 28, 650, DateTimeKind.Utc).AddTicks(605),
                             Name = "French Fries",
                             Price = 3.99m
                         },
@@ -260,7 +263,7 @@ namespace Reliable_Reservations.Migrations
                             Category = "SideDish",
                             Description = "Creamy mashed potatoes with butter and herbs.",
                             IsPopular = false,
-                            LastUpdated = new DateTime(2024, 10, 14, 14, 35, 36, 590, DateTimeKind.Utc).AddTicks(3801),
+                            LastUpdated = new DateTime(2024, 10, 14, 14, 24, 28, 650, DateTimeKind.Utc).AddTicks(606),
                             Name = "Mashed Potatoes",
                             Price = 4.99m
                         },
@@ -271,7 +274,7 @@ namespace Reliable_Reservations.Migrations
                             Category = "Soup",
                             Description = "Hearty Italian soup with vegetables and pasta.",
                             IsPopular = false,
-                            LastUpdated = new DateTime(2024, 10, 14, 14, 35, 36, 590, DateTimeKind.Utc).AddTicks(3803),
+                            LastUpdated = new DateTime(2024, 10, 14, 14, 24, 28, 650, DateTimeKind.Utc).AddTicks(607),
                             Name = "Minestrone Soup",
                             Price = 5.99m
                         },
@@ -282,7 +285,7 @@ namespace Reliable_Reservations.Migrations
                             Category = "Soup",
                             Description = "Classic chicken soup with noodles and vegetables.",
                             IsPopular = false,
-                            LastUpdated = new DateTime(2024, 10, 14, 14, 35, 36, 590, DateTimeKind.Utc).AddTicks(3804),
+                            LastUpdated = new DateTime(2024, 10, 14, 14, 24, 28, 650, DateTimeKind.Utc).AddTicks(608),
                             Name = "Chicken Noodle Soup",
                             Price = 5.99m
                         },
@@ -293,7 +296,7 @@ namespace Reliable_Reservations.Migrations
                             Category = "Salad",
                             Description = "Salad with tomatoes, cucumbers, olives, and feta cheese.",
                             IsPopular = false,
-                            LastUpdated = new DateTime(2024, 10, 14, 14, 35, 36, 590, DateTimeKind.Utc).AddTicks(3805),
+                            LastUpdated = new DateTime(2024, 10, 14, 14, 24, 28, 650, DateTimeKind.Utc).AddTicks(609),
                             Name = "Greek Salad",
                             Price = 6.99m
                         },
@@ -304,7 +307,7 @@ namespace Reliable_Reservations.Migrations
                             Category = "Salad",
                             Description = "Fresh tomatoes, mozzarella, and basil with balsamic glaze.",
                             IsPopular = false,
-                            LastUpdated = new DateTime(2024, 10, 14, 14, 35, 36, 590, DateTimeKind.Utc).AddTicks(3806),
+                            LastUpdated = new DateTime(2024, 10, 14, 14, 24, 28, 650, DateTimeKind.Utc).AddTicks(610),
                             Name = "Caprese Salad",
                             Price = 7.99m
                         },
@@ -315,7 +318,7 @@ namespace Reliable_Reservations.Migrations
                             Category = "Special",
                             Description = "Succulent lobster tail served with drawn butter.",
                             IsPopular = false,
-                            LastUpdated = new DateTime(2024, 10, 14, 14, 35, 36, 590, DateTimeKind.Utc).AddTicks(3807),
+                            LastUpdated = new DateTime(2024, 10, 14, 14, 24, 28, 650, DateTimeKind.Utc).AddTicks(612),
                             Name = "Lobster Tail",
                             Price = 29.99m
                         },
@@ -326,7 +329,7 @@ namespace Reliable_Reservations.Migrations
                             Category = "Special",
                             Description = "Creamy risotto with truffle oil and parmesan.",
                             IsPopular = false,
-                            LastUpdated = new DateTime(2024, 10, 14, 14, 35, 36, 590, DateTimeKind.Utc).AddTicks(3808),
+                            LastUpdated = new DateTime(2024, 10, 14, 14, 24, 28, 650, DateTimeKind.Utc).AddTicks(613),
                             Name = "Truffle Risotto",
                             Price = 24.99m
                         },
@@ -337,7 +340,7 @@ namespace Reliable_Reservations.Migrations
                             Category = "Kids",
                             Description = "Crispy chicken nuggets served with fries.",
                             IsPopular = false,
-                            LastUpdated = new DateTime(2024, 10, 14, 14, 35, 36, 590, DateTimeKind.Utc).AddTicks(3810),
+                            LastUpdated = new DateTime(2024, 10, 14, 14, 24, 28, 650, DateTimeKind.Utc).AddTicks(614),
                             Name = "Chicken Nuggets",
                             Price = 5.99m
                         },
@@ -348,7 +351,7 @@ namespace Reliable_Reservations.Migrations
                             Category = "Kids",
                             Description = "Creamy macaroni and cheese.",
                             IsPopular = false,
-                            LastUpdated = new DateTime(2024, 10, 14, 14, 35, 36, 590, DateTimeKind.Utc).AddTicks(3811),
+                            LastUpdated = new DateTime(2024, 10, 14, 14, 24, 28, 650, DateTimeKind.Utc).AddTicks(615),
                             Name = "Mac and Cheese",
                             Price = 4.99m
                         },
@@ -359,7 +362,7 @@ namespace Reliable_Reservations.Migrations
                             Category = "Vegetarian",
                             Description = "Mixed vegetables stir-fried with soy sauce and served over rice.",
                             IsPopular = false,
-                            LastUpdated = new DateTime(2024, 10, 14, 14, 35, 36, 590, DateTimeKind.Utc).AddTicks(3812),
+                            LastUpdated = new DateTime(2024, 10, 14, 14, 24, 28, 650, DateTimeKind.Utc).AddTicks(616),
                             Name = "Vegetable Stir-Fry",
                             Price = 9.99m
                         },
@@ -370,7 +373,7 @@ namespace Reliable_Reservations.Migrations
                             Category = "Vegetarian",
                             Description = "Lasagna layered with spinach, ricotta, and marinara sauce.",
                             IsPopular = false,
-                            LastUpdated = new DateTime(2024, 10, 14, 14, 35, 36, 590, DateTimeKind.Utc).AddTicks(3813),
+                            LastUpdated = new DateTime(2024, 10, 14, 14, 24, 28, 650, DateTimeKind.Utc).AddTicks(617),
                             Name = "Vegetarian Lasagna",
                             Price = 11.99m
                         });
@@ -668,7 +671,7 @@ namespace Reliable_Reservations.Migrations
                     b.HasOne("Reliable_Reservations.Models.Reservation", "Reservation")
                         .WithMany("TimeSlots")
                         .HasForeignKey("ReservationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Reliable_Reservations.Models.Table", "Table")
                         .WithMany("TimeSlots")

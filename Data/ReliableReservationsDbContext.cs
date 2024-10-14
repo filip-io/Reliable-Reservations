@@ -18,7 +18,7 @@ namespace Reliable_Reservations.Data
 
 
         // Config of entities with Fluent API
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -74,6 +74,12 @@ namespace Reliable_Reservations.Data
             modelBuilder.Entity<Customer>()
                 .HasIndex(c => c.Email)
                 .IsUnique();
+
+            modelBuilder.Entity<Customer>()
+                .HasMany(c => c.Reservations)
+                .WithOne(r => r.Customer)
+                .HasForeignKey(r => r.CustomerId)
+                .OnDelete(DeleteBehavior.Cascade);
 
 
             // MenuItem
@@ -209,7 +215,7 @@ namespace Reliable_Reservations.Data
                 .HasMany(r => r.TimeSlots)
                 .WithOne(ts => ts.Reservation)
                 .HasForeignKey(ts => ts.ReservationId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
 
 
@@ -263,7 +269,7 @@ namespace Reliable_Reservations.Data
                 .HasOne(ts => ts.Reservation)
                 .WithMany(r => r.TimeSlots)
                 .HasForeignKey(ts => ts.ReservationId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
 
 
