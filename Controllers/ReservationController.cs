@@ -102,6 +102,10 @@ namespace Reliable_Reservations.Controllers
                 var reservation = await _reservationService.CreateReservationAsync(reservationCreateDto);
                 return CreatedAtAction(nameof(GetReservationById), new { id = reservation.ReservationId }, reservation);
             }
+            catch (ArgumentException ex)
+            {
+                return ResponseHelper.HandleBadRequest(_logger, ex.Message);
+            }
             catch (InvalidOperationException ex)
             {
                 return ResponseHelper.HandleBadRequest(_logger, ex.Message);
