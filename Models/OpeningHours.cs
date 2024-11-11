@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Reliable_Reservations.Models
+﻿namespace Reliable_Reservations.Models
 {
     public class OpeningHours
     {
@@ -16,7 +14,7 @@ namespace Reliable_Reservations.Models
 
         public virtual ICollection<SpecialOpeningHours> SpecialOpeningHours { get; set; } = new List<SpecialOpeningHours>(); // Initialize to avoid null reference
 
-        
+
         // Relationship with TimeSlots
         public virtual ICollection<TimeSlot> TimeSlots { get; set; } = new List<TimeSlot>();
     }

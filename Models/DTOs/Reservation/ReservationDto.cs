@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Reliable_Reservations.Models.DTOs.Table;
+﻿using Reliable_Reservations.Models.DTOs.Table;
+using System.ComponentModel.DataAnnotations;
 
 namespace Reliable_Reservations.Models.DTOs.Reservation
 {

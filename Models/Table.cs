@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Reliable_Reservations.Models
+﻿namespace Reliable_Reservations.Models
 {
     public class Table
     {

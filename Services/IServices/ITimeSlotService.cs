@@ -1,5 +1,4 @@
-﻿using Reliable_Reservations.Models;
-using Reliable_Reservations.Models.DTOs.TimeSlot;
+﻿using Reliable_Reservations.Models.DTOs.TimeSlot;
 
 namespace Reliable_Reservations.Services.IServices
 {

@@ -5,7 +5,7 @@ namespace Reliable_Reservations.Services.IServices
 {
     public interface IAdminService
     {
-        Task<AdminDto?> GetAdminByIdAsync(int id); 
+        Task<AdminDto?> GetAdminByIdAsync(int id);
         Task<Admin?> GetAdminByEmailAsync(string email);
         Task<AdminDto?> CreateAdminAsync(AdminCreateDto admin);
     }

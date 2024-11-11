@@ -12,9 +12,9 @@ namespace Reliable_Reservations.Helpers
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
-            var key = Encoding.UTF8.GetBytes(configuration["Jwt:Key"]);
-            var issuer = configuration["Jwt:Issuer"];
-            var audience = configuration["Jwt:Audience"];
+            var key = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT__KEY") ?? throw new InvalidOperationException("JWT__KEY is not configured."));
+            var issuer = Environment.GetEnvironmentVariable("JWT__ISSUER");
+            var audience = Environment.GetEnvironmentVariable("JWT__AUDIENCE");
 
             var claims = new ClaimsIdentity(new[]
             {

@@ -1,7 +1,6 @@
 using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Reliable_Reservations.Data;
 using Reliable_Reservations.Data.Repos;
@@ -85,9 +84,9 @@ namespace Reliable_Reservations
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                        ValidAudience = builder.Configuration["Jwt:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                        ValidIssuer = Environment.GetEnvironmentVariable("JWT__ISSUER"),
+                        ValidAudience = Environment.GetEnvironmentVariable("JWT__AUDIENCE"),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT__KEY") ?? throw new InvalidOperationException("JWT__KEY is not configured.")))
                     };
                 });
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-using Reliable_Reservations.Models.DTOs.Customer;
+﻿using Reliable_Reservations.Models.DTOs.Customer;
 using Reliable_Reservations.Models.DTOs.Table;
 using Reliable_Reservations.Models.DTOs.TimeSlot;
 

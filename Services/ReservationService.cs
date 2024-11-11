@@ -1,13 +1,10 @@
 ﻿using AutoMapper;
 using Reliable_Reservations.Data.Repos.IRepos;
-using Reliable_Reservations.Models;
-using Reliable_Reservations.Services.IServices;
 using Reliable_Reservations.Helpers;
+using Reliable_Reservations.Models;
 using Reliable_Reservations.Models.DTOs.Reservation;
 using Reliable_Reservations.Models.DTOs.TimeSlot;
-using Microsoft.EntityFrameworkCore;
-using Reliable_Reservations.Data.Repos;
-using Reliable_Reservations.Models.DTOs.Table;
+using Reliable_Reservations.Services.IServices;
 
 namespace Reliable_Reservations.Services
 {
@@ -17,7 +14,7 @@ namespace Reliable_Reservations.Services
         private readonly ITableService _tableService;
         private readonly ITableRepository _tableRepository;
         private readonly ITimeSlotService _timeSlotService;
-        private readonly ITimeSlotRepository _timeSlotRepository; 
+        private readonly ITimeSlotRepository _timeSlotRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly IOpeningHoursRepository _openingHoursRepository;
         private readonly IMapper _mapper;
@@ -294,7 +291,7 @@ namespace Reliable_Reservations.Services
                 }
             }
 
-            await _reservationRepository.UpdateReservation(existingReservation);           
+            await _reservationRepository.UpdateReservation(existingReservation);
 
             return _mapper.Map<ReservationDetailsDto>(existingReservation);
         }

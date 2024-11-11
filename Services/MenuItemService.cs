@@ -71,7 +71,7 @@ namespace Reliable_Reservations.Services
             {
                 throw new KeyNotFoundException($"MenuItem with ID {id} not found.");
             }
-            
+
             await _menuRepository.DeleteMenuItem(menuItem);
         }
     }

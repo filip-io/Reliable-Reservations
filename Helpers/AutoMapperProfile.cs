@@ -21,7 +21,7 @@ public class AutoMapperProfile : Profile
         // Customer mappings
 
         CreateMap<Customer, CustomerDto>().ReverseMap();
-        CreateMap<Customer, CustomerCreateDto>().ReverseMap();     
+        CreateMap<Customer, CustomerCreateDto>().ReverseMap();
 
 
         // Reservation mappings
@@ -31,27 +31,27 @@ public class AutoMapperProfile : Profile
         CreateMap<ReservationUpdateDto, ReservationDetailsDto>();
         CreateMap<Reservation, ReservationDetailsDto>().ReverseMap();
 
-            // Mapping from ReservationDto to Reservation entity
-            CreateMap<ReservationDto, Reservation>()
-                .ForMember(dest => dest.Customer, opt => opt.Ignore())
-                .ForMember(dest => dest.Tables, opt => opt.Ignore());
+        // Mapping from ReservationDto to Reservation entity
+        CreateMap<ReservationDto, Reservation>()
+            .ForMember(dest => dest.Customer, opt => opt.Ignore())
+            .ForMember(dest => dest.Tables, opt => opt.Ignore());
 
-            // Mapping from ReservationCreateDto to Reservation entity
-            CreateMap<ReservationCreateDto, Reservation>()
-                .ForMember(dest => dest.Customer, opt => opt.Ignore())
-                .ForMember(dest => dest.Tables, opt => opt.Ignore());
+        // Mapping from ReservationCreateDto to Reservation entity
+        CreateMap<ReservationCreateDto, Reservation>()
+            .ForMember(dest => dest.Customer, opt => opt.Ignore())
+            .ForMember(dest => dest.Tables, opt => opt.Ignore());
 
-            // Mapping from Reservation entity to ReservationDetailsDto
-            //CreateMap<Reservation, ReservationDetailsDto>()
-            //    .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer))
-            //    .ForMember(dest => dest.NumberOfGuests, opt => opt.MapFrom(src => src.NumberOfGuests))
-            //    .ForMember(dest => dest.Tables, opt => opt.MapFrom(src => src.Tables))
-            //    .ForMember(dest => dest.TimeSlots, opt => opt.MapFrom(src => src.TimeSlots));
+        // Mapping from Reservation entity to ReservationDetailsDto
+        //CreateMap<Reservation, ReservationDetailsDto>()
+        //    .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer))
+        //    .ForMember(dest => dest.NumberOfGuests, opt => opt.MapFrom(src => src.NumberOfGuests))
+        //    .ForMember(dest => dest.Tables, opt => opt.MapFrom(src => src.Tables))
+        //    .ForMember(dest => dest.TimeSlots, opt => opt.MapFrom(src => src.TimeSlots));
 
-            // Mapping from ReservationDetailsDto to Reservation entity
-            //CreateMap<ReservationDetailsDto, Reservation>()
-            //            .ForMember(dest => dest.Customer, opt => opt.Ignore())
-            //            .ForMember(dest => dest.Tables, opt => opt.Ignore());
+        // Mapping from ReservationDetailsDto to Reservation entity
+        //CreateMap<ReservationDetailsDto, Reservation>()
+        //            .ForMember(dest => dest.Customer, opt => opt.Ignore())
+        //            .ForMember(dest => dest.Tables, opt => opt.Ignore());
 
 
 
@@ -81,7 +81,7 @@ public class AutoMapperProfile : Profile
 
         CreateMap<OpeningHours, OpeningHoursDto>()
             .ForMember(dest => dest.SpecialOpeningHours, opt => opt.MapFrom(src => src.SpecialOpeningHours));
-            //.ForMember(dest => dest.TimeSlots, opt => opt.MapFrom(src => src.TimeSlots));
+        //.ForMember(dest => dest.TimeSlots, opt => opt.MapFrom(src => src.TimeSlots));
 
 
         // SpecialOpeningHours mappings

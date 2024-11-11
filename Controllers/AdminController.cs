@@ -8,7 +8,7 @@ namespace Reliable_Reservations.Controllers
     [ApiController]
     [Route("api/[controller]")]
     public class AdminController : ControllerBase
-    { 
+    {
         private readonly IAdminService _adminService;
         private readonly ILogger<AdminController> _logger;
         private readonly IConfiguration _configuration;
@@ -17,11 +17,11 @@ namespace Reliable_Reservations.Controllers
         {
             _adminService = adminService;
             _logger = logger;
-            _configuration = configuration; 
+            _configuration = configuration;
         }
 
         [HttpPost("create")]
-        public async Task <IActionResult> CreateAdminAsync(AdminCreateDto adminCreateDto)
+        public async Task<IActionResult> CreateAdminAsync(AdminCreateDto adminCreateDto)
         {
             await _adminService.CreateAdminAsync(adminCreateDto);
 
